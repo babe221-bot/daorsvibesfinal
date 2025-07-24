@@ -1,15 +1,14 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
 import { handleSuggestKeyChange } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Terminal } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import type { KeyChangeSuggesterState } from "@/lib/types";
-import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 const initialState: KeyChangeSuggesterState = {};
@@ -24,7 +23,7 @@ function SubmitButton() {
 }
 
 export function KeyChangeSuggester() {
-  const [state, formAction] = useFormState(handleSuggestKeyChange, initialState);
+  const [state, formAction] = useActionState(handleSuggestKeyChange, initialState);
   const { toast } = useToast();
 
   useEffect(() => {
