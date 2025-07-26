@@ -15,12 +15,15 @@ import { Button } from "@/components/ui/button";
 export default function Header({ title }: { title: string }) {
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-8">
-      <div className="md:hidden">
+      <div className="hidden md:block">
         <SidebarTrigger />
       </div>
       <h1 className="flex-1 text-2xl font-semibold text-primary-foreground">
         {title}
       </h1>
+      <div className="md:hidden">
+        <SidebarTrigger />
+      </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">

@@ -21,59 +21,51 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   
   return (
     <SidebarProvider>
-      <Sidebar>
+      <Sidebar collapsible="icon">
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
             <GitBranch className="w-8 h-8 text-primary" />
-            <h1 className="text-xl font-headline text-primary-foreground">DaorsVibes</h1>
+            <span className="text-xl font-headline text-primary-foreground group-data-[collapsible=icon]:hidden">DaorsVibes</span>
           </div>
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
                <NextLink href="/" legacyBehavior passHref>
-                  <SidebarMenuButton asChild isActive={pathname === '/'}>
+                  <SidebarMenuButton asChild isActive={pathname === '/'} tooltip="Kontrolna tabla">
                     <a>
-                      <span>
-                        <LayoutDashboard />
-                        <span>Kontrolna tabla</span>
-                      </span>
+                      <LayoutDashboard />
+                      <span>Kontrolna tabla</span>
                     </a>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
                <NextLink href="#" legacyBehavior passHref>
-                  <SidebarMenuButton asChild isActive={pathname === '/setlists'}>
+                  <SidebarMenuButton asChild isActive={pathname === '/setlists'} tooltip="Setliste">
                     <a>
-                      <span>
-                        <ListMusic />
-                        <span>Setliste</span>
-                      </span>
+                      <ListMusic />
+                      <span>Setliste</span>
                     </a>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
                <NextLink href="#" legacyBehavior passHref>
-                  <SidebarMenuButton asChild isActive={pathname === '/songs'}>
+                  <SidebarMenuButton asChild isActive={pathname === '/songs'} tooltip="Pjesme">
                     <a>
-                      <span>
-                        <Music />
-                        <span>Pjesme</span>
-                      </span>
+                      <Music />
+                      <span>Pjesme</span>
                     </a>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
                <NextLink href="#" legacyBehavior passHref>
-                  <SidebarMenuButton asChild isActive={pathname === '/ai-tools'}>
+                  <SidebarMenuButton asChild isActive={pathname === '/ai-tools'} tooltip="AI Alati">
                     <a>
-                      <span>
-                        <Sparkles />
-                        <span>AI Alati</span>
-                      </span>
+                      <Sparkles />
+                      <span>AI Alati</span>
                     </a>
                   </SidebarMenuButton>
               </NextLink>
@@ -86,7 +78,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <AvatarImage src="https://placehold.co/40x40" alt="Korisnik" data-ai-hint="user avatar" />
               <AvatarFallback>DV</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col">
+            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
               <span className="text-sm font-semibold text-sidebar-foreground">Daors Korisnik</span>
               <span className="text-xs text-muted-foreground">korisnik@daorsvibes.com</span>
             </div>
