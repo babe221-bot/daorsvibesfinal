@@ -56,18 +56,10 @@ export default function Home() {
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {favoriteSongs.map(song => (
-                  <div key={song.title} className="p-4 rounded-lg bg-muted/50 flex items-center gap-4 hover:bg-muted transition-colors">
-                     <Image 
-                        src={song.imageUrl}
-                        alt="Omot albuma"
-                        width={64}
-                        height={64}
-                        className="rounded-md object-cover"
-                        data-ai-hint="album art"
-                      />
-                    <div className="space-y-1.5">
-                      <p className="font-semibold text-base text-foreground tracking-tight">{song.title}</p>
-                      <p className="text-sm text-muted-foreground tracking-wide">{song.artist}</p>
+                  <div key={song.title} className="p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                    <div className="space-y-1">
+                      <p className="font-semibold text-base text-foreground tracking-normal">{song.title}</p>
+                      <p className="text-sm text-muted-foreground tracking-normal">{song.artist}</p>
                     </div>
                   </div>
                 ))}
