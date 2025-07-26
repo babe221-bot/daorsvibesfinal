@@ -13,7 +13,7 @@ export default function Home() {
     { title: "Hallelujah", artist: "Leonard Cohen", imageUrl: "https://images.unsplash.com/photo-1711054824441-064a99073a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhbGJ1bSUyMGFydHxlbnwwfHx8fDE3NTM1Njk0NzV8MA&ixlib=rb-4.1.0&q=80&w=1080" },
   ];
 
-  const recentSetlists = [
+  const recentPlaylists = [
     { name: "Akustična svirka - Juli", count: 5, icon: Music },
     { name: "Proba benda", count: 8, icon: ListMusic },
     { name: "Večer otvorenog mikrofona", count: 3, icon: Mic },
@@ -77,17 +77,17 @@ export default function Home() {
           
           <Card className="glass-card lg:col-span-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xl font-medium">Nedavne setliste</CardTitle>
+              <CardTitle className="text-xl font-medium">Nedavne playliste</CardTitle>
               <ListMusic className="h-6 w-6 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentSetlists.map(setlist => (
-                  <div key={setlist.name} className="flex items-center gap-4 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                    <setlist.icon className="h-6 w-6 text-accent" />
+                {recentPlaylists.map(playlist => (
+                  <div key={playlist.name} className="flex items-center gap-4 p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                    <playlist.icon className="h-6 w-6 text-accent" />
                     <div className="space-y-1">
-                      <p className="text-sm font-medium leading-none">{setlist.name}</p>
-                      <p className="text-sm text-muted-foreground">{setlist.count} pjesama</p>
+                      <p className="text-sm font-medium leading-none">{playlist.name}</p>
+                      <p className="text-sm text-muted-foreground">{playlist.count} pjesama</p>
                     </div>
                   </div>
                 ))}

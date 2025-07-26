@@ -42,10 +42,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </SidebarMenuItem>
             <SidebarMenuItem>
                <NextLink href="#" legacyBehavior passHref>
-                  <SidebarMenuButton asChild isActive={pathname === '/setlists'} tooltip="Setliste">
+                  <SidebarMenuButton asChild isActive={pathname === '/playlists'} tooltip="Playliste">
                     <a>
                       <ListMusic />
-                      <span>Setliste</span>
+                      <span>Playliste</span>
                     </a>
                   </SidebarMenuButton>
               </NextLink>
