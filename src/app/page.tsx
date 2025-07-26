@@ -66,7 +66,7 @@ export default function Home() {
                         data-ai-hint="album art"
                       />
                     <div className="space-y-1">
-                      <p className="font-semibold text-primary-foreground">{song.title}</p>
+                      <p className="font-semibold text-base text-primary-foreground">{song.title}</p>
                       <p className="text-sm text-muted-foreground">{song.artist}</p>
                     </div>
                   </div>
