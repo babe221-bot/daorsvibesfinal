@@ -65,9 +65,9 @@ export default function Home() {
                         className="rounded-md object-cover"
                         data-ai-hint="album art"
                       />
-                    <div className="space-y-1">
-                      <p className="font-semibold text-base text-primary-foreground">{song.title}</p>
-                      <p className="text-sm text-muted-foreground">{song.artist}</p>
+                    <div className="space-y-1.5">
+                      <p className="font-semibold text-base text-foreground tracking-tight">{song.title}</p>
+                      <p className="text-sm text-muted-foreground tracking-wide">{song.artist}</p>
                     </div>
                   </div>
                 ))}
