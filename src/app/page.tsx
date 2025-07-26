@@ -7,10 +7,10 @@ import Image from "next/image";
 
 export default function Home() {
   const favoriteSongs = [
-    { title: "Wonderwall", artist: "Oasis" },
-    { title: "Stairway to Heaven", artist: "Led Zeppelin" },
-    { title: "Bohemian Rhapsody", artist: "Queen" },
-    { title: "Hallelujah", artist: "Leonard Cohen" },
+    { title: "Wonderwall", artist: "Oasis", imageUrl: "https://images.unsplash.com/photo-1711054824441-064a99073a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhbGJ1bSUyMGFydHxlbnwwfHx8fDE3NTM1Njk0NzV8MA&ixlib=rb-4.1.0&q=80&w=1080" },
+    { title: "Stairway to Heaven", artist: "Led Zeppelin", imageUrl: "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxhbGJ1bSUyMGFydHxlbnwwfHx8fDE3NTM1Njk0NzV8MA&ixlib=rb-4.1.0&q=80&w=1080" },
+    { title: "Bohemian Rhapsody", artist: "Queen", imageUrl: "https://images.unsplash.com/photo-1500099817043-86d46000d58f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxhbGJ1bSUyMGFydHxlbnwwfHx8fDE3NTM1Njk0NzV8MA&ixlib=rb-4.1.0&q=80&w=1080" },
+    { title: "Hallelujah", artist: "Leonard Cohen", imageUrl: "https://images.unsplash.com/photo-1711054824441-064a99073a0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhbGJ1bSUyMGFydHxlbnwwfHx8fDE3NTM1Njk0NzV8MA&ixlib=rb-4.1.0&q=80&w=1080" },
   ];
 
   const recentSetlists = [
@@ -58,11 +58,11 @@ export default function Home() {
                 {favoriteSongs.map(song => (
                   <div key={song.title} className="p-4 rounded-lg bg-muted/50 flex items-center gap-4 hover:bg-muted transition-colors">
                      <Image 
-                        src="https://placehold.co/64x64.png"
+                        src={song.imageUrl}
                         alt="Omot albuma"
                         width={64}
                         height={64}
-                        className="rounded-md"
+                        className="rounded-md object-cover"
                         data-ai-hint="album art"
                       />
                     <div className="space-y-1">
