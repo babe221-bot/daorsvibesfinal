@@ -25,18 +25,18 @@ export default function Header({ title }: { title: string }) {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
             <Avatar className="h-10 w-10">
-              <AvatarImage src="https://placehold.co/40x40" alt="@shadcn" data-ai-hint="user avatar" />
+              <AvatarImage src="https://placehold.co/40x40" alt="Korisnik" data-ai-hint="user avatar" />
               <AvatarFallback>DV</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>Moj nalog</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          <DropdownMenuItem>Postavke</DropdownMenuItem>
+          <DropdownMenuItem>Podrška</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem>Odjava</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

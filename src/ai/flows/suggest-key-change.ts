@@ -19,10 +19,10 @@ export type SuggestKeyChangeInput = z.infer<typeof SuggestKeyChangeInputSchema>;
 const SuggestKeyChangeOutputSchema = z.object({
   suggestedKeyChanges: z.array(
     z.object({
-      key: z.string().describe('Suggested key to change to.'),
-      confidence: z.number().describe('Confidence score for the suggestion (0-1).'),
+      key: z.string().describe('Predloženi tonalitet za promjenu.'),
+      confidence: z.number().describe('Ocjena pouzdanosti za prijedlog (0-1).'),
     })
-  ).describe('List of suggested key changes with confidence scores.'),
+  ).describe('Lista predloženih promjena tonaliteta sa ocjenama pouzdanosti.'),
 });
 export type SuggestKeyChangeOutput = z.infer<typeof SuggestKeyChangeOutputSchema>;
 
@@ -34,14 +34,14 @@ const prompt = ai.definePrompt({
   name: 'suggestKeyChangePrompt',
   input: {schema: SuggestKeyChangeInputSchema},
   output: {schema: SuggestKeyChangeOutputSchema},
-  prompt: `You are an AI-powered music expert. Your task is to analyze the provided audio and suggest optimal key changes for the song.
+  prompt: `Vi ste muzički stručnjak pokretan vještačkom inteligencijom. Vaš zadatak je da analizirate priloženi audio i predložite optimalne promjene tonaliteta za pjesmu.
 
-Analyze the audio from the following URL: {{{audioUrl}}}
+Analizirajte audio sa sljedećeg URL-a: {{{audioUrl}}}
 
-Suggest key changes that would make the song easier to perform, along with confidence scores for each suggestion. Provide at least 3 suggestions.
-Ensure that the confidence scores reflect your certainty in the accuracy of each key change suggestion.
+Predložite promjene tonaliteta koje bi olakšale izvođenje pjesme, zajedno sa ocjenama pouzdanosti za svaki prijedlog. Dajte najmanje 3 prijedloga.
+Osigurajte da ocjene pouzdanosti odražavaju vašu sigurnost u tačnost svakog prijedloga za promjenu tonaliteta.
 
-Format your output as a JSON array of objects, where each object contains the suggested key and its corresponding confidence score.
+Formatirajte svoj izlaz kao JSON niz objekata, gdje svaki objekat sadrži predloženi tonalitet i odgovarajuću ocjenu pouzdanosti.
 `,
 });
 

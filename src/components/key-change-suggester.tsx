@@ -17,7 +17,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" disabled={pending} className="w-full sm:w-auto gradient-btn">
-      {pending ? "Analyzing..." : "Suggest Key"}
+      {pending ? "Analiziram..." : "Predloži tonalitet"}
     </Button>
   );
 }
@@ -30,7 +30,7 @@ export function KeyChangeSuggester() {
     if (state.error) {
       toast({
         variant: "destructive",
-        title: "Error",
+        title: "Greška",
         description: state.error,
       });
     }
@@ -41,7 +41,7 @@ export function KeyChangeSuggester() {
       <form action={formAction} className="flex flex-col sm:flex-row gap-2">
         <Input
           name="audioUrl"
-          placeholder="https://example.com/my-song.mp3"
+          placeholder="https://primjer.com/moja-pjesma.mp3"
           required
           className="flex-grow"
         />
@@ -52,7 +52,7 @@ export function KeyChangeSuggester() {
         <div className="space-y-4">
           <h3 className="text-xl font-semibold text-primary-foreground flex items-center gap-2">
             <Sparkles className="text-accent"/>
-            Suggestions
+            Prijedlozi
           </h3>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {state.result.suggestedKeyChanges.map((suggestion, index) => (
@@ -61,7 +61,7 @@ export function KeyChangeSuggester() {
                   <div className="flex justify-between items-baseline mb-2">
                     <p className="font-bold text-lg text-primary-foreground">{suggestion.key}</p>
                     <p className="text-sm text-muted-foreground">
-                      {(suggestion.confidence * 100).toFixed(0)}% confidence
+                      {(suggestion.confidence * 100).toFixed(0)}% pouzdanost
                     </p>
                   </div>
                   <Progress value={suggestion.confidence * 100} className="h-2 [&>div]:bg-gradient-to-r [&>div]:from-accent [&>div]:to-primary" />

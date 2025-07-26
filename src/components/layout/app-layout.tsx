@@ -34,8 +34,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                <NextLink href="/" legacyBehavior passHref>
                   <SidebarMenuButton asChild isActive={pathname === '/'}>
                     <a>
+                      <span>
                         <LayoutDashboard />
-                        <span>Dashboard</span>
+                        <span>Kontrolna tabla</span>
+                      </span>
                     </a>
                   </SidebarMenuButton>
               </NextLink>
@@ -44,8 +46,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                <NextLink href="#" legacyBehavior passHref>
                   <SidebarMenuButton asChild isActive={pathname === '/setlists'}>
                     <a>
+                      <span>
                         <ListMusic />
-                        <span>Setlists</span>
+                        <span>Setliste</span>
+                      </span>
                     </a>
                   </SidebarMenuButton>
               </NextLink>
@@ -54,8 +58,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                <NextLink href="#" legacyBehavior passHref>
                   <SidebarMenuButton asChild isActive={pathname === '/songs'}>
                     <a>
+                      <span>
                         <Music />
-                        <span>Songs</span>
+                        <span>Pjesme</span>
+                      </span>
                     </a>
                   </SidebarMenuButton>
               </NextLink>
@@ -64,8 +70,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                <NextLink href="#" legacyBehavior passHref>
                   <SidebarMenuButton asChild isActive={pathname === '/ai-tools'}>
                     <a>
+                      <span>
                         <Sparkles />
-                        <span>AI Tools</span>
+                        <span>AI Alati</span>
+                      </span>
                     </a>
                   </SidebarMenuButton>
               </NextLink>
@@ -75,12 +83,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarFooter>
           <div className="flex items-center gap-3 p-3">
             <Avatar>
-              <AvatarImage src="https://placehold.co/40x40" alt="User" data-ai-hint="user avatar" />
+              <AvatarImage src="https://placehold.co/40x40" alt="Korisnik" data-ai-hint="user avatar" />
               <AvatarFallback>DV</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="text-sm font-semibold text-sidebar-foreground">Daors User</span>
-              <span className="text-xs text-muted-foreground">user@daorsvibes.com</span>
+              <span className="text-sm font-semibold text-sidebar-foreground">Daors Korisnik</span>
+              <span className="text-xs text-muted-foreground">korisnik@daorsvibes.com</span>
             </div>
           </div>
         </SidebarFooter>

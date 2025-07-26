@@ -14,21 +14,21 @@ export default function Home() {
   ];
 
   const recentSetlists = [
-    { name: "Acoustic Gig - July", count: 5, icon: Music },
-    { name: "Band Practice", count: 8, icon: ListMusic },
-    { name: "Open Mic Night", count: 3, icon: Mic },
+    { name: "Akustična svirka - Juli", count: 5, icon: Music },
+    { name: "Proba benda", count: 8, icon: ListMusic },
+    { name: "Večer otvorenog mikrofona", count: 3, icon: Mic },
   ];
   
   return (
     <AppLayout>
-      <Header title="Dashboard" />
+      <Header title="Kontrolna tabla" />
       <main className="flex-1 p-4 md:p-8 space-y-8">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <Card className="lg:col-span-2 glass-card">
             <CardHeader>
-              <CardTitle className="text-2xl">AI Key Change Suggester</CardTitle>
+              <CardTitle className="text-2xl">AI Sugeriranje promjene tonaliteta</CardTitle>
               <CardDescription>
-                Paste an audio URL to get optimal key change suggestions.
+                Zalijepite audio URL da dobijete optimalne prijedloge za promjenu tonaliteta.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -39,18 +39,18 @@ export default function Home() {
           <Card className="glass-card hidden lg:flex flex-col items-center justify-center p-6">
             <Image 
               src="https://placehold.co/300x200.png" 
-              alt="Music illustration" 
+              alt="Muzička ilustracija" 
               width={300} 
               height={200}
               className="rounded-lg object-cover"
               data-ai-hint="music illustration" 
             />
-            <p className="text-center mt-4 text-muted-foreground">Discover your next favorite tune.</p>
+            <p className="text-center mt-4 text-muted-foreground">Otkrijte svoju sljedeću omiljenu pjesmu.</p>
           </Card>
 
           <Card className="glass-card lg:col-span-3">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xl font-medium">Favorite Songs</CardTitle>
+              <CardTitle className="text-xl font-medium">Omiljene pjesme</CardTitle>
               <Star className="h-6 w-6 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -59,7 +59,7 @@ export default function Home() {
                   <div key={song.title} className="p-4 rounded-lg bg-muted/50 flex items-center gap-4 hover:bg-muted transition-colors">
                      <Image 
                         src="https://placehold.co/64x64.png"
-                        alt="Album art"
+                        alt="Omot albuma"
                         width={64}
                         height={64}
                         className="rounded-md"
@@ -77,7 +77,7 @@ export default function Home() {
           
           <Card className="glass-card lg:col-span-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xl font-medium">Recent Setlists</CardTitle>
+              <CardTitle className="text-xl font-medium">Nedavne setliste</CardTitle>
               <ListMusic className="h-6 w-6 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -87,7 +87,7 @@ export default function Home() {
                     <setlist.icon className="h-6 w-6 text-accent" />
                     <div className="space-y-1">
                       <p className="text-sm font-medium leading-none">{setlist.name}</p>
-                      <p className="text-sm text-muted-foreground">{setlist.count} songs</p>
+                      <p className="text-sm text-muted-foreground">{setlist.count} pjesama</p>
                     </div>
                   </div>
                 ))}
