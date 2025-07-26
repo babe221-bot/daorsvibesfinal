@@ -14,7 +14,7 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LayoutDashboard, ListMusic, Music, Sparkles, GitBranch, Brush } from "lucide-react";
+import { LayoutDashboard, ListMusic, Music, Sparkles, GitBranch } from "lucide-react";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -33,35 +33,40 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <SidebarMenuItem>
                <NextLink href="/" legacyBehavior passHref>
                   <SidebarMenuButton asChild isActive={pathname === '/'}>
-                    <a><LayoutDashboard />Dashboard</a>
+                    <a>
+                        <LayoutDashboard />
+                        <span>Dashboard</span>
+                    </a>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
                <NextLink href="#" legacyBehavior passHref>
                   <SidebarMenuButton asChild isActive={pathname === '/setlists'}>
-                    <a><ListMusic />Setlists</a>
+                    <a>
+                        <ListMusic />
+                        <span>Setlists</span>
+                    </a>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
                <NextLink href="#" legacyBehavior passHref>
                   <SidebarMenuButton asChild isActive={pathname === '/songs'}>
-                    <a><Music />Songs</a>
+                    <a>
+                        <Music />
+                        <span>Songs</span>
+                    </a>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
                <NextLink href="#" legacyBehavior passHref>
                   <SidebarMenuButton asChild isActive={pathname === '/ai-tools'}>
-                    <a><Sparkles />AI Tools</a>
-                  </SidebarMenuButton>
-              </NextLink>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-               <NextLink href="/ui-kit" legacyBehavior passHref>
-                  <SidebarMenuButton asChild isActive={pathname === '/ui-kit'}>
-                    <a><Brush />UI Kit</a>
+                    <a>
+                        <Sparkles />
+                        <span>AI Tools</span>
+                    </a>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
