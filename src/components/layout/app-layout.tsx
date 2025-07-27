@@ -21,7 +21,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   
   return (
     <SidebarProvider>
-      <Sidebar collapsible="icon" className="bg-card/20 backdrop-blur-lg border-r border-white/10">
+      <Sidebar collapsible="icon" className="glass-sidebar">
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
             <GitBranch className="w-8 h-8 text-primary" />
@@ -80,7 +80,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </Avatar>
             <div className="flex flex-col group-data-[collapsible=icon]:hidden">
               <span className="text-sm font-semibold text-sidebar-foreground">Daors Korisnik</span>
-              <span className="text-xs text-muted-foreground">korisnik@daorsvibes.com</span>
+              <span className="text-xs text-muted-foreground">daors.korisnik@email.com</span>
             </div>
           </div>
         </SidebarFooter>
