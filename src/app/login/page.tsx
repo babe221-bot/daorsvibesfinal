@@ -1,77 +1,82 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { auth } from "@/lib/firebase";
-import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
-import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
-import "firebaseui/dist/firebaseui.css";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LoginForm } from "@/components/login-form";
+import { RegisterForm } from "@/components/register-form";
+import { Button } from "@/components/ui/button";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
+
+function GoogleIcon() {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+            <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"></path>
+            <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"></path>
+            <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"></path>
+            <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C42.012 36.49 44 30.836 44 24c0-1.341-.138-2.65-.389-3.917z"></path>
+        </svg>
+    )
+}
 
 export default function LoginPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
-      if (user) {
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      if (result.user) {
         router.push("/dashboard");
-      } else {
-        setLoading(false);
-        // Dynamically import firebaseui here
-        import('firebaseui').then(firebaseui => {
-            const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
-            ui.start("#firebaseui-auth-container", {
-            signInFlow: "popup",
-            signInOptions: [
-                GoogleAuthProvider.PROVIDER_ID,
-                EmailAuthProvider.PROVIDER_ID,
-            ],
-            callbacks: {
-                signInSuccessWithAuthResult: function (authResult, redirectUrl) {
-                // User successfully signed in.
-                if (authResult.user) {
-                    router.push("/dashboard");
-                }
-                return false;
-                },
-            },
-            signInSuccessUrl: "/dashboard",
-            tosUrl: "/terms-of-service",
-            privacyPolicyUrl: "/privacy-policy",
-            });
-        });
       }
-    });
-
-    return () => unregisterAuthObserver();
-  }, [router]);
+    } catch (error) {
+      console.error("Error during Google sign-in:", error);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md glass-card">
         <CardHeader>
-          <Image 
-            src="/logo.png" 
-            alt="DaorsVibes Logo" 
-            width={150} 
-            height={150} 
-            className="mx-auto mb-4 mix-blend-lighten opacity-90"
-            style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.7))' }}
+          <Image
+            src="/logo.png"
+            alt="DaorsVibes Logo"
+            width={150}
+            height={150}
+            className="mx-auto mb-4"
+            style={{ filter: "drop-shadow(0 0 20px hsl(var(--primary) / 0.7))" }}
           />
           <CardTitle className="text-2xl font-bold text-center">
-            Prijavite se na DaorsVibes
+            Dobrodošli u DaorsVibes
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {loading ? (
-             <div className="space-y-4">
-                <div className="h-10 w-full animate-pulse rounded-md bg-muted" />
-                <div className="h-10 w-full animate-pulse rounded-md bg-muted" />
-             </div>
-          ) : (
-            <div id="firebaseui-auth-container"></div>
-          )}
+          <Tabs defaultValue="login" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="login">Prijava</TabsTrigger>
+              <TabsTrigger value="register">Registracija</TabsTrigger>
+            </TabsList>
+            <TabsContent value="login">
+              <LoginForm />
+            </TabsContent>
+            <TabsContent value="register">
+              <RegisterForm />
+            </TabsContent>
+          </Tabs>
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">Ili nastavite sa</span>
+            </div>
+          </div>
+          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
+            <GoogleIcon />
+            <span className="ml-2">Google</span>
+          </Button>
         </CardContent>
       </Card>
     </div>
