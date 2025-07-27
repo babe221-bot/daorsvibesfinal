@@ -24,7 +24,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Sidebar collapsible="icon" className="glass-sidebar">
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
-            <GitBranch className="w-8 h-8 text-primary" />
+            <video
+              src="/logo-transformation-video.mp4"
+              width="48"
+              height="48"
+              autoPlay
+              loop
+              muted
+              className="mix-blend-screen opacity-90"
+              style={{ filter: 'drop-shadow(0 0 12px hsl(var(--primary) / 0.8))' }}
+            />
             <span className="text-xl font-headline text-primary-foreground group-data-[collapsible=icon]:hidden">DaorsVibes</span>
           </div>
         </SidebarHeader>
