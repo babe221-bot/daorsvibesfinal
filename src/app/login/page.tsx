@@ -1,69 +1,41 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { auth, firebase } from "@/lib/firebase";
+import { useEffect, useState } from "react";
+import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import "firebaseui/dist/firebaseui.css";
-import type { AuthUI } from "firebaseui";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
-  // Store the FirebaseUI instance in a ref to prevent re-initialization
-  const firebaseUiWidget = useRef<AuthUI | null>(null);
-  
-  // This effect runs once on component mount
-  useEffect(() => {
-    // Dynamically import firebaseui to ensure it's only run on the client
-    import("firebaseui").then(firebaseui => {
-      // Get or create a new FirebaseUI instance
-      const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
-      firebaseUiWidget.current = ui;
+  const handleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      if (user) {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.error("Error signing in with Google: ", error);
+    }
+  };
 
-      const uiConfig = {
-        signInFlow: "popup",
-        signInSuccessUrl: "/dashboard",
-        signInOptions: [
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-          firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        ],
-        callbacks: {
-          // This is called when the UI is shown
-          uiShown: () => {
-            setLoading(false);
-          },
-          // This is called on sign-in success
-          signInSuccessWithAuthResult: () => {
-            router.push("/dashboard");
-            // Return false to prevent the default redirect
-            return false;
-          },
-        },
-      };
-      
-      // Start the FirebaseUI widget
-      ui.start("#firebaseui-auth-container", uiConfig);
-    });
-  }, [router]);
-
-  // This effect handles auth state changes
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
       if (user) {
-        // If user is signed in, redirect to dashboard
         router.push("/dashboard");
+      } else {
+        setLoading(false);
       }
     });
 
-    // Cleanup the listener and reset the widget on unmount
-    return () => {
-      unregisterAuthObserver();
-      firebaseUiWidget.current?.reset();
-    };
+    return () => unregisterAuthObserver();
   }, [router]);
 
   return (
@@ -83,19 +55,15 @@ export default function LoginPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {loading && (
+          {loading ? (
              <div className="space-y-4">
                 <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
-                <div className="flex items-center space-x-2">
-                    <Skeleton className="h-4 flex-grow" />
-                    <Skeleton className="h-4 w-12" />
-                    <Skeleton className="h-4 flex-grow" />
-                </div>
-                 <Skeleton className="h-10 w-full" />
              </div>
+          ) : (
+            <Button onClick={handleSignIn} className="w-full">
+              Sign in with Google
+            </Button>
           )}
-          <div id="firebaseui-auth-container" />
         </CardContent>
       </Card>
     </div>
