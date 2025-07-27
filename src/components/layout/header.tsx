@@ -28,7 +28,7 @@ export default function Header() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
             <Avatar className="h-10 w-10">
-              <AvatarImage src="https://placehold.co/40x40" alt="Korisnik" data-ai-hint="user avatar" />
+              <AvatarImage src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtdXNpY3xlbnwwfHx8fDE3NTM1ODE3OTZ8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Korisnik" data-ai-hint="user avatar" />
               <AvatarFallback>DV</AvatarFallback>
             </Avatar>
           </Button>
