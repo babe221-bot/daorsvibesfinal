@@ -12,14 +12,27 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { auth } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+      router.push("/");
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b border-white/10 bg-background/50 backdrop-blur-sm px-4 md:px-8">
       <div className="hidden md:block">
         <SidebarTrigger />
       </div>
-      <Image src="/logo.png" alt="DaorsVibes Logo" width={40} height={40} className="mix-blend-lighten opacity-80" />
+      <Image src="/logo.png" alt="DaorsVibes Logo" width={40} height={40} className="mix-blend-screen opacity-70" />
       <div className="flex-1" />
       <div className="md:hidden">
         <SidebarTrigger />
@@ -39,7 +52,7 @@ export default function Header() {
           <DropdownMenuItem>Postavke</DropdownMenuItem>
           <DropdownMenuItem>Podrška</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Odjava</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleSignOut}>Odjava</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
