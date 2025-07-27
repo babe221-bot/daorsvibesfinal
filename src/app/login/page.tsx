@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import "firebaseui/dist/firebaseui.css";
 import type { AuthUI } from "firebaseui";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -69,6 +70,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md glass-card">
         <CardHeader>
+          <Image src="/logo.png" alt="DaorsVibes Logo" width={80} height={80} className="mx-auto mb-4 mix-blend-lighten opacity-80" />
           <CardTitle className="text-2xl font-bold text-center">
             Prijavite se na DaorsVibes
           </CardTitle>

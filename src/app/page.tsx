@@ -1,11 +1,14 @@
 
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-center p-4">
        <div className="max-w-2xl">
+        <Image src="/logo.png" alt="DaorsVibes Logo" width={120} height={120} className="mx-auto mb-4 mix-blend-lighten opacity-80" />
         <h1 className="text-5xl font-bold text-primary animate-fade-in-down">
           Dobrodošli na DaorsVibes
         </h1>
