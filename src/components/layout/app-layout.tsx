@@ -82,9 +82,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </SidebarContent>
         <SidebarFooter>
           <div className="flex items-center gap-3 p-3">
-            <Avatar>
-              <AvatarFallback>DV</AvatarFallback>
-            </Avatar>
             <div className="flex flex-col group-data-[collapsible=icon]:hidden">
               <span className="text-sm font-semibold text-sidebar-foreground">Daors Korisnik</span>
               <span className="text-xs text-muted-foreground">daors.korisnik@email.com</span>
