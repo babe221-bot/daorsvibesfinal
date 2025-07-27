@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoginForm } from "@/components/login-form";
 import { RegisterForm } from "@/components/register-form";
@@ -41,14 +40,6 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md glass-card">
         <CardHeader>
-          <Image
-            src="/logo.png"
-            alt="DaorsVibes Logo"
-            width={150}
-            height={150}
-            className="mx-auto mb-4"
-            style={{ filter: "drop-shadow(0 0 20px hsl(var(--primary) / 0.7))" }}
-          />
           <CardTitle className="text-2xl font-bold text-center">
             Dobrodošli u DaorsVibes
           </CardTitle>
