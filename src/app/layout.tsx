@@ -21,6 +21,13 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn("font-body antialiased min-h-screen")}>
+        <video
+            src="/logo-transformation-video.mp4"
+            autoPlay
+            loop
+            muted
+            className="video-background"
+        />
         <div className="relative z-0 bg-background/70 min-h-svh">
             {children}
         </div>
