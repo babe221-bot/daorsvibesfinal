@@ -79,6 +79,10 @@
     @apply bg-card/30 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg transition-all duration-300 hover:border-white/20;
   }
 
+  .glass-sidebar {
+    @apply bg-sidebar-background/10 backdrop-blur-xl border-r border-white/10 shadow-2xl transition-all duration-300;
+  }
+
   .gradient-btn {
     @apply bg-gradient-to-r from-primary via-blue-500 to-cyan-400 text-primary-foreground border-cyan-400/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.5)] transition-shadow duration-300;
   }
