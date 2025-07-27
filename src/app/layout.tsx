@@ -29,7 +29,7 @@ export default function RootLayout({
           className="video-background"
           poster="https://placehold.co/1920x1080/000000/000000.png"
         >
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-with-a-special-effect-4328-large.mp4" type="video/mp4" />
+          <source src="/Logo_Transformation_Video_Creation_Guide.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div className="relative z-0 bg-background/70 min-h-svh">
