@@ -18,7 +18,7 @@ export default function SignUpPage() {
 
   const handleEmailSignUp = async () => {
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      alert("Lozinke se ne podudaraju");
       return;
     }
     setIsLoading(true);
@@ -34,7 +34,7 @@ export default function SignUpPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            Sign Up
+            Registracija
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -69,7 +69,7 @@ export default function SignUpPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Label htmlFor="confirm-password">Potvrdi lozinku</Label>
               <Input
                 id="confirm-password"
                 type="password"
@@ -80,11 +80,11 @@ export default function SignUpPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing Up..." : "Sign Up"}
+              {isLoading ? "Registracija..." : "Registrujte se"}
             </Button>
           </form>
           <div className="mt-4 text-center">
-            <Link href="/login">Already have an account? Sign In</Link>
+            <Link href="/login">Već imate račun? Prijavite se</Link>
           </div>
         </CardContent>
       </Card>

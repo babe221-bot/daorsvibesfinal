@@ -73,7 +73,7 @@ export default function LoginPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing In..." : "Prijavi se"}
+              {isLoading ? "Prijavljivanje..." : "Prijavi se"}
             </Button>
           </form>
           <div className="mt-4 text-center">
@@ -83,11 +83,11 @@ export default function LoginPage() {
               onClick={handleGoogleSignIn}
               disabled={isLoading}
             >
-              {isLoading ? "Signing In..." : "Sign In with Google"}
+              {isLoading ? "Prijavljivanje..." : "Prijavi se sa Google"}
             </Button>
           </div>
           <div className="mt-4 text-center">
-            <Link href="/signup">Don't have an account? Sign Up</Link>
+            <Link href="/signup">Nemate račun? Registrujte se</Link>
           </div>
         </CardContent>
       </Card>
