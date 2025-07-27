@@ -1,7 +1,7 @@
 "use client";
 
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 
@@ -32,14 +31,6 @@ export default function Header() {
       <div className="hidden md:block">
         <SidebarTrigger />
       </div>
-       <Image 
-          src="/logo.png" 
-          alt="DaorsVibes Logo" 
-          width={48} 
-          height={48}
-          className="mix-blend-lighten opacity-90"
-          style={{ filter: 'drop-shadow(0 0 12px hsl(var(--primary) / 0.8))' }}
-        />
       <div className="flex-1" />
       <div className="md:hidden">
         <SidebarTrigger />
