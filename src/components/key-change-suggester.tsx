@@ -38,7 +38,11 @@ export function KeyChangeSuggester() {
 
   return (
     <div className="space-y-6">
-      <form action={formAction} className="flex flex-col sm:flex-row gap-2">
+      <form
+        action={formAction}
+        className="flex flex-col sm:flex-row gap-2"
+        suppressHydrationWarning
+      >
         <Input
           name="audioUrl"
           placeholder="https://primjer.com/moja-pjesma.mp3"

@@ -20,7 +20,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <Sidebar collapsible="icon" className="bg-card/20 backdrop-blur-lg border-r border-white/10">
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
