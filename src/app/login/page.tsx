@@ -1,94 +1,92 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useState } from "react";
-import { signInWithGoogle, signInWithEmail } from "@/lib/auth";
+import { useEffect, useRef, useState } from "react";
+import { auth, firebase } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import "firebaseui/dist/firebaseui.css";
+import type { AuthUI } from "firebaseui";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    const user = await signInWithGoogle();
-    if (user) {
-      router.push("/dashboard");
-    }
-    setIsLoading(false);
-  };
+  // Store the FirebaseUI instance in a ref to prevent re-initialization
+  const firebaseUiWidget = useRef<AuthUI | null>(null);
+  
+  // This effect runs once on component mount
+  useEffect(() => {
+    // Dynamically import firebaseui to ensure it's only run on the client
+    import("firebaseui").then(firebaseui => {
+      // Get or create a new FirebaseUI instance
+      const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
+      firebaseUiWidget.current = ui;
 
-  const handleEmailSignIn = async () => {
-    setIsLoading(true);
-    const user = await signInWithEmail(email, password);
-    if (user) {
-      router.push("/dashboard");
-    }
-    setIsLoading(false);
-  };
+      const uiConfig = {
+        signInFlow: "popup",
+        signInSuccessUrl: "/dashboard",
+        signInOptions: [
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        ],
+        callbacks: {
+          // This is called when the UI is shown
+          uiShown: () => {
+            setLoading(false);
+          },
+          // This is called on sign-in success
+          signInSuccessWithAuthResult: () => {
+            router.push("/dashboard");
+            // Return false to prevent the default redirect
+            return false;
+          },
+        },
+      };
+      
+      // Start the FirebaseUI widget
+      ui.start("#firebaseui-auth-container", uiConfig);
+    });
+  }, [router]);
+
+  // This effect handles auth state changes
+  useEffect(() => {
+    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
+      if (user) {
+        // If user is signed in, redirect to dashboard
+        router.push("/dashboard");
+      }
+    });
+
+    // Cleanup the listener and reset the widget on unmount
+    return () => {
+      unregisterAuthObserver();
+      firebaseUiWidget.current?.reset();
+    };
+  }, [router]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <Card className="w-full max-w-md glass-card">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            Prijava
+            Prijavite se na DaorsVibes
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form
-            className="space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleEmailSignIn();
-            }}
-          >
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="vas@email.com"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isLoading}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Lozinka</Label>
-              <Input
-                id="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={isLoading}
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Prijavljivanje..." : "Prijavi se"}
-            </Button>
-          </form>
-          <div className="mt-4 text-center">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={handleGoogleSignIn}
-              disabled={isLoading}
-            >
-              {isLoading ? "Prijavljivanje..." : "Prijavi se sa Google"}
-            </Button>
-          </div>
-          <div className="mt-4 text-center">
-            <Link href="/signup">Nemate račun? Registrujte se</Link>
-          </div>
+          {loading && (
+             <div className="space-y-4">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <div className="flex items-center space-x-2">
+                    <Skeleton className="h-4 flex-grow" />
+                    <Skeleton className="h-4 w-12" />
+                    <Skeleton className="h-4 flex-grow" />
+                </div>
+                 <Skeleton className="h-10 w-full" />
+             </div>
+          )}
+          <div id="firebaseui-auth-container" />
         </CardContent>
       </Card>
     </div>
