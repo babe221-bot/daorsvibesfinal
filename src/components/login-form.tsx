@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +10,6 @@ import { loginUser } from "@/app/auth-actions";
 import { auth as clientAuth } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 const initialState = { error: undefined, fieldErrors: undefined, success: false, message: undefined };
@@ -24,7 +24,7 @@ function SubmitButton() {
 }
 
 export function LoginForm() {
-  const [state, formAction] = useFormState(loginUser, initialState);
+  const [state, formAction] = useActionState(loginUser, initialState);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
