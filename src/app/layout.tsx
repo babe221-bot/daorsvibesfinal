@@ -29,7 +29,7 @@ export default function RootLayout({
           className="video-background"
           poster="https://placehold.co/1920x1080/000000/000000.png"
         >
-          <source src="/Logo_Transformation_Video_Creation_Guide.mp4" type="video/mp4" />
+          <source src="https://firebasestorage.googleapis.com/v0/b/website-5a18c.firebasestorage.app/o/DaorsVibes%2FLogo_Transformation_Video_Creation_Guide.mp4?alt=media&token=6843af0a-858e-45f2-b619-83808bb97368" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div className="relative z-0 bg-background/70 min-h-svh">
