@@ -19,7 +19,7 @@ export default function Header() {
       <div className="hidden md:block">
         <SidebarTrigger />
       </div>
-      <Image src="/logo.png" alt="Logo" width={40} height={40} className="mix-blend-darken opacity-100" />
+      <Image src="/logo.png" alt="Logo" width={40} height={40} className="mix-blend-lighten opacity-80" />
       <div className="flex-1" />
       <div className="md:hidden">
         <SidebarTrigger />
