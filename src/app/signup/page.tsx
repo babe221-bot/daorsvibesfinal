@@ -6,27 +6,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
-import { signInWithGoogle, signInWithEmail } from "@/lib/auth";
+import { signUpWithEmail } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    const user = await signInWithGoogle();
-    if (user) {
-      router.push("/dashboard");
+  const handleEmailSignUp = async () => {
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
     }
-    setIsLoading(false);
-  };
-
-  const handleEmailSignIn = async () => {
     setIsLoading(true);
-    const user = await signInWithEmail(email, password);
+    const user = await signUpWithEmail(email, password);
     if (user) {
       router.push("/dashboard");
     }
@@ -38,7 +34,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            Prijava
+            Sign Up
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -46,7 +42,7 @@ export default function LoginPage() {
             className="space-y-4"
             onSubmit={(e) => {
               e.preventDefault();
-              handleEmailSignIn();
+              handleEmailSignUp();
             }}
           >
             <div className="space-y-2">
@@ -72,22 +68,23 @@ export default function LoginPage() {
                 disabled={isLoading}
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Input
+                id="confirm-password"
+                type="password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing In..." : "Prijavi se"}
+              {isLoading ? "Signing Up..." : "Sign Up"}
             </Button>
           </form>
           <div className="mt-4 text-center">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={handleGoogleSignIn}
-              disabled={isLoading}
-            >
-              {isLoading ? "Signing In..." : "Sign In with Google"}
-            </Button>
-          </div>
-          <div className="mt-4 text-center">
-            <Link href="/signup">Don't have an account? Sign Up</Link>
+            <Link href="/login">Already have an account? Sign In</Link>
           </div>
         </CardContent>
       </Card>
