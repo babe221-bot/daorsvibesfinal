@@ -1,5 +1,4 @@
 
-
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,6 +12,7 @@ export default function LandingPage() {
           alt="DaorsVibes Logo" 
           width={150} 
           height={150} 
+          priority
           className="mx-auto mb-6 mix-blend-lighten opacity-90"
           style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.7))' }}
         />
