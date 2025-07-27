@@ -68,6 +68,12 @@
   }
 }
 
+@layer components {
+  .video-background {
+    @apply fixed right-0 bottom-0 min-w-full min-h-full -z-10 object-cover opacity-50;
+  }
+}
+
 @layer utilities {
   .glass-card {
     @apply bg-card/30 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg transition-all duration-300 hover:border-white/20;

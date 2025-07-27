@@ -21,7 +21,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   
   return (
     <SidebarProvider>
-      <Sidebar collapsible="icon">
+      <Sidebar collapsible="icon" className="bg-transparent border-0">
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
             <GitBranch className="w-8 h-8 text-primary" />
@@ -85,7 +85,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset>
+      <SidebarInset className="bg-transparent">
         {children}
       </SidebarInset>
     </SidebarProvider>
