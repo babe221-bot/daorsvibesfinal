@@ -2,15 +2,15 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getStorage }_from "firebase/storage";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyDxwAQf6RX8UHlbjPpnjMVX-0jS85K3bvw",
+  authDomain: "website-5a18c.firebaseapp.com",
+  projectId: "website-5a18c",
+  storageBucket: "website-5a18c.appspot.com",
+  messagingSenderId: "636702053767",
+  appId: "1:636702053767:web:efb577d6c53d4d06bd6f22",
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
