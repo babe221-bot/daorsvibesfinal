@@ -10,11 +10,11 @@ export default function LandingPage() {
         <Image 
           src="/logo.png" 
           alt="DaorsVibes Logo" 
-          width={150} 
-          height={150} 
+          width={250} 
+          height={250} 
           priority
           className="mx-auto mb-6 mix-blend-lighten opacity-90"
-          style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.7))' }}
+          style={{ filter: 'drop-shadow(0 0 25px hsl(var(--primary) / 0.8))' }}
         />
         <h1 className="text-5xl font-bold text-primary animate-fade-in-down">
           Dobrodošli na DaorsVibes
