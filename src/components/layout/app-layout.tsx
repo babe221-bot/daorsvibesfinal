@@ -13,8 +13,7 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LayoutDashboard, ListMusic, Music, Sparkles, GitBranch } from "lucide-react";
+import { LayoutDashboard, ListMusic, Music, Sparkles } from "lucide-react";
 import Image from "next/image";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -81,12 +80,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
-          <div className="flex items-center gap-3 p-3">
-            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-              <span className="text-sm font-semibold text-sidebar-foreground">Daors Korisnik</span>
-              <span className="text-xs text-muted-foreground">daors.korisnik@email.com</span>
-            </div>
-          </div>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
