@@ -11,16 +11,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
-export default function Header({ title }: { title: string }) {
+export default function Header() {
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-8">
+    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b border-white/10 bg-background/50 backdrop-blur-sm px-4 md:px-8">
       <div className="hidden md:block">
         <SidebarTrigger />
       </div>
-      <h1 className="flex-1 text-2xl font-semibold text-primary-foreground">
-        {title}
-      </h1>
+      <Image src="/icons/logo-64x64.png" alt="Logo" width={40} height={40} />
+      <div className="flex-1" />
       <div className="md:hidden">
         <SidebarTrigger />
       </div>
