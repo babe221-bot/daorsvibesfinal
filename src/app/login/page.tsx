@@ -4,31 +4,14 @@ import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { Button } from "@/components/ui/button";
+import * as firebaseui from "firebaseui";
+import "firebaseui/dist/firebaseui.css";
+import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
 
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-
-  const handleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      if (user) {
-        router.push("/dashboard");
-      }
-    } catch (error: any) {
-      if (error.code === 'auth/popup-closed-by-user') {
-        console.log("Sign-in popup closed by user.");
-      } else {
-        console.error("Error signing in with Google: ", error);
-      }
-    }
-  };
 
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
@@ -36,6 +19,28 @@ export default function LoginPage() {
         router.push("/dashboard");
       } else {
         setLoading(false);
+        const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
+        ui.start("#firebaseui-auth-container", {
+          signInFlow: "popup",
+          signInOptions: [
+            GoogleAuthProvider.PROVIDER_ID,
+            EmailAuthProvider.PROVIDER_ID,
+          ],
+          callbacks: {
+            signInSuccessWithAuthResult: function (authResult, redirectUrl) {
+              // User successfully signed in.
+              // Return type determines whether we continue the redirect automatically
+              // or whether we leave that to developer to handle.
+              if (authResult.user) {
+                router.push("/dashboard");
+              }
+              return false;
+            },
+          },
+          signInSuccessUrl: "/dashboard",
+          tosUrl: "/terms-of-service",
+          privacyPolicyUrl: "/privacy-policy",
+        });
       }
     });
 
@@ -49,10 +54,10 @@ export default function LoginPage() {
           <Image 
             src="/logo.png" 
             alt="DaorsVibes Logo" 
-            width={100} 
-            height={100} 
+            width={150} 
+            height={150} 
             className="mx-auto mb-4 mix-blend-lighten opacity-90"
-            style={{ filter: 'drop-shadow(0 0 15px hsl(var(--primary) / 0.7))' }}
+            style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.7))' }}
           />
           <CardTitle className="text-2xl font-bold text-center">
             Prijavite se na DaorsVibes
@@ -61,12 +66,10 @@ export default function LoginPage() {
         <CardContent>
           {loading ? (
              <div className="space-y-4">
-                <Skeleton className="h-10 w-full" />
+                <div className="h-10 w-full animate-pulse rounded-md bg-muted" />
              </div>
           ) : (
-            <Button onClick={handleSignIn} className="w-full">
-              Sign in with Google
-            </Button>
+            <div id="firebaseui-auth-container"></div>
           )}
         </CardContent>
       </Card>
