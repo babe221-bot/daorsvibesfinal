@@ -1,7 +1,6 @@
 "use client";
 
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import { User } from "lucide-react";
 
 export default function Header() {
   const router = useRouter();
@@ -37,10 +37,8 @@ export default function Header() {
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-            <Avatar className="h-10 w-10">
-              <AvatarFallback>DV</AvatarFallback>
-            </Avatar>
+          <Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-full">
+            <User />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
