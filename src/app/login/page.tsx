@@ -70,7 +70,14 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md glass-card">
         <CardHeader>
-          <Image src="/logo.png" alt="DaorsVibes Logo" width={80} height={80} className="mx-auto mb-4 mix-blend-lighten opacity-80" />
+          <Image 
+            src="/logo.png" 
+            alt="DaorsVibes Logo" 
+            width={100} 
+            height={100} 
+            className="mx-auto mb-4 mix-blend-lighten opacity-90"
+            style={{ filter: 'drop-shadow(0 0 15px hsl(var(--primary) / 0.7))' }}
+          />
           <CardTitle className="text-2xl font-bold text-center">
             Prijavite se na DaorsVibes
           </CardTitle>

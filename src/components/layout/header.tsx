@@ -32,7 +32,14 @@ export default function Header() {
       <div className="hidden md:block">
         <SidebarTrigger />
       </div>
-      <Image src="/logo.png" alt="DaorsVibes Logo" width={40} height={40} className="mix-blend-screen opacity-70" />
+      <Image 
+        src="/logo.png" 
+        alt="DaorsVibes Logo" 
+        width={48} 
+        height={48} 
+        className="mix-blend-screen opacity-90"
+        style={{ filter: 'drop-shadow(0 0 12px hsl(var(--primary) / 0.8))' }}
+      />
       <div className="flex-1" />
       <div className="md:hidden">
         <SidebarTrigger />
