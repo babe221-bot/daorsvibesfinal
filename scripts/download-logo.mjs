@@ -1,8 +1,13 @@
+
 import { promises as fs } from 'fs';
 import fetch from 'node-fetch';
 import path from 'path';
 
-const LOGO_URL = 'https://firebasestorage.googleapis.com/v0/b/website-5a18c.appspot.com/o/DaorsVibes%2Fgenerated-image%20(7).png?alt=media&token=039ab2f7-1559-4ffc-a706-1bb28ec3a8f8';
+const BUCKET = 'website-5a18c.appspot.com';
+const OBJECT_PATH = 'DaorsVibes/generated-image (8).png';
+const TOKEN = '9cf04eea-e4ca-4000-840a-df41406f6a6a';
+
+const LOGO_URL = `https://firebasestorage.googleapis.com/v0/b/${BUCKET}/o/${encodeURIComponent(OBJECT_PATH)}?alt=media&token=${TOKEN}`;
 const OUTPUT_PATH = 'public/logo.png';
 
 async function downloadLogo() {
