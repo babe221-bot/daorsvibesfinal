@@ -19,7 +19,7 @@ export default function Header() {
       <div className="hidden md:block">
         <SidebarTrigger />
       </div>
-      <Image src="/icons/logo-64x64.png" alt="Logo" width={40} height={40} />
+      <Image src="https://placehold.co/64x64/000000/FFFFFF.png?text=DV" alt="Logo" width={40} height={40} />
       <div className="flex-1" />
       <div className="md:hidden">
         <SidebarTrigger />
