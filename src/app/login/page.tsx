@@ -5,9 +5,8 @@ import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
-import * as firebaseui from "firebaseui";
-import "firebaseui/dist/firebaseui.css";
 import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import "firebaseui/dist/firebaseui.css";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,27 +18,28 @@ export default function LoginPage() {
         router.push("/dashboard");
       } else {
         setLoading(false);
-        const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
-        ui.start("#firebaseui-auth-container", {
-          signInFlow: "popup",
-          signInOptions: [
-            GoogleAuthProvider.PROVIDER_ID,
-            EmailAuthProvider.PROVIDER_ID,
-          ],
-          callbacks: {
-            signInSuccessWithAuthResult: function (authResult, redirectUrl) {
-              // User successfully signed in.
-              // Return type determines whether we continue the redirect automatically
-              // or whether we leave that to developer to handle.
-              if (authResult.user) {
-                router.push("/dashboard");
-              }
-              return false;
+        // Dynamically import firebaseui here
+        import('firebaseui').then(firebaseui => {
+            const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
+            ui.start("#firebaseui-auth-container", {
+            signInFlow: "popup",
+            signInOptions: [
+                GoogleAuthProvider.PROVIDER_ID,
+                EmailAuthProvider.PROVIDER_ID,
+            ],
+            callbacks: {
+                signInSuccessWithAuthResult: function (authResult, redirectUrl) {
+                // User successfully signed in.
+                if (authResult.user) {
+                    router.push("/dashboard");
+                }
+                return false;
+                },
             },
-          },
-          signInSuccessUrl: "/dashboard",
-          tosUrl: "/terms-of-service",
-          privacyPolicyUrl: "/privacy-policy",
+            signInSuccessUrl: "/dashboard",
+            tosUrl: "/terms-of-service",
+            privacyPolicyUrl: "/privacy-policy",
+            });
         });
       }
     });
@@ -66,6 +66,7 @@ export default function LoginPage() {
         <CardContent>
           {loading ? (
              <div className="space-y-4">
+                <div className="h-10 w-full animate-pulse rounded-md bg-muted" />
                 <div className="h-10 w-full animate-pulse rounded-md bg-muted" />
              </div>
           ) : (
