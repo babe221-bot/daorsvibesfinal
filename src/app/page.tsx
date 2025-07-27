@@ -16,9 +16,9 @@ export default function LandingPage() {
 
       <main className="pt-24">
         <section className="text-center py-20 px-6 bg-white">
-          <h2 className="text-5xl font-bold mb-4">Revolucionirajte Svoje Glazbeno Stvaralaštvo</h2>
+          <h2 className="text-5xl font-bold mb-4">Revolucionirajte svoje muzičko stvaralaštvo</h2>
           <p className="text-xl text-gray-600 mb-8">
-            Naša aplikacija pruža glazbenicima alate za transkripciju, analizu i suradnju kao nikada prije.
+            Naša aplikacija pruža muzičarima alate za transkripciju, analizu i saradnju kao nikada prije.
           </p>
           <Link href="/dashboard">
             <Button size="lg">Započnite besplatno</Button>
@@ -32,12 +32,12 @@ export default function LandingPage() {
               <div>
                 <h4 className="text-2xl font-semibold mb-4">Daors Forge AI Systems</h4>
                 <p className="text-gray-700 leading-relaxed">
-                  Mi smo tehnološka tvrtka specijalizirana za razvoj AI rješenja za glazbenu industriju. Naša misija je osnažiti glazbenike s najnovijom tehnologijom kako bi pomaknuli granice kreativnosti. Posjetite našu web stranicu kako biste saznali više:
+                  Mi smo tehnološka kompanija specijalizirana za razvoj AI rješenja za muzičku industriju. Naša misija je osnažiti muzičare s najnovijom tehnologijom kako bi pomjerili granice kreativnosti. Posjetite našu web stranicu kako biste saznali više:
                   <a href="https://daorsforgeaisystems.com" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer"> daorsforgeaisystems.com</a>.
                 </p>
               </div>
               <div className="w-full h-64 bg-gray-200 rounded-lg shadow-md flex items-center justify-center">
-                <p className="text-gray-500">Mjesto za sliku tvrtke</p>
+                <p className="text-gray-500">Mjesto za sliku kompanije</p>
               </div>
             </div>
           </div>
@@ -48,21 +48,21 @@ export default function LandingPage() {
             <h3 className="text-4xl font-bold text-center mb-12">Značajke</h3>
             <div className="grid md:grid-cols-3 gap-8">
               <div className="p-8 bg-gray-50 rounded-lg shadow-md">
-                <h4 className="text-2xl font-semibold mb-4">Povijest Glazbenika</h4>
+                <h4 className="text-2xl font-semibold mb-4">Historija muzičara</h4>
                 <p className="text-gray-700">
-                  Od trubadura na srednjovjekovnim dvorovima do modernih uličnih svirača, glazbenici su oduvijek tražili načine kako zaraditi za život svirajući. Naša platforma odaje počast toj tradiciji olakšavajući modernim umjetnicima da se povežu s publikom i unovče svoj talent.
+                  Od trubadura na srednjovjekovnim dvorovima do modernih uličnih svirača, muzičari su oduvijek tražili načine kako zaraditi za život svirajući. Naša platforma odaje počast toj tradiciji olakšavajući modernim umjetnicima da se povežu s publikom i unovče svoj talent.
                 </p>
               </div>
               <div className="p-8 bg-gray-50 rounded-lg shadow-md">
-                <h4 className="text-2xl font-semibold mb-4">Raznolikost Instrumenata</h4>
+                <h4 className="text-2xl font-semibold mb-4">Raznolikost instrumenata</h4>
                 <p className="text-gray-700">
-                  Bilo da svirate gitaru, klavir, violinu ili bubnjeve, naša platforma podržava širok spektar instrumenata. Istražite povijest i zvuk različitih instrumenata i pronađite inspiraciju za svoju sljedeću skladbu.
+                  Bilo da svirate gitaru, klavir, violinu ili bubnjeve, naša platforma podržava širok spektar instrumenata. Istražite historiju i zvuk različitih instrumenata i pronađite inspiraciju za svoju sljedeću kompoziciju.
                 </p>
               </div>
               <div className="p-8 bg-gray-50 rounded-lg shadow-md">
-                <h4 className="text-2xl font-semibold mb-4">Mjesta za Slike i Videozapise</h4>
+                <h4 className="text-2xl font-semibold mb-4">Mjesta za slike i videozapise</h4>
                 <p className="text-gray-700">
-                  Dodajte vizualnu dimenziju svojoj glazbi. Naša platforma vam omogućuje jednostavno dodavanje slika i videozapisa uz vaše skladbe.
+                  Dodajte vizualnu dimenziju svojoj muzici. Naša platforma vam omogućuje jednostavno dodavanje slika i videozapisa uz vaše kompozicije.
                 </p>
               </div>
             </div>
@@ -72,7 +72,7 @@ export default function LandingPage() {
         <section className="py-20 px-6 text-center">
           <h3 className="text-4xl font-bold mb-4">Jeste li spremni?</h3>
           <p className="text-xl text-gray-600 mb-8">
-            Pridružite se našoj zajednici glazbenika i podignite svoju glazbu na višu razinu.
+            Pridružite se našoj zajednici muzičara i podignite svoju muziku na viši nivo.
           </p>
           <Link href="/dashboard">
             <Button size="lg" variant="default">Idi na kontrolnu ploču</Button>
@@ -81,7 +81,7 @@ export default function LandingPage() {
       </main>
 
       <footer className="py-8 px-6 bg-gray-800 text-white text-center">
-        <p>&copy; {new Date().getFullYear()} Daors Forge AI Systems. Sva prava pridržana.</p>
+        <p>&copy; {new Date().getFullYear()} Daors Forge AI Systems. Sva prava zadržana.</p>
       </footer>
     </div>
   );
