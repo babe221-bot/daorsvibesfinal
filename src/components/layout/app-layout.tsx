@@ -31,42 +31,42 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-               <NextLink href="/" legacyBehavior passHref>
+               <NextLink href="/">
                   <SidebarMenuButton asChild isActive={pathname === '/'} tooltip="Kontrolna tabla">
-                    <a>
+                    <span>
                       <LayoutDashboard />
                       <span>Kontrolna tabla</span>
-                    </a>
+                    </span>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-               <NextLink href="#" legacyBehavior passHref>
+               <NextLink href="#">
                   <SidebarMenuButton asChild isActive={pathname === '/playlists'} tooltip="Playliste">
-                    <a>
+                    <span>
                       <ListMusic />
                       <span>Playliste</span>
-                    </a>
+                    </span>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-               <NextLink href="#" legacyBehavior passHref>
+               <NextLink href="#">
                   <SidebarMenuButton asChild isActive={pathname === '/songs'} tooltip="Pjesme">
-                    <a>
+                    <span>
                       <Music />
                       <span>Pjesme</span>
-                    </a>
+                    </span>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-               <NextLink href="#" legacyBehavior passHref>
+               <NextLink href="#">
                   <SidebarMenuButton asChild isActive={pathname === '/ai-tools'} tooltip="AI Alati">
-                    <a>
+                    <span>
                       <Sparkles />
                       <span>AI Alati</span>
-                    </a>
+                    </span>
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
