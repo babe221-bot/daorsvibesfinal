@@ -2,8 +2,8 @@ import { promises as fs } from 'fs';
 import fetch from 'node-fetch';
 import path from 'path';
 
-const LOGO_URL = 'https://gs://website-5a18c.firebasestorage.app/generated-image%20(6).png';
-const OUTPUT_PATH = 'public/logo.png';
+const LOGO_URL = 'https://firebasestorage.googleapis.com/v0/b/website-5a18c.appspot.com/o/DaorsVibes%2FLogo_Transformation_Video_Creation_Guide.mp4?alt=media&token=6843af0a-858e-45f2-b619-83808bb97368';
+const OUTPUT_PATH = 'public/Logo_Transformation_Video_Creation_Guide.mp4';
 
 async function downloadLogo() {
   try {
