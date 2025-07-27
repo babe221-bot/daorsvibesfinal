@@ -29,6 +29,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               width="48"
               height="48"
               alt="DaorsVibes Logo"
+              className="mix-blend-screen opacity-90"
+              style={{ filter: 'drop-shadow(0 0 12px hsl(var(--primary) / 0.8))' }}
             />
             <span className="text-xl font-headline text-primary-foreground group-data-[collapsible=icon]:hidden">DaorsVibes</span>
           </div>
