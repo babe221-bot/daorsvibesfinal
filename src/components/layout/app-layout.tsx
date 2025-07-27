@@ -21,7 +21,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   
   return (
     <SidebarProvider>
-      <Sidebar collapsible="icon" className="bg-transparent border-0">
+      <Sidebar collapsible="icon" className="bg-card/20 backdrop-blur-lg border-r border-white/10">
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
             <GitBranch className="w-8 h-8 text-primary" />
