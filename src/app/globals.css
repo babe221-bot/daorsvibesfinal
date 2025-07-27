@@ -5,7 +5,7 @@
 @layer base {
   :root {
     --background: 220 13% 18%; /* Cool, dark slate */
-    --foreground: 210 40% 96%; /* Soft white */
+    --foreground: 210 40% 85%; /* Softer white */
 
     --card: 220 13% 22%;
     --card-foreground: 210 40% 96%;
