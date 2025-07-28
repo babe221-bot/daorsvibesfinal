@@ -14,7 +14,10 @@ export async function initFirebaseAdminApp() {
   }
   
   if (!serviceAccount) {
-    throw new Error("Missing FIREBASE_SERVICE_ACCOUNT_KEY environment variable");
+    console.warn(
+      "Firebase Admin SDK not initialized. Missing FIREBASE_SERVICE_ACCOUNT_KEY. Server-side Firebase features will be disabled."
+    );
+    throw new Error("Firebase Admin SDK not initialized.");
   }
 
   adminApp = initializeApp({
