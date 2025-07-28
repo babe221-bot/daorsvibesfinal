@@ -53,7 +53,7 @@ export default function Header() {
         <DropdownMenuTrigger asChild>
            <Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-full">
              <Avatar>
-              <AvatarImage src="https://github.com/daors.png" alt="@daors" />
+              <AvatarImage src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${Math.random()}`} alt="@daors" />
               <AvatarFallback>DV</AvatarFallback>
             </Avatar>
           </Button>
