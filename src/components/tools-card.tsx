@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Search, Milestone, Users, Guitar, ArrowRight } from "lucide-react";
+import { Search, Milestone, Users, Guitar, ArrowRight, Calendar } from "lucide-react";
 import Link from "next/link";
 
 const tools = [
@@ -16,12 +16,6 @@ const tools = [
     description: "Keep your rhythm perfect with our integrated metronome.",
     icon: <Milestone className="h-6 w-6 text-gray-300" />,
     buttonText: "Set Tempo",
-  },
-  {
-    title: "Svirke",
-    description: "Find gigs and connect with other musicians in your area.",
-    icon: <Users className="h-6 w-6 text-gray-300" />,
-    buttonText: "Find Gigs",
   },
 ];
 
@@ -50,6 +44,22 @@ export function ToolsCard() {
                     </CardContent>
                 </Card>
             ))}
+             <Card className="glass-card">
+                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-xl font-bold text-white">Moji Događaji</CardTitle>
+                    <div className="p-2 bg-white/20 rounded-full">
+                        <Calendar className="h-6 w-6 text-white" />
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-gray-300 mb-4">Povežite svoj Google Kalendar da pratite vrijeme i lokacije svojih svirki.</p>
+                     <Link href="/dashboard/gigs">
+                        <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                            Moji Događaji <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                    </Link>
+                </CardContent>
+            </Card>
             <Card className="glass-card">
                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-xl font-bold text-white">AI Instrument Tuner</CardTitle>
