@@ -11,22 +11,48 @@ import './instrument-tuner.css';
 const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 const notePresets = {
-    drum: [
-        { value: 'G3', text: 'G3 (Snare)' },
-        { value: 'C3', text: 'C3 (High Tom)' },
-        { value: 'G2', text: 'G2 (Low Tom)' },
-        { value: 'E2', text: 'E2 (Kick)' }
-    ],
-    guitar: [
-        { value: 'autodetect', text: 'Autodetect' },
-        { value: 'E4', text: 'E4 (1st string)' },
-        { value: 'B3', text: 'B3 (2nd string)' },
-        { value: 'G3', text: 'G3 (3rd string)' },
-        { value: 'D3', text: 'D3 (4th string)' },
-        { value: 'A2', text: 'A2 (5th string)' },
-        { value: 'E2', text: 'E2 (6th string)' }
-    ]
+    guitar: {
+        name: 'Guitar',
+        notes: [
+            { value: 'autodetect', text: 'Autodetect' },
+            { value: 'E4', text: 'E4 (1st string)' },
+            { value: 'B3', text: 'B3 (2nd string)' },
+            { value: 'G3', text: 'G3 (3rd string)' },
+            { value: 'D3', text: 'D3 (4th string)' },
+            { value: 'A2', text: 'A2 (5th string)' },
+            { value: 'E2', text: 'E2 (6th string)' }
+        ]
+    },
+    bass: {
+        name: 'Bass',
+        notes: [
+            { value: 'G2', text: 'G2 (1st string)' },
+            { value: 'D2', text: 'D2 (2nd string)' },
+            { value: 'A1', text: 'A1 (3rd string)' },
+            { value: 'E1', text: 'E1 (4th string)' }
+        ]
+    },
+    ukulele: {
+        name: 'Ukulele',
+        notes: [
+            { value: 'A4', text: 'A4 (1st string)' },
+            { value: 'E4', text: 'E4 (2nd string)' },
+            { value: 'C4', text: 'C4 (3rd string)' },
+            { value: 'G4', text: 'G4 (4th string)' }
+        ]
+    },
+    drum: {
+        name: 'Drum',
+        notes: [
+            { value: 'G3', text: 'G3 (Snare)' },
+            { value: 'C3', text: 'C3 (High Tom)' },
+            { value: 'G2', text: 'G2 (Low Tom)' },
+            { value: 'E2', text: 'E2 (Kick)' }
+        ]
+    },
 };
+
+type TunerMode = keyof typeof notePresets;
 
 const noteToFreq = (note: string): number => {
     const noteParts = note.match(/([A-G]#?)([0-9])/);
@@ -44,8 +70,8 @@ export default function InstrumentTuner() {
     const [note, setNote] = useState('--');
     const [frequency, setFrequency] = useState(0);
     const [cents, setCents] = useState(0);
-    const [mode, setMode] = useState<'drum' | 'guitar'>('drum');
-    const [targetNote, setTargetNote] = useState(notePresets.drum[0].value);
+    const [mode, setMode] = useState<TunerMode>('guitar');
+    const [targetNote, setTargetNote] = useState(notePresets.guitar.notes[0].value);
 
     const analyserRef = useRef<Tone.Analyser | null>(null);
     const micRef = useRef<Tone.UserMedia | null>(null);
@@ -97,7 +123,7 @@ export default function InstrumentTuner() {
         if (maxVal < -70) return 0;
 
         const freq = maxIndex * sampleRate / (analyserRef.current!.size * 2);
-        return (freq > 50 && freq < 1200) ? freq : 0;
+        return (freq > 30 && freq < 1200) ? freq : 0; // Lowered bottom range for bass
     };
 
     const freqToNoteDetails = (freq: number) => {
@@ -126,7 +152,7 @@ export default function InstrumentTuner() {
                     let minDiff = Infinity;
                     let closestNote = '';
                     
-                    notePresets.guitar.forEach(preset => {
+                    notePresets.guitar.notes.forEach(preset => {
                         if (preset.value !== 'autodetect') {
                             const presetFreq = noteToFreq(preset.value);
                             const diff = Math.abs(fundamentalFreq - presetFreq);
@@ -163,7 +189,7 @@ export default function InstrumentTuner() {
     
     useEffect(() => {
         stopTuning();
-        setTargetNote(notePresets[mode][0].value);
+        setTargetNote(notePresets[mode].notes[0].value);
     }, [mode]);
 
     const needleRotation = Math.max(-45, Math.min(45, cents * 0.9));
@@ -172,8 +198,15 @@ export default function InstrumentTuner() {
     return (
         <div className="flex flex-col items-center justify-center p-4">
             <div className="tuner-mode-switch mb-6">
-                <button onClick={() => setMode('drum')} className={cn(mode === 'drum' && 'active')}>Drum</button>
-                <button onClick={() => setMode('guitar')} className={cn(mode === 'guitar' && 'active')}>Guitar</button>
+                {(Object.keys(notePresets) as TunerMode[]).map((key) => (
+                    <button 
+                        key={key}
+                        onClick={() => setMode(key)} 
+                        className={cn(mode === key && 'active')}
+                    >
+                        {notePresets[key].name}
+                    </button>
+                ))}
             </div>
             
             <div className="flex items-center justify-center space-x-3 mb-4 text-white">
@@ -183,7 +216,7 @@ export default function InstrumentTuner() {
                         <SelectValue placeholder="Select a note" />
                     </SelectTrigger>
                     <SelectContent>
-                        {notePresets[mode].map(note => (
+                        {notePresets[mode].notes.map(note => (
                             <SelectItem key={note.value} value={note.value}>{note.text}</SelectItem>
                         ))}
                     </SelectContent>
