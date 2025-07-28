@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import {
   SidebarProvider,
   Sidebar,
-  SidebarHeader,
   SidebarContent,
   SidebarMenu,
   SidebarMenuItem,
@@ -36,7 +35,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <Sidebar collapsible="desktop" className="glass-sidebar">
-        <SidebarHeader />
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
