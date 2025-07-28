@@ -16,8 +16,11 @@ import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import Link from "next/link";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 
 export default function Header() {
+  const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
 
   const handleSignOut = async () => {
@@ -27,6 +30,13 @@ export default function Header() {
     } catch (error) {
       console.error("Error signing out: ", error);
     }
+  };
+
+  const getAvatarFallback = () => {
+    if (loading) return "";
+    if (!user) return "DV";
+    if (user.isAnonymous) return "G";
+    return user.displayName?.substring(0, 2).toUpperCase() || "DV";
   };
 
   return (
@@ -53,13 +63,13 @@ export default function Header() {
         <DropdownMenuTrigger asChild>
            <Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-full">
              <Avatar>
-              <AvatarImage src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${Math.random()}`} alt="@daors" />
-              <AvatarFallback>DV</AvatarFallback>
+              <AvatarImage src={user?.photoURL ?? `https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.uid ?? 'default'}`} alt="@daors" />
+              <AvatarFallback>{getAvatarFallback()}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Moj nalog</DropdownMenuLabel>
+          <DropdownMenuLabel>{user?.isAnonymous ? "Guest" : "Moj nalog"}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/dashboard/settings">Postavke</Link>
