@@ -4,6 +4,9 @@ import { Search, Milestone, Users, Guitar, ArrowRight } from "lucide-react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
@@ -70,6 +73,10 @@ export function ToolsCard() {
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="max-w-lg h-[80vh] p-0 bg-slate-900 border-slate-700">
+                        <DialogHeader>
+                          <DialogTitle className="sr-only">AI Instrument Tuner</DialogTitle>
+                          <DialogDescription className="sr-only">Tune your drums or guitar with our AI-powered tuner.</DialogDescription>
+                        </DialogHeader>
                         <iframe src="/tuner.html" className="w-full h-full border-0" title="AI Instrument Tuner" />
                       </DialogContent>
                     </Dialog>
