@@ -39,7 +39,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
             <Avatar>
-              <AvatarImage src="https://firebasestorage.googleapis.com/v0/b/website-5a18c.appspot.com/o/DaorsVibes%2Fgenerated-image%20(8).png?alt=media&token=9cf04eea-e4ca-4000-840a-df41406f6a6a" alt="DaorsVibes Logo" />
+              <AvatarImage src="https://placehold.co/40x40.png" alt="DaorsVibes Logo" data-ai-hint="logo" />
               <AvatarFallback>DV</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
