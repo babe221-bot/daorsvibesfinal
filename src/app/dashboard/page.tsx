@@ -3,7 +3,6 @@ import Header from "@/components/layout/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Key } from "lucide-react";
 import KeyChangeSuggester from "@/components/key-change-suggester";
-import { DashboardStats } from "@/components/dashboard-stats";
 import { DesignResourcesCard } from "@/components/design-resources-card";
 import { ToolsCard } from "@/components/tools-card";
 
@@ -15,7 +14,6 @@ export default function DashboardPage() {
         <div className="relative z-10">
           <Header />
           <main className="flex-1 p-4 md:p-8 text-white fade-in-down">
-            <DashboardStats />
             
             <div className="grid gap-8 md:grid-cols-3 lg:grid-cols-4">
               
