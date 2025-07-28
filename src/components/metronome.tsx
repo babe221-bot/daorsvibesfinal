@@ -129,7 +129,7 @@ export function Metronome() {
   }, [tempo, isPlaying, scheduleNote]);
 
   return (
-    <div className="flex flex-col items-center p-4 rounded-lg bg-white/10 text-white shadow-xl backdrop-blur-lg border border-white/20">
+    <div className="flex flex-col items-center p-4 rounded-lg text-white">
       <div className="w-full max-w-md flex flex-col items-center">
         
         <div className="metronome-container">
