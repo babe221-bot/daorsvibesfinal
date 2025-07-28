@@ -11,12 +11,27 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarInset,
+  SidebarFooter,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "../ui/button";
+import { auth } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+      router.push("/login");
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
   
   return (
     <SidebarProvider>
@@ -95,6 +110,29 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
+         <SidebarFooter>
+          <SidebarSeparator />
+          <SidebarMenu>
+            <SidebarMenuItem>
+                <NextLink href="/dashboard/settings">
+                    <SidebarMenuButton asChild isActive={pathname === '/dashboard/settings'} tooltip="Postavke">
+                        <span>
+                            <Settings />
+                            <span>Postavke</span>
+                        </span>
+                    </SidebarMenuButton>
+                </NextLink>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+                <SidebarMenuButton onClick={handleSignOut} tooltip="Odjava">
+                    <span>
+                        <LogOut />
+                        <span>Odjava</span>
+                    </span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         {children}

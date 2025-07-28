@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
+import Link from "next/link";
 
 export default function Header() {
   const router = useRouter();
@@ -60,7 +61,9 @@ export default function Header() {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Moj nalog</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Postavke</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/settings">Postavke</Link>
+          </DropdownMenuItem>
           <DropdownMenuItem>Podrška</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleSignOut}>Odjava</DropdownMenuItem>
