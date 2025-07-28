@@ -18,7 +18,7 @@ export default function MetronomePage() {
         <div className="relative z-10">
           <Header />
           <main className="flex-1 p-4 md:p-8 text-white fade-in-down">
-            <Card className="glass-card">
+            <Card className="bg-transparent border-0 shadow-none">
               <CardHeader>
                 <div className="flex items-center space-x-4">
                     <div className="p-3 bg-white/20 rounded-full">
@@ -33,7 +33,7 @@ export default function MetronomePage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="mb-6 text-gray-200">
+                <p className="mb-6 text-gray-200 text-center">
                   Podesite tempo i održavajte ritam pod kontrolom pomoću našeg vizualnog metronoma. Savršeno za vježbanje, snimanje ili nastupe uživo.
                 </p>
                 <Metronome />
