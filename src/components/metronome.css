@@ -14,51 +14,97 @@
     border-color: hsla(var(--primary-foreground), 0.8);
 }
 
-.metronome-dial {
-    width: 300px;
-    height: 180px; /* shorter than tuner */
-    border: 4px solid hsl(var(--card)); 
-    border-radius: 50% 50% 0 0;
-    border-bottom: none;
-    position: relative;
-    margin: 2rem auto;
-    background: radial-gradient(circle at 50% 100%, hsl(var(--card)), hsl(var(--background)));
-    box-shadow: 0 0 30px hsla(var(--primary), 0.2), inset 0 5px 15px hsla(var(--card), 0.8);
+/* --- New Realistic Metronome Styles --- */
+
+.metronome-container {
+    perspective: 800px;
 }
 
-.metronome-needle {
-    width: 4px;
-    height: 160px;
-    background: linear-gradient(to top, hsl(var(--accent)), hsl(var(--accent) / 0.7));
+.metronome-body {
+    width: 250px;
+    height: 350px;
+    background: linear-gradient(145deg, #4a372a, #2c1f18); /* Wood grain effect */
+    margin: 2rem auto;
+    position: relative;
+    border-radius: 10px 10px 5px 5px;
+    box-shadow: 
+        0 10px 20px rgba(0,0,0,0.4), 
+        inset 0 0 15px rgba(0,0,0,0.5),
+        inset 0 2px 2px rgba(255,255,255,0.2);
+    transform: rotateX(10deg); /* Slight 3D tilt */
+}
+
+.metronome-front {
     position: absolute;
-    bottom: 0;
-    left: calc(50% - 2px);
+    top: 20px;
+    left: 25px;
+    right: 25px;
+    bottom: 20px;
+    background: #251a13;
+    border-radius: 5px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.7);
+    overflow: hidden;
+}
+
+.metronome-scale {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #c5b5a5;
+    font-family: serif;
+}
+
+.metronome-scale .tick {
+    height: 1px;
+    width: 20px;
+    background: #c5b5a5;
+    margin: 14px 0;
+    position: relative;
+}
+.metronome-scale .tick::after {
+    content: attr(data-bpm);
+    position: absolute;
+    left: -35px;
+    font-size: 12px;
+}
+
+
+.metronome-pendulum {
+    width: 6px;
+    height: 280px;
+    background: linear-gradient(to right, #d4af37, #b8860b, #d4af37); /* Gold color */
+    position: absolute;
+    bottom: 20px;
+    left: calc(50% - 3px);
     transform-origin: bottom;
     transition-property: transform;
-    transition-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-    border-radius: 4px 4px 0 0;
-    box-shadow: 0 0 10px hsla(var(--accent), 0.7);
+    transition-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95); /* Smoother swing */
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
 }
 
-.metronome-base {
-    width: 60px;
-    height: 30px;
-    background-color: hsl(var(--card));
+.pendulum-weight {
+    width: 30px;
+    height: 20px;
+    background: linear-gradient(145deg, #e6c56d, #b8860b);
     position: absolute;
-    bottom: -28px;
-    left: calc(50% - 30px);
-    border-radius: 5px;
-    border: 2px solid hsl(var(--border));
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    border-top: 1px solid #f0e68c;
 }
+
 
 .metronome-display {
     text-align: center;
     position: relative;
-    top: -40px; /* move up to not overlap with needle */
+    padding-top: 1rem;
 }
 
 .tempo-display {
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: 700;
     line-height: 1;
     color: hsl(var(--foreground));

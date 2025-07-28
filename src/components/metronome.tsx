@@ -5,7 +5,6 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Play, Pause, Plus, Minus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 import './metronome.css';
 
 export function Metronome() {
@@ -25,19 +24,20 @@ export function Metronome() {
   const scheduleNote = useCallback(() => {
     if (!audioContextRef.current) return;
     
+    const secondsPerBeat = 60.0 / tempo;
+
     while (nextNoteTimeRef.current < audioContextRef.current.currentTime + scheduleAheadTime) {
       const isFirstBeat = (beatCountRef.current % beatsPerMeasure) === 0;
       playClick(isFirstBeat, nextNoteTimeRef.current);
       
       const currentBeatIndex = beatCountRef.current % beatsPerMeasure;
-      const rotationAngle = 30 * ((beatCountRef.current % 2 === 0) ? 1 : -1);
+      const rotationAngle = 25 * ((beatCountRef.current % 2 === 0) ? 1 : -1);
 
       setTimeout(() => {
           setCurrentBeat(currentBeatIndex);
           setNeedleRotation(rotationAngle);
       }, (nextNoteTimeRef.current - audioContextRef.current.currentTime) * 1000);
 
-      const secondsPerBeat = 60.0 / tempo;
       nextNoteTimeRef.current += secondsPerBeat;
       beatCountRef.current = beatCountRef.current + 1;
     }
@@ -67,11 +67,15 @@ export function Metronome() {
         window.clearTimeout(timerRef.current);
       }
       setIsPlaying(false);
-      setNeedleRotation(0);
-      setTimeout(() => setCurrentBeat(-1), (60 / tempo) * 1000);
       if (audioContextRef.current && audioContextRef.current.state === 'running') {
         await audioContextRef.current.suspend();
       }
+      // Reset needle after a short delay
+      setTimeout(() => {
+        setNeedleRotation(0);
+        setCurrentBeat(-1)
+      }, 100);
+
     } else {
       try {
         if (!audioContextRef.current) {
@@ -80,7 +84,7 @@ export function Metronome() {
         if (audioContextRef.current.state === 'suspended') {
           await audioContextRef.current.resume();
         }
-        nextNoteTimeRef.current = audioContextRef.current.currentTime;
+        nextNoteTimeRef.current = audioContextRef.current.currentTime + 0.1; // Add a small buffer
         beatCountRef.current = 0;
         setIsPlaying(true);
         scheduleNote();
@@ -101,9 +105,10 @@ export function Metronome() {
   const adjustTempo = (amount: number) => {
     setTempo(prev => Math.max(40, Math.min(220, prev + amount)));
   };
+
+  const pendulumWeightPosition = 100 - ((tempo - 40) / (220 - 40)) * 100;
   
   useEffect(() => {
-    // Stop and clean up on unmount
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
@@ -127,15 +132,32 @@ export function Metronome() {
     <div className="flex flex-col items-center p-4 rounded-lg bg-white/10 text-white shadow-xl backdrop-blur-lg border border-white/20">
       <div className="w-full max-w-md flex flex-col items-center">
         
-        <div className="metronome-dial">
-           <div 
-              className="metronome-needle"
-              style={{
-                transform: `rotate(${isPlaying ? needleRotation : 0}deg)`,
-                transitionDuration: isPlaying ? `${60 / tempo}s` : '0.2s',
-              }}
-            ></div>
-            <div className="metronome-base"></div>
+        <div className="metronome-container">
+            <div className="metronome-body">
+                <div className="metronome-front">
+                    <div className="metronome-scale">
+                        <div className="tick" data-bpm="220"></div>
+                        <div className="tick"></div>
+                        <div className="tick" data-bpm="180"></div>
+                        <div className="tick"></div>
+                        <div className="tick" data-bpm="140"></div>
+                         <div className="tick"></div>
+                        <div className="tick" data-bpm="100"></div>
+                         <div className="tick"></div>
+                        <div className="tick" data-bpm="60"></div>
+                         <div className="tick"></div>
+                    </div>
+                    <div 
+                        className="metronome-pendulum"
+                        style={{
+                            transform: `rotate(${isPlaying ? needleRotation : 0}deg)`,
+                            transitionDuration: isPlaying ? `${60 / tempo}s` : '0.5s',
+                        }}
+                    >
+                      <div className="pendulum-weight" style={{ top: `${pendulumWeightPosition}%` }}></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div className="metronome-display">
