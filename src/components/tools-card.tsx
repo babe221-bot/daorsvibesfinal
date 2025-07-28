@@ -1,14 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Search, Milestone, Users, Guitar, ArrowRight } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 const tools = [
   {
@@ -65,21 +57,10 @@ export function ToolsCard() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-gray-300 mb-4">Tune your drums or guitar with our AI-powered tuner.</p>
-                     <Dialog>
-                      <DialogTrigger asChild>
-                         <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
-                            Open Tuner <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="max-w-lg h-[80vh] p-0 bg-slate-900 border-slate-700">
-                        <DialogHeader>
-                          <DialogTitle className="sr-only">AI Instrument Tuner</DialogTitle>
-                          <DialogDescription className="sr-only">Tune your drums or guitar with our AI-powered tuner.</DialogDescription>
-                        </DialogHeader>
-                        <iframe src="/tuner" className="w-full h-full border-0" title="AI Instrument Tuner" />
-                      </DialogContent>
-                    </Dialog>
+                    <p className="text-gray-300 mb-4">A new and improved tuner is coming soon!</p>
+                     <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black" disabled>
+                        Coming Soon <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
                 </CardContent>
             </Card>
         </div>
