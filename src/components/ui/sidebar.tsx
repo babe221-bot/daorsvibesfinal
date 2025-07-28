@@ -374,11 +374,10 @@ const SidebarHeader = React.forwardRef<
         <Image
           src="/logo.png"
           alt="DaorsVibes Logo"
-          width={100}
-          height={100}
-          className="rounded-full mix-blend-screen"
+          width={150}
+          height={150}
+          className="rounded-full"
         />
-        <h1 className="text-2xl font-bold">DaorsVibes</h1>
       </div>
     </div>
   )
