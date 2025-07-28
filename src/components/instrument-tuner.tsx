@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Analyser, UserMedia, start, context } from 'tone';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
@@ -73,17 +72,22 @@ export default function InstrumentTuner() {
     const [mode, setMode] = useState<TunerMode>('guitar');
     const [targetNote, setTargetNote] = useState(notePresets.guitar.notes[0].value);
 
-    const analyserRef = useRef<Analyser | null>(null);
-    const micRef = useRef<UserMedia | null>(null);
+    const toneRef = useRef<any>(null);
+    const analyserRef = useRef<any>(null);
+    const micRef = useRef<any>(null);
     const animationFrameRef = useRef<number | null>(null);
 
     const startTuning = async () => {
         try {
-            await start();
-            micRef.current = new UserMedia();
+            if (!toneRef.current) {
+                toneRef.current = await import('tone');
+            }
+            const Tone = toneRef.current;
+            await Tone.start();
+            micRef.current = new Tone.UserMedia();
             await micRef.current.open();
 
-            analyserRef.current = new Analyser('fft', 2048);
+            analyserRef.current = new Tone.Analyser('fft', 2048);
             micRef.current.connect(analyserRef.current);
             setIsTuning(true);
         } catch (error) {
@@ -123,7 +127,7 @@ export default function InstrumentTuner() {
         if (maxVal < -70) return 0;
 
         const freq = maxIndex * sampleRate / (analyserRef.current!.size * 2);
-        return (freq > 30 && freq < 1200) ? freq : 0; // Lowered bottom range for bass
+        return (freq > 30 && freq < 1200) ? freq : 0;
     };
 
     const freqToNoteDetails = (freq: number) => {
@@ -135,11 +139,11 @@ export default function InstrumentTuner() {
     };
 
     const tuningLoop = () => {
-        if (!isTuning || !analyserRef.current) return;
-
+        if (!isTuning || !analyserRef.current || !toneRef.current) return;
+        const Tone = toneRef.current;
         const fftData = analyserRef.current.getValue();
         if (fftData instanceof Float32Array) {
-            const fundamentalFreq = findFundamentalFreq(fftData, context.sampleRate);
+            const fundamentalFreq = findFundamentalFreq(fftData, Tone.context.sampleRate);
             
             if (fundamentalFreq > 0) {
                 const currentNoteDetails = freqToNoteDetails(fundamentalFreq);
