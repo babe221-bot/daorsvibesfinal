@@ -64,7 +64,9 @@ export default function Header() {
           <DropdownMenuItem asChild>
             <Link href="/dashboard/settings">Postavke</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>Podrška</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/support">Podrška</Link>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleSignOut}>Odjava</DropdownMenuItem>
         </DropdownMenuContent>
