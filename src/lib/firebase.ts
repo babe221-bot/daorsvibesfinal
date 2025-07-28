@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth, connectAuthEmulator } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { getStorage }_from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDxwAQf6RX8UHlbjPpnjMVX-0jS85K3bvw",
@@ -20,8 +20,8 @@ const storage = getStorage(app);
 
 if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
     // Point to the emulators
-    connectAuthEmulator(auth, 'http://localhost:9099');
-    connectFirestoreEmulator(db, 'localhost', 8080);
+    connectAuthEmulator(auth, 'http://localhost:9101');
+    connectFirestoreEmulator(db, 'localhost', 8082);
 }
 
 
