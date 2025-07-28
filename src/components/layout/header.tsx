@@ -10,9 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import { User } from "lucide-react";
+import { Search } from "lucide-react";
 
 export default function Header() {
   const router = useRouter();
@@ -20,7 +22,7 @@ export default function Header() {
   const handleSignOut = async () => {
     try {
       await auth.signOut();
-      router.push("/");
+      router.push("/login");
     } catch (error) {
       console.error("Error signing out: ", error);
     }
@@ -31,14 +33,28 @@ export default function Header() {
       <div className="hidden md:block">
         <SidebarTrigger />
       </div>
-      <div className="flex-1" />
+       <div className="flex w-full flex-1 gap-4 md:ml-auto md:gap-2 lg:gap-4">
+          <form className="ml-auto flex-1 sm:flex-initial">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Pretražite pjesme, playliste..."
+                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px] bg-background/50"
+              />
+            </div>
+          </form>
+        </div>
       <div className="md:hidden">
         <SidebarTrigger />
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-full">
-            <User />
+           <Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-full">
+             <Avatar>
+              <AvatarImage src="https://github.com/daors.png" alt="@daors" />
+              <AvatarFallback>DV</AvatarFallback>
+            </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

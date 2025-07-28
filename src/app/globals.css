@@ -4,50 +4,51 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
+    --background: 240 6% 10%; /* Darker, almost black */
     --foreground: 210 40% 98%;
 
-    --card: 240 4.8% 9.8%;
+    --card: 240 5% 14%; /* Dark Gray */
     --card-foreground: 210 40% 98%;
 
-    --popover: 240 10% 3.9%;
+    --popover: 240 6% 10%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 262.1 83.3% 57.8%; /* Royal Purple */
+    --primary: 217 91% 60%; /* Bright Blue */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 240 3.7% 15.9%;
+    --secondary: 240 4% 18%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 240 3.7% 15.9%;
+    --muted: 240 4% 18%;
     --muted-foreground: 240 5% 64.9%;
 
-    --accent: 333.9 100% 50%; /* Neon Pink */
+    --accent: 34 99% 50%; /* Bright Orange */
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 262.1 83.3% 57.8%;
+    --border: 240 4% 18%;
+    --input: 240 4% 18%;
+    --ring: 217 91% 60%;
     
-    --chart-1: 262 83% 58%;
-    --chart-2: 334 100% 50%;
+    --chart-1: 217 91% 60%;
+    --chart-2: 34 99% 50%;
     --chart-3: 160 60% 45%;
     --chart-4: 30 80% 55%;
     --chart-5: 280 65% 60%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 260 20% 8%;
+    /* Keeping sidebar variables for potential future use, but they can be simplified */
+    --sidebar-background: 240 6% 10%;
     --sidebar-foreground: 210 40% 94%;
-    --sidebar-primary: 333.9 100% 50%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 260 20% 12%;
+    --sidebar-accent: 240 5% 14%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 260 20% 12%;
-    --sidebar-ring: 333.9 100% 50%;
+    --sidebar-border: 240 4% 18%;
+    --sidebar-ring: 34 99% 50%;
   }
 
   .dark {
@@ -63,29 +64,29 @@
     @apply bg-background text-foreground/85 font-body;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-headline text-primary tracking-tighter;
-    text-shadow: 0 2px 12px hsl(var(--primary) / 0.4);
+    @apply font-headline text-foreground tracking-tight;
   }
 }
 
 @layer components {
   .video-background {
-    @apply fixed right-0 bottom-0 min-w-full min-h-full -z-10 object-cover opacity-80;
+    @apply fixed right-0 bottom-0 min-w-full min-h-full -z-10 object-cover opacity-20; /* Reduced opacity */
   }
 }
 
 @layer utilities {
-  .glass-card {
-    @apply bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg transition-all duration-300 hover:border-white/20 hover:shadow-primary/20 hover:shadow-2xl;
+  .ui-card {
+    @apply bg-card border border-border rounded-xl shadow-md transition-all duration-300 hover:border-primary/80 hover:shadow-primary/10 hover:shadow-lg;
   }
 
+  /* You can keep glass-sidebar or change it to align with the new design */
   .glass-sidebar {
-    background-color: hsl(var(--sidebar-background) / 0.1);
-    @apply backdrop-blur-xl border-r border-white/10 shadow-2xl transition-all duration-300;
+    background-color: hsl(var(--sidebar-background) / 0.5); /* Made it less transparent */
+    @apply backdrop-blur-md border-r border-white/5 shadow-2xl transition-all duration-300;
   }
 
   .gradient-btn {
-    @apply bg-gradient-to-r from-primary via-purple-500 to-accent text-primary-foreground border-accent/50 hover:shadow-[0_0_20px_hsl(var(--accent)/0.7)] transition-shadow duration-300;
+    @apply bg-gradient-to-r from-primary to-blue-400 text-primary-foreground border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.5)] transition-shadow duration-300;
   }
   
   .neon-underline {
