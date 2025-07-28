@@ -77,7 +77,7 @@ export function ToolsCard() {
                           <DialogTitle className="sr-only">AI Instrument Tuner</DialogTitle>
                           <DialogDescription className="sr-only">Tune your drums or guitar with our AI-powered tuner.</DialogDescription>
                         </DialogHeader>
-                        <iframe src="/tuner.html" className="w-full h-full border-0" title="AI Instrument Tuner" />
+                        <iframe src="/tuner" className="w-full h-full border-0" title="AI Instrument Tuner" />
                       </DialogContent>
                     </Dialog>
                 </CardContent>
