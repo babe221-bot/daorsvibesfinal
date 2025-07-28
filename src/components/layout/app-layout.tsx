@@ -1,6 +1,7 @@
 "use client";
 
 import NextLink from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   SidebarProvider,
@@ -37,7 +38,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <Sidebar collapsible="desktop" className="glass-sidebar">
         <SidebarContent>
-          <SidebarHeader />
+          <SidebarHeader>
+            <div className="flex items-center gap-2 p-2">
+              <Image src="/icons/logo-48x48.png" alt="DaorsVibes Logo" width={48} height={48} />
+            </div>
+          </SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
                <NextLink href="/dashboard">
