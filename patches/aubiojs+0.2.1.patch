@@ -1,0 +1,14 @@
+diff --git a/node_modules/aubiojs/package.json b/node_modules/aubiojs/package.json
+index 548c71e..9553507 100644
+--- a/node_modules/aubiojs/package.json
++++ b/node_modules/aubiojs/package.json
+@@ -4,8 +4,7 @@
+   "license": "MIT",
+   "author": "Guido P. Goldin <ggoldin@gmail.com>",
+   "main": "build/aubio.js",
+-  "browser": "build/aubio.js",
+   "files": [
+     "build/*"
+   ]
+ }
+
