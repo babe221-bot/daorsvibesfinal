@@ -7,14 +7,13 @@ import {
   Sidebar,
   SidebarHeader,
   SidebarContent,
-  SidebarFooter,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarInset,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, ListMusic, Music, Sparkles, Settings, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -25,23 +24,31 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
             <Avatar>
-              <AvatarImage src="https://github.com/daors.png" alt="@daors" />
               <AvatarFallback>DV</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
                 <span className="text-lg font-headline text-primary-foreground group-data-[collapsible=icon]:hidden">DaorsVibes</span>
-                <span className="text-sm text-primary-foreground/80 group-data-[collapsible=icon]:hidden">daors@vibes.com</span>
             </div>
           </div>
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-               <NextLink href="/">
-                  <SidebarMenuButton asChild isActive={pathname === '/'} tooltip="Kontrolna tabla">
+               <NextLink href="/dashboard">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip="Kontrolna tabla">
                     <span>
                       <LayoutDashboard />
                       <span>Kontrolna tabla</span>
+                    </span>
+                  </SidebarMenuButton>
+              </NextLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+               <NextLink href="/dashboard/stats">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/stats'} tooltip="Statistika">
+                    <span>
+                      <BarChart />
+                      <span>Statistika</span>
                     </span>
                   </SidebarMenuButton>
               </NextLink>
@@ -78,30 +85,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
-        <SidebarFooter>
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <NextLink href="#">
-                        <SidebarMenuButton asChild isActive={pathname === '/settings'} tooltip="Postavke">
-                            <span>
-                            <Settings />
-                            <span>Postavke</span>
-                            </span>
-                        </SidebarMenuButton>
-                    </NextLink>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <NextLink href="/login">
-                        <SidebarMenuButton asChild tooltip="Odjava">
-                            <span>
-                            <LogOut />
-                            <span>Odjava</span>
-                            </span>
-                        </SidebarMenuButton>
-                    </NextLink>
-                </SidebarMenuItem>
-            </SidebarMenu>
-        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         {children}
