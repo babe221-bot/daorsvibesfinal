@@ -3,8 +3,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
-import { Play, Pause } from 'lucide-react';
+import { Play, Pause, Plus, Minus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 import './metronome.css';
 
 export function Metronome() {
@@ -12,23 +13,32 @@ export function Metronome() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [tempo, setTempo] = useState(120);
   const [beatsPerMeasure, setBeatsPerMeasure] = useState(4);
-  const [currentBeat, setCurrentBeat] = useState(0);
+  const [currentBeat, setCurrentBeat] = useState(-1);
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const nextNoteTimeRef = useRef<number>(0);
   const scheduleAheadTime = 0.1;
   const timerRef = useRef<number | null>(null);
+  const beatCountRef = useRef<number>(0);
 
   const scheduleNote = () => {
     if (!audioContextRef.current) return;
     
     while (nextNoteTimeRef.current < audioContextRef.current.currentTime + scheduleAheadTime) {
-      const isFirstBeat = (currentBeat % beatsPerMeasure) === 0;
+      const isFirstBeat = (beatCountRef.current % beatsPerMeasure) === 0;
       playClick(isFirstBeat, nextNoteTimeRef.current);
       
+      const currentBeatIndex = beatCountRef.current % beatsPerMeasure;
+      
+      // Schedule state update on the main thread
+      setTimeout(() => {
+          setCurrentBeat(currentBeatIndex);
+      }, (nextNoteTimeRef.current - audioContextRef.current.currentTime) * 1000);
+
+
       const secondsPerBeat = 60.0 / tempo;
       nextNoteTimeRef.current += secondsPerBeat;
-      setCurrentBeat(prev => (prev + 1) % beatsPerMeasure);
+      beatCountRef.current = beatCountRef.current + 1;
     }
     
     timerRef.current = window.setTimeout(scheduleNote, 25.0);
@@ -56,7 +66,7 @@ export function Metronome() {
         window.clearTimeout(timerRef.current);
       }
       setIsPlaying(false);
-      setCurrentBeat(0);
+      setTimeout(() => setCurrentBeat(-1), (60/tempo) * 1000);
       if (audioContextRef.current && audioContextRef.current.state === 'running') {
         await audioContextRef.current.suspend();
       }
@@ -69,7 +79,7 @@ export function Metronome() {
           await audioContextRef.current.resume();
         }
         nextNoteTimeRef.current = audioContextRef.current.currentTime;
-        setCurrentBeat(0);
+        beatCountRef.current = 0;
         setIsPlaying(true);
         scheduleNote();
       } catch (error) {
@@ -85,6 +95,10 @@ export function Metronome() {
   const handleTempoChange = (value: number[]) => {
     setTempo(value[0]);
   };
+
+  const adjustTempo = (amount: number) => {
+    setTempo(prev => Math.max(40, Math.min(220, prev + amount)));
+  };
   
   useEffect(() => {
     return () => {
@@ -98,27 +112,41 @@ export function Metronome() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center p-6 rounded-lg bg-white/10 text-white shadow-xl backdrop-blur-lg border border-white/20">
-      <div className="w-full max-w-md">
-        <div className="flex justify-between items-center mb-4">
-          <div className="text-lg font-bold">Tempo: {tempo} BPM</div>
-          <div className="flex space-x-2">
+    <div className="flex flex-col items-center p-4 rounded-lg bg-white/10 text-white shadow-xl backdrop-blur-lg border border-white/20">
+      <div className="w-full max-w-md flex flex-col items-center">
+
+        <div className={cn("metronome-display", isPlaying && "playing")}>
+            <div className="tempo-display">{tempo}</div>
+            <div className="bpm-label">BPM</div>
+        </div>
+        
+        <div className="w-full my-8">
+             <div className="flex items-center justify-center gap-4">
+                <Button onClick={() => adjustTempo(-1)} variant="outline" size="icon" className="rounded-full h-12 w-12 bg-white/20 border-0">
+                    <Minus />
+                </Button>
+                <Slider
+                    min={40}
+                    max={220}
+                    step={1}
+                    value={[tempo]}
+                    onValueChange={handleTempoChange}
+                    className="flex-1"
+                />
+                <Button onClick={() => adjustTempo(1)} variant="outline" size="icon" className="rounded-full h-12 w-12 bg-white/20 border-0">
+                    <Plus />
+                </Button>
+             </div>
+        </div>
+
+         <div className="flex space-x-3 mb-8">
             {Array.from({ length: beatsPerMeasure }).map((_, i) => (
                 <div key={i} className={`beat-indicator ${isPlaying && currentBeat === i ? 'active' : ''}`}></div>
             ))}
-          </div>
         </div>
-        <Slider
-          min={40}
-          max={220}
-          step={1}
-          value={[tempo]}
-          onValueChange={handleTempoChange}
-          className="mb-6"
-        />
-        <Button onClick={startStop} className="w-full text-lg py-6 bg-white text-black hover:bg-gray-200 shadow-lg">
-          {isPlaying ? <Pause className="mr-2 h-6 w-6" /> : <Play className="mr-2 h-6 w-6" />}
-          {isPlaying ? 'Stop' : 'Start'}
+
+        <Button onClick={startStop} className="w-40 h-16 text-lg rounded-full bg-white text-black hover:bg-gray-200 shadow-lg flex items-center justify-center">
+          {isPlaying ? <Pause className="h-8 w-8" /> : <Play className="h-8 w-8" />}
         </Button>
       </div>
     </div>
