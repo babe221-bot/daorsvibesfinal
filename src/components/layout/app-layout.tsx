@@ -12,6 +12,7 @@ import {
   SidebarInset,
   SidebarFooter,
   SidebarSeparator,
+  SidebarHeader,
 } from "@/components/ui/sidebar";
 import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key, LifeBuoy, Calendar } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -36,6 +37,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <Sidebar collapsible="desktop" className="glass-sidebar">
         <SidebarContent>
+          <SidebarHeader />
           <SidebarMenu>
             <SidebarMenuItem>
                <NextLink href="/dashboard">
