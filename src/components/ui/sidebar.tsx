@@ -372,7 +372,7 @@ const SidebarHeader = React.forwardRef<
     >
       <div className="flex items-center justify-center">
         <Image
-          src="https://firebasestorage.googleapis.com/v0/b/website-5a18c.appspot.com/o/DaorsVibes%2Fgenerated-image%20(8).png?alt=media&token=9cf04eea-e4ca-4000-840a-df41406f6a6a"
+          src="https://firebasestorage.googleapis.com/v0/b/website-5a18c.appspot.com/o/DaorsVibes%2Fgenerated-image%20(8)_180x180.png?alt=media&token=9cf04eea-e4ca-4000-840a-df41406f6a6a"
           alt="DaorsVibes Logo"
           width={180}
           height={180}
