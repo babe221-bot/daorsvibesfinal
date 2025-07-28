@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Music, Search, Milestone, Users, Guitar, Key, GitBranch, LayoutTemplate, Palette, Code, ArrowRight, ListMusic, Activity, Clock, Server, BookOpen, Lightbulb } from "lucide-react";
 import KeyChangeSuggester from "@/components/key-change-suggester";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import GuitarTuner from "@/components/guitar-tuner";
 
 
 export default function DashboardPage() {
@@ -204,7 +203,7 @@ export default function DashboardPage() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                   <GuitarTuner />
+                   <p className="text-gray-300">This feature is coming soon!</p>
                   </CardContent>
                 </Card>
               </div>
