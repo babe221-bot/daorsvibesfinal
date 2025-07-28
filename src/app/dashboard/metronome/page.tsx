@@ -27,14 +27,14 @@ export default function MetronomePage() {
                     <div>
                         <CardTitle className="text-3xl font-bold text-white">Metronom</CardTitle>
                         <CardDescription className="text-gray-300 text-lg">
-                            Održavajte savršen ritam uz naš integrisani metronom.
+                            Održavajte savršen ritam uz naš grafički metronom.
                         </CardDescription>
                     </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <p className="mb-6 text-gray-200">
-                  Podesite tempo i održavajte ritam pod kontrolom pomoću našeg jednostavnog metronoma. Savršeno za vježbanje, snimanje ili nastupe uživo.
+                  Podesite tempo i održavajte ritam pod kontrolom pomoću našeg vizualnog metronoma. Savršeno za vježbanje, snimanje ili nastupe uživo.
                 </p>
                 <Metronome />
               </CardContent>

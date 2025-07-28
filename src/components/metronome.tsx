@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Play, Pause, Plus, Minus } from 'lucide-react';
@@ -14,6 +14,7 @@ export function Metronome() {
   const [tempo, setTempo] = useState(120);
   const [beatsPerMeasure, setBeatsPerMeasure] = useState(4);
   const [currentBeat, setCurrentBeat] = useState(-1);
+  const [needleRotation, setNeedleRotation] = useState(0);
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const nextNoteTimeRef = useRef<number>(0);
@@ -21,7 +22,7 @@ export function Metronome() {
   const timerRef = useRef<number | null>(null);
   const beatCountRef = useRef<number>(0);
 
-  const scheduleNote = () => {
+  const scheduleNote = useCallback(() => {
     if (!audioContextRef.current) return;
     
     while (nextNoteTimeRef.current < audioContextRef.current.currentTime + scheduleAheadTime) {
@@ -29,12 +30,12 @@ export function Metronome() {
       playClick(isFirstBeat, nextNoteTimeRef.current);
       
       const currentBeatIndex = beatCountRef.current % beatsPerMeasure;
-      
-      // Schedule state update on the main thread
+      const rotationAngle = 30 * ((beatCountRef.current % 2 === 0) ? 1 : -1);
+
       setTimeout(() => {
           setCurrentBeat(currentBeatIndex);
+          setNeedleRotation(rotationAngle);
       }, (nextNoteTimeRef.current - audioContextRef.current.currentTime) * 1000);
-
 
       const secondsPerBeat = 60.0 / tempo;
       nextNoteTimeRef.current += secondsPerBeat;
@@ -42,7 +43,7 @@ export function Metronome() {
     }
     
     timerRef.current = window.setTimeout(scheduleNote, 25.0);
-  };
+  }, [beatsPerMeasure, tempo]);
   
   const playClick = (isFirstBeat: boolean, time: number) => {
     if (!audioContextRef.current) return;
@@ -66,7 +67,8 @@ export function Metronome() {
         window.clearTimeout(timerRef.current);
       }
       setIsPlaying(false);
-      setTimeout(() => setCurrentBeat(-1), (60/tempo) * 1000);
+      setNeedleRotation(0);
+      setTimeout(() => setCurrentBeat(-1), (60 / tempo) * 1000);
       if (audioContextRef.current && audioContextRef.current.state === 'running') {
         await audioContextRef.current.suspend();
       }
@@ -101,6 +103,7 @@ export function Metronome() {
   };
   
   useEffect(() => {
+    // Stop and clean up on unmount
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
@@ -110,17 +113,37 @@ export function Metronome() {
       }
     };
   }, []);
+  
+   useEffect(() => {
+    if (isPlaying) {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+      scheduleNote();
+    }
+  }, [tempo, isPlaying, scheduleNote]);
 
   return (
     <div className="flex flex-col items-center p-4 rounded-lg bg-white/10 text-white shadow-xl backdrop-blur-lg border border-white/20">
       <div className="w-full max-w-md flex flex-col items-center">
+        
+        <div className="metronome-dial">
+           <div 
+              className="metronome-needle"
+              style={{
+                transform: `rotate(${isPlaying ? needleRotation : 0}deg)`,
+                transitionDuration: isPlaying ? `${60 / tempo / 2}s` : '0.2s',
+              }}
+            ></div>
+            <div className="metronome-base"></div>
+        </div>
 
-        <div className={cn("metronome-display", isPlaying && "playing")}>
+        <div className="metronome-display">
             <div className="tempo-display">{tempo}</div>
             <div className="bpm-label">BPM</div>
         </div>
         
-        <div className="w-full my-8">
+        <div className="w-full my-6">
              <div className="flex items-center justify-center gap-4">
                 <Button onClick={() => adjustTempo(-1)} variant="outline" size="icon" className="rounded-full h-12 w-12 bg-white/20 border-0">
                     <Minus />
@@ -139,7 +162,7 @@ export function Metronome() {
              </div>
         </div>
 
-         <div className="flex space-x-3 mb-8">
+         <div className="flex space-x-3 mb-6">
             {Array.from({ length: beatsPerMeasure }).map((_, i) => (
                 <div key={i} className={`beat-indicator ${isPlaying && currentBeat === i ? 'active' : ''}`}></div>
             ))}
