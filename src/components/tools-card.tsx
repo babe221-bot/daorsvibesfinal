@@ -15,6 +15,7 @@ const tools = [
     title: "Metronome",
     description: "Keep your rhythm perfect with our integrated metronome.",
     icon: <Milestone className="h-6 w-6 text-gray-300" />,
+    href: "/dashboard/metronome",
     buttonText: "Set Tempo",
   },
 ];
@@ -31,11 +32,19 @@ export function ToolsCard() {
                     <CardContent>
                         <p className="text-gray-300 mb-4">{tool.description}</p>
                         {tool.href ? (
-                            <a href={tool.href} target="_blank" rel="noopener noreferrer">
-                                <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
-                                    {tool.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
-                            </a>
+                             tool.href.startsWith("http") ? (
+                                <a href={tool.href} target="_blank" rel="noopener noreferrer" className="w-full">
+                                    <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                                        {tool.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Button>
+                                </a>
+                            ) : (
+                                <Link href={tool.href} className="w-full">
+                                    <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                                        {tool.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Button>
+                                </Link>
+                            )
                         ) : (
                             <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
                                 {tool.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
