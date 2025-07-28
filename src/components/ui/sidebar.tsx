@@ -367,16 +367,16 @@ const SidebarHeader = React.forwardRef<
     <div
       ref={ref}
       data-sidebar="header"
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn("flex flex-col gap-2", className)}
       {...props}
     >
       <div className="flex items-center justify-center">
         <Image
           src="/logo.png"
           alt="DaorsVibes Logo"
-          width={150}
-          height={150}
-          className="rounded-full mix-blend-screen"
+          width={180}
+          height={180}
+          className="mix-blend-screen"
         />
       </div>
     </div>
