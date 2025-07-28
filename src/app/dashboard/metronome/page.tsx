@@ -1,4 +1,5 @@
-
+import AppLayout from "@/components/layout/app-layout";
+import Header from "@/components/layout/header";
 import {
   Card,
   CardContent,
@@ -6,31 +7,34 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { AppLayout } from "@/components/layout/app-layout";
 import { Metronome } from "@/components/metronome";
 import { Milestone } from "lucide-react";
 
 export default function MetronomePage() {
   return (
     <AppLayout>
-      <div className="flex h-full w-full">
-        <div className="flex-1 overflow-auto p-4 md:p-6">
-          <main className="flex-1">
-            <Card className="bg-gray-900 text-white border-gray-800">
+      <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/background.png')" }}>
+        <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
+        <div className="relative z-10">
+          <Header />
+          <main className="flex-1 p-4 md:p-8 text-white fade-in-down">
+            <Card className="glass-card">
               <CardHeader>
-                <div className="flex items-center">
-                  <Milestone className="h-8 w-8 mr-2 text-gray-300" />
-                  <div>
-                    <CardTitle>Metronome</CardTitle>
-                    <CardDescription>
-                    Keep your rhythm perfect with our integrated metronome.
-                    </CardDescription>
-                  </div>
+                <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-white/20 rounded-full">
+                        <Milestone className="h-8 w-8 text-white" />
+                    </div>
+                    <div>
+                        <CardTitle className="text-3xl font-bold text-white">Metronom</CardTitle>
+                        <CardDescription className="text-gray-300 text-lg">
+                            Održavajte savršen ritam uz naš integrisani metronom.
+                        </CardDescription>
+                    </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <p className="mb-6 text-gray-200">
-                Set the tempo and keep your rhythm in check with our easy-to-use metronome. Perfect for practice sessions, recording, or live performances.
+                  Podesite tempo i održavajte ritam pod kontrolom pomoću našeg jednostavnog metronoma. Savršeno za vježbanje, snimanje ili nastupe uživo.
                 </p>
                 <Metronome />
               </CardContent>
