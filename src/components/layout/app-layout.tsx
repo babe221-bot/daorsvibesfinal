@@ -14,7 +14,7 @@ import {
   SidebarFooter,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key } from "lucide-react";
+import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key, LifeBuoy } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { auth } from "@/lib/firebase";
@@ -122,6 +122,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         </span>
                     </SidebarMenuButton>
                 </NextLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+                <a href="mailto:support@daorsforgeaisystem.com">
+                    <SidebarMenuButton asChild tooltip="Podrška">
+                        <span>
+                            <LifeBuoy />
+                            <span>Podrška</span>
+                        </span>
+                    </SidebarMenuButton>
+                </a>
             </SidebarMenuItem>
              <SidebarMenuItem>
                 <SidebarMenuButton onClick={handleSignOut} tooltip="Odjava">
