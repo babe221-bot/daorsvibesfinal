@@ -36,17 +36,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <Sidebar collapsible="desktop" className="glass-sidebar">
-        <SidebarHeader>
-          <div className="flex items-center gap-2 p-2">
-            <Avatar>
-              <AvatarImage src="https://firebasestorage.googleapis.com/v0/b/website-5a18c.appspot.com/o/DaorsVibes%2Fgenerated-image%20(8).png?alt=media&token=9cf04eea-e4ca-4000-840a-df41406f6a6a" alt="DaorsVibes Logo" />
-              <AvatarFallback>DV</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col">
-                <span className="text-lg font-headline text-primary-foreground group-data-[collapsible=icon]:hidden">DaorsVibes</span>
-            </div>
-          </div>
-        </SidebarHeader>
+        <SidebarHeader />
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>

@@ -4,6 +4,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
 import { PanelLeft } from "lucide-react"
+import Image from "next/image"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -368,7 +369,18 @@ const SidebarHeader = React.forwardRef<
       data-sidebar="header"
       className={cn("flex flex-col gap-2 p-2", className)}
       {...props}
-    />
+    >
+      <div className="flex items-center justify-center">
+        <Image
+          src="/logo.png"
+          alt="DaorsVibes Logo"
+          width={100}
+          height={100}
+          className="rounded-full mix-blend-screen"
+        />
+        <h1 className="text-2xl font-bold">DaorsVibes</h1>
+      </div>
+    </div>
   )
 })
 SidebarHeader.displayName = "SidebarHeader"
