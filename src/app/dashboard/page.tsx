@@ -2,7 +2,7 @@ import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Music, Search, Metronome, Users, Guitar, Key, GitBranch, LayoutTemplate, Palette, Code, ArrowRight, ListMusic, Activity, Clock } from "lucide-react";
+import { Music, Search, Milestone, Users, Guitar, Key, GitBranch, LayoutTemplate, Palette, Code, ArrowRight, ListMusic, Activity, Clock } from "lucide-react";
 import KeyChangeSuggester from "@/components/key-change-suggester";
 
 export default function DashboardPage() {
@@ -118,7 +118,7 @@ export default function DashboardPage() {
                 <Card className="bg-white/10 border-0 shadow-lg backdrop-blur-xl">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-xl font-bold text-white">Metronome</CardTitle>
-                    <Metronome className="h-6 w-6 text-gray-300" />
+                    <Milestone className="h-6 w-6 text-gray-300" />
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-300 mb-4">Keep your rhythm perfect with our integrated metronome.</p>

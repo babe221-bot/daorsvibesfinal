@@ -45,7 +45,7 @@
     "firebase-admin": "^12.1.1",
     "firebaseui": "^6.1.0",
     "genkit": "^1.14.1",
-    "lucide-react": "^0.475.0",
+    "lucide-react": "^0.526.0",
     "next": "15.3.3",
     "node-fetch": "^3.3.2",
     "patch-package": "^8.0.0",
