@@ -80,8 +80,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-               <NextLink href="#">
-                  <SidebarMenuButton asChild isActive={pathname === '/playlists'} tooltip="Playliste">
+               <NextLink href="/dashboard/playlists">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/playlists'} tooltip="Playliste">
                     <span>
                       <ListMusic />
                       <span>Playliste</span>
@@ -90,8 +90,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-               <NextLink href="#">
-                  <SidebarMenuButton asChild isActive={pathname === '/songs'} tooltip="Pjesme">
+               <NextLink href="/dashboard/songs">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/songs'} tooltip="Pjesme">
                     <span>
                       <Music />
                       <span>Pjesme</span>
@@ -100,8 +100,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-               <NextLink href="#">
-                  <SidebarMenuButton asChild isActive={pathname === '/ai-tools'} tooltip="AI Alati">
+               <NextLink href="/dashboard/ai-tools">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/ai-tools'} tooltip="AI Alati">
                     <span>
                       <Sparkles />
                       <span>AI Alati</span>
