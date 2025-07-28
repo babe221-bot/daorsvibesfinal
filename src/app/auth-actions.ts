@@ -16,7 +16,13 @@ const LoginSchema = z.object({
 });
 
 export async function registerUser(prevState: any, formData: FormData) {
-  await initFirebaseAdminApp();
+  try {
+    await initFirebaseAdminApp();
+  } catch (e: any) {
+    console.warn(e.message);
+    return { error: "Registracija novih korisnika je trenutno onemogućena. Molimo pokušajte kasnije." };
+  }
+
   const validatedFields = RegisterSchema.safeParse(Object.fromEntries(formData.entries()));
 
   if (!validatedFields.success) {
