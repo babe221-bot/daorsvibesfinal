@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Search, Milestone, Users, Guitar, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const tools = [
   {
@@ -57,10 +58,12 @@ export function ToolsCard() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-gray-300 mb-4">A new and improved tuner is coming soon!</p>
-                     <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black" disabled>
-                        Coming Soon <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                    <p className="text-gray-300 mb-4">Tune your drums or guitar with our AI-powered tuner.</p>
+                     <Link href="/dashboard/tuner">
+                        <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                            Open Tuner <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                    </Link>
                 </CardContent>
             </Card>
         </div>
