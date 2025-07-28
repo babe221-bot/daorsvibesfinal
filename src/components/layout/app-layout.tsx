@@ -14,7 +14,7 @@ import {
   SidebarFooter,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key, LifeBuoy } from "lucide-react";
+import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key, LifeBuoy, Calendar } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { auth } from "@/lib/firebase";
@@ -65,6 +65,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     <span>
                       <Key />
                       <span>Key Suggester</span>
+                    </span>
+                  </SidebarMenuButton>
+              </NextLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+               <NextLink href="/dashboard/gigs">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/gigs'} tooltip="Moji Događaji">
+                    <span>
+                      <Calendar />
+                      <span>Moji Događaji</span>
                     </span>
                   </SidebarMenuButton>
               </NextLink>
