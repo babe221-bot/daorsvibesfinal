@@ -1,6 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Search, Milestone, Users, Guitar, ArrowRight } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const tools = [
   {
@@ -58,11 +63,16 @@ export function ToolsCard() {
                 </CardHeader>
                 <CardContent>
                     <p className="text-gray-300 mb-4">Tune your drums or guitar with our AI-powered tuner.</p>
-                     <a href="/tuner.html" target="_blank" rel="noopener noreferrer">
-                        <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                     <Dialog>
+                      <DialogTrigger asChild>
+                         <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
                             Open Tuner <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
-                    </a>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-md h-[70vh] p-0 bg-slate-900 border-slate-700">
+                        <iframe src="/tuner.html" className="w-full h-full border-0" title="AI Instrument Tuner" />
+                      </DialogContent>
+                    </Dialog>
                 </CardContent>
             </Card>
         </div>
