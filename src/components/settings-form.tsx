@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import Link from "next/link"
 
 export function SettingsForm() {
   return (
@@ -145,9 +146,9 @@ export function SettingsForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <a href="mailto:support@daorsforgeaisystem.com">
+          <Link href="/dashboard/support">
             <Button>Kontaktiraj Podršku</Button>
-          </a>
+          </Link>
         </CardContent>
       </Card>
     </div>
