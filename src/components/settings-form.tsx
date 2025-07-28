@@ -136,6 +136,20 @@ export function SettingsForm() {
             <Button variant="destructive">Obriši Nalog</Button>
         </CardContent>
       </Card>
+
+      <Card className="glass-card">
+        <CardHeader>
+          <CardTitle>Podrška</CardTitle>
+          <CardDescription>
+            Kontaktirajte nas za pomoć i podršku.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <a href="mailto:support@daorsforgeaisystem.com">
+            <Button>Kontaktiraj Podršku</Button>
+          </a>
+        </CardContent>
+      </Card>
     </div>
   )
 }
