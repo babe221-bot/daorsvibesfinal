@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import * as Tone from 'tone';
+import { Analyser, UserMedia, start, context } from 'tone';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
@@ -73,17 +73,17 @@ export default function InstrumentTuner() {
     const [mode, setMode] = useState<TunerMode>('guitar');
     const [targetNote, setTargetNote] = useState(notePresets.guitar.notes[0].value);
 
-    const analyserRef = useRef<Tone.Analyser | null>(null);
-    const micRef = useRef<Tone.UserMedia | null>(null);
+    const analyserRef = useRef<Analyser | null>(null);
+    const micRef = useRef<UserMedia | null>(null);
     const animationFrameRef = useRef<number | null>(null);
 
     const startTuning = async () => {
         try {
-            await Tone.start();
-            micRef.current = new Tone.UserMedia();
+            await start();
+            micRef.current = new UserMedia();
             await micRef.current.open();
 
-            analyserRef.current = new Tone.Analyser('fft', 2048);
+            analyserRef.current = new Analyser('fft', 2048);
             micRef.current.connect(analyserRef.current);
             setIsTuning(true);
         } catch (error) {
@@ -139,7 +139,7 @@ export default function InstrumentTuner() {
 
         const fftData = analyserRef.current.getValue();
         if (fftData instanceof Float32Array) {
-            const fundamentalFreq = findFundamentalFreq(fftData, Tone.context.sampleRate);
+            const fundamentalFreq = findFundamentalFreq(fftData, context.sampleRate);
             
             if (fundamentalFreq > 0) {
                 const currentNoteDetails = freqToNoteDetails(fundamentalFreq);
