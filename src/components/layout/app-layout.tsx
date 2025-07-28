@@ -15,7 +15,7 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key, LifeBuoy } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
@@ -39,6 +39,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
             <Avatar>
+              <AvatarImage src="https://firebasestorage.googleapis.com/v0/b/website-5a18c.appspot.com/o/DaorsVibes%2Fgenerated-image%20(8).png?alt=media&token=9cf04eea-e4ca-4000-840a-df41406f6a6a" alt="DaorsVibes Logo" />
               <AvatarFallback>DV</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
@@ -124,18 +125,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-                <a href="mailto:support@daorsforgeaisystem.com">
+                <NextLink href="/dashboard/support">
                     <SidebarMenuButton asChild tooltip="Podrška">
                         <span>
                             <LifeBuoy />
                             <span>Podrška</span>
                         </span>
                     </SidebarMenuButton>
-                </a>
+                </NextLink>
             </SidebarMenuItem>
              <SidebarMenuItem>
                 <SidebarMenuButton onClick={handleSignOut} tooltip="Odjava">
-                    <LogOut size={16} />
+                    <LogOut />
                     <span>Odjava</span>
                 </SidebarMenuButton>
             </SidebarMenuItem>
