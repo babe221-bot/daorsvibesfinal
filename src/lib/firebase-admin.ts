@@ -1,26 +1,25 @@
-import { initializeApp, getApps, App, cert } from "firebase-admin/app";
+import * as admin from "firebase-admin";
 import "server-only";
 
 const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
   ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
   : undefined;
 
-let adminApp: App;
-
-export async function initFirebaseAdminApp() {
-  if (getApps().length > 0) {
-    adminApp = getApps()[0];
-    return;
-  }
-  
-  if (!serviceAccount) {
+if (!admin.apps.length) {
+  if (serviceAccount) {
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+  } else {
     console.warn(
       "Firebase Admin SDK not initialized. Missing FIREBASE_SERVICE_ACCOUNT_KEY. Server-side Firebase features will be disabled."
     );
-    throw new Error("Firebase Admin SDK not initialized.");
+    // Initialize without credentials, some features might still work.
+    admin.initializeApp();
   }
-
-  adminApp = initializeApp({
-    credential: cert(serviceAccount),
-  });
 }
+
+const adminAuth = admin.auth();
+const adminDb = admin.firestore();
+
+export { adminAuth, adminDb };

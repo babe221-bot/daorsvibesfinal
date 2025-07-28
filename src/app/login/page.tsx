@@ -7,7 +7,7 @@ import { LoginForm } from "@/components/login-form";
 import { RegisterForm } from "@/components/register-form";
 import { Button } from "@/components/ui/button";
 import { GoogleAuthProvider, signInAnonymously, signInWithPopup } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase-client";
 import { useRouter } from "next/navigation";
 import { User } from "lucide-react";
 
