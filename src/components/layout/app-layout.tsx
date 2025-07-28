@@ -13,17 +13,25 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, ListMusic, Music, Sparkles } from "lucide-react";
+import { LayoutDashboard, ListMusic, Music, Sparkles, Settings, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   
   return (
     <SidebarProvider>
-      <Sidebar collapsible="icon" className="glass-sidebar">
+      <Sidebar collapsible="desktop" className="glass-sidebar">
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
-            <span className="text-xl font-headline text-primary-foreground group-data-[collapsible=icon]:hidden">DaorsVibes</span>
+            <Avatar>
+              <AvatarImage src="https://github.com/daors.png" alt="@daors" />
+              <AvatarFallback>DV</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+                <span className="text-lg font-headline text-primary-foreground group-data-[collapsible=icon]:hidden">DaorsVibes</span>
+                <span className="text-sm text-primary-foreground/80 group-data-[collapsible=icon]:hidden">daors@vibes.com</span>
+            </div>
           </div>
         </SidebarHeader>
         <SidebarContent>
@@ -71,6 +79,28 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
+            <SidebarMenu>
+                <SidebarMenuItem>
+                    <NextLink href="#">
+                        <SidebarMenuButton asChild isActive={pathname === '/settings'} tooltip="Postavke">
+                            <span>
+                            <Settings />
+                            <span>Postavke</span>
+                            </span>
+                        </SidebarMenuButton>
+                    </NextLink>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                    <NextLink href="/login">
+                        <SidebarMenuButton asChild tooltip="Odjava">
+                            <span>
+                            <LogOut />
+                            <span>Odjava</span>
+                            </span>
+                        </SidebarMenuButton>
+                    </NextLink>
+                </SidebarMenuItem>
+            </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
