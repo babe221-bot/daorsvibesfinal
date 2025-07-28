@@ -136,7 +136,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
              <SidebarMenuItem>
                 <SidebarMenuButton onClick={handleSignOut} tooltip="Odjava">
                     <span>
-                        <LogOut />
+                        <LogOut size={16} />
                         <span>Odjava</span>
                     </span>
                 </SidebarMenuButton>
