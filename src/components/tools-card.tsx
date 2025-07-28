@@ -69,7 +69,7 @@ export function ToolsCard() {
                             Open Tuner <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-md h-[70vh] p-0 bg-slate-900 border-slate-700">
+                      <DialogContent className="max-w-lg h-[80vh] p-0 bg-slate-900 border-slate-700">
                         <iframe src="/tuner.html" className="w-full h-full border-0" title="AI Instrument Tuner" />
                       </DialogContent>
                     </Dialog>

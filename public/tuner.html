@@ -192,6 +192,7 @@
         // Audio processing variables
         let mic, analyser;
         let isTuning = false;
+        let currentMode = 'drum';
         const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         
         // --- Note presets for different modes ---
@@ -203,6 +204,7 @@
                 { value: 'E2', text: 'E2 (Kick)' }
             ],
             guitar: [
+                { value: 'autodetect', text: 'Autodetect' },
                 { value: 'E4', text: 'E4 (1st string)' },
                 { value: 'B3', text: 'B3 (2nd string)' },
                 { value: 'G3', text: 'G3 (3rd string)' },
@@ -211,11 +213,14 @@
                 { value: 'E2', text: 'E2 (6th string)' }
             ]
         };
+        const guitarNoteFrequencies = notePresets.guitar.filter(n => n.value !== 'autodetect').map(n => ({ ...n, freq: noteToFreq(n.value) }));
+
 
         // --- Initialization ---
         
         // Function to set the tuner mode and update UI accordingly
         function setTunerMode(mode) {
+            currentMode = mode;
             if (isTuning) stopTuning();
 
             // Update title and description
@@ -224,7 +229,7 @@
                 appDescription.textContent = "Select a target drum note and hit 'Start' to begin tuning.";
             } else {
                 appTitle.textContent = 'AI Guitar Tuner';
-                appDescription.textContent = "Select a target string and hit 'Start' to begin tuning.";
+                appDescription.textContent = "Select a target string, or use Autodetect, and hit 'Start'.";
             }
 
             // Populate the target note dropdown
@@ -336,12 +341,38 @@
 
         // Convert frequency to note and calculate cents difference
         function freqToNote(freq) {
+            let targetNoteName = targetNoteSelector.value;
+
+            // Autodetect logic for guitar
+            if (currentMode === 'guitar' && targetNoteName === 'autodetect') {
+                targetNoteSelector.disabled = false; // Allow changing strings while autodetecting
+                let closestNote = null;
+                let smallestDiff = Infinity;
+                
+                guitarNoteFrequencies.forEach(noteInfo => {
+                    const diff = Math.abs(freq - noteInfo.freq);
+                    if (diff < smallestDiff) {
+                        smallestDiff = diff;
+                        closestNote = noteInfo.value;
+                    }
+                });
+
+                if (closestNote) {
+                    targetNoteName = closestNote;
+                    // Visually select the detected note in the dropdown
+                    if (targetNoteSelector.value !== targetNoteName) {
+                       targetNoteSelector.value = targetNoteName;
+                    }
+                } else {
+                   targetNoteName = 'E4'; // Default fallback
+                }
+            }
+
             const noteNum = 12 * (Math.log(freq / 440) / Math.log(2));
             const roundedNoteNum = Math.round(noteNum) + 69;
             const noteName = noteStrings[roundedNoteNum % 12];
             const octave = Math.floor(roundedNoteNum / 12) - 1;
             
-            const targetNoteName = targetNoteSelector.value;
             const targetFreq = noteToFreq(targetNoteName);
             const centsOff = 1200 * Math.log2(freq / targetFreq);
 
