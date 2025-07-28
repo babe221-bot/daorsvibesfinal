@@ -132,7 +132,7 @@ export function Metronome() {
               className="metronome-needle"
               style={{
                 transform: `rotate(${isPlaying ? needleRotation : 0}deg)`,
-                transitionDuration: isPlaying ? `${60 / tempo / 2}s` : '0.2s',
+                transitionDuration: isPlaying ? `${60 / tempo}s` : '0.2s',
               }}
             ></div>
             <div className="metronome-base"></div>
