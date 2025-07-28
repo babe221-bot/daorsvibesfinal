@@ -6,9 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoginForm } from "@/components/login-form";
 import { RegisterForm } from "@/components/register-form";
 import { Button } from "@/components/ui/button";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInAnonymously, signInWithPopup } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import { User } from "lucide-react";
 
 function GoogleIcon() {
     return (
@@ -33,6 +34,17 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error("Error during Google sign-in:", error);
+    }
+  };
+
+  const handleGuestSignIn = async () => {
+    try {
+      const result = await signInAnonymously(auth);
+      if (result.user) {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.error("Error during guest sign-in:", error);
     }
   };
 
@@ -65,10 +77,16 @@ export default function LoginPage() {
                 <span className="bg-card px-2 text-muted-foreground">Ili nastavite sa</span>
             </div>
           </div>
-          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
-            <GoogleIcon />
-            <span className="ml-2">Google</span>
-          </Button>
+          <div className="flex flex-col space-y-2">
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
+                <GoogleIcon />
+                <span className="ml-2">Google</span>
+            </Button>
+            <Button variant="outline" className="w-full" onClick={handleGuestSignIn}>
+                <User className="h-5 w-5"/>
+                <span className="ml-2">Prijavi se kao gost</span>
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -64,3 +64,14 @@ export async function loginUser(prevState: any, formData: FormData) {
   // This action only validates. The client will perform the actual sign-in.
   return { success: true, message: "Sada se možete prijaviti na klijentu." };
 }
+
+export async function signInAsGuest() {
+  try {
+    await initFirebaseAdminApp();
+    const user = await auth().createUser({});
+    return { success: true, uid: user.uid };
+  } catch (e: any) {
+    console.error("Greška prilikom prijave gosta:", e);
+    return { error: "Prijava gosta nije uspjela. Molimo pokušajte ponovo." };
+  }
+}
