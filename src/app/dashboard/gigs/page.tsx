@@ -2,7 +2,7 @@ import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Clock } from "lucide-react";
+import { Calendar, MapPin, Clock, Plus, ListMusic } from "lucide-react";
 
 const placeholderGigs = [
     { title: "Svirka u Pub-u", location: "Mostar, BiH", date: "2024-08-15", time: "21:00" },
@@ -32,29 +32,38 @@ export default function GigsPage() {
                             </CardDescription>
                         </div>
                     </div>
-                    <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                        Poveži Google Kalendar
-                    </Button>
+                    <div className="flex gap-2">
+                         <Button variant="outline" className="bg-transparent text-white border-white hover:bg-white hover:text-black">
+                            <Plus className="mr-2 h-4 w-4" />
+                            Dodaj Događaj
+                        </Button>
+                        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                            Poveži Kalendare
+                        </Button>
+                    </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                     {placeholderGigs.map((gig, index) => (
                         <Card key={index} className="bg-white/10 border-0 shadow-lg backdrop-blur-xl">
-                            <CardContent className="p-4 flex items-center justify-between">
-                                <div>
+                            <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                <div className="flex-grow">
                                     <h3 className="text-xl font-bold text-white">{gig.title}</h3>
                                     <div className="flex items-center text-gray-300 mt-2">
                                         <MapPin className="h-4 w-4 mr-2" />
                                         <span>{gig.location}</span>
                                     </div>
-                                </div>
-                                <div className="text-right">
-                                    <p className="font-semibold text-white">{gig.date}</p>
                                     <div className="flex items-center text-gray-300 mt-1">
                                         <Clock className="h-4 w-4 mr-2" />
-                                        <span>{gig.time}</span>
+                                        <span>{gig.date} u {gig.time}</span>
                                     </div>
+                                </div>
+                                <div className="w-full sm:w-auto">
+                                    <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                                       <ListMusic className="mr-2 h-4 w-4" />
+                                       Kreiraj Playlistu
+                                    </Button>
                                 </div>
                             </CardContent>
                         </Card>
