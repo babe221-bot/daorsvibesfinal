@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -49,6 +49,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     <span>
                       <BarChart />
                       <span>Statistika</span>
+                    </span>
+                  </SidebarMenuButton>
+              </NextLink>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+               <NextLink href="/dashboard/key-suggester">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/key-suggester'} tooltip="Key Suggester">
+                    <span>
+                      <Key />
+                      <span>Key Suggester</span>
                     </span>
                   </SidebarMenuButton>
               </NextLink>

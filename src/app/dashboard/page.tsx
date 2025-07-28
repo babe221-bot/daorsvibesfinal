@@ -1,8 +1,5 @@
 import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Key } from "lucide-react";
-import KeyChangeSuggester from "@/components/key-change-suggester";
 import { DesignResourcesCard } from "@/components/design-resources-card";
 import { ToolsCard } from "@/components/tools-card";
 
@@ -19,28 +16,7 @@ export default function DashboardPage() {
               
               {/* Left Column */}
               <div className="md:col-span-2 lg:col-span-3 space-y-8">
-                 <Card className="glass-card">
-                  <CardHeader>
-                    <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-white/20 rounded-full">
-                        <Key className="h-8 w-8 text-white" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-3xl font-bold text-white">Key Change Suggester</CardTitle>
-                        <CardDescription className="text-gray-300 text-lg">
-                          Find the perfect key for any song.
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="mb-6 text-gray-200">
-                      Our AI-powered tool analyzes song structures to suggest optimal key changes, making your music more dynamic and engaging. Whether you're a producer, a DJ, or a musician, get instant recommendations to elevate your sound.
-                    </p>
-                    <KeyChangeSuggester />
-                  </CardContent>
-                </Card>
-                <DesignResourcesCard />
+                 <DesignResourcesCard />
               </div>
 
               {/* Right Column */}
