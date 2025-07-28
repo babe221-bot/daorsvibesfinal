@@ -50,16 +50,19 @@ export function ToolsCard() {
                 </Card>
             ))}
             <Card className="glass-card">
-                <CardHeader>
-                    <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-white/20 rounded-full">
-                            <Guitar className="h-6 w-6 text-white" />
-                        </div>
-                        <CardTitle className="text-2xl font-bold">Guitar Tuner</CardTitle>
+                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-xl font-bold text-white">AI Instrument Tuner</CardTitle>
+                    <div className="p-2 bg-white/20 rounded-full">
+                        <Guitar className="h-6 w-6 text-white" />
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-gray-300">This feature is coming soon!</p>
+                    <p className="text-gray-300 mb-4">Tune your drums or guitar with our AI-powered tuner.</p>
+                     <a href="/tuner.html" target="_blank" rel="noopener noreferrer">
+                        <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                            Open Tuner <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                    </a>
                 </CardContent>
             </Card>
         </div>
