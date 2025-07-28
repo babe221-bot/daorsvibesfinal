@@ -23,10 +23,11 @@ const TOOLS = [
     buttonText: "Find Gigs",
   },
   {
-    title: "Guitar Tuner",
-    description: "This feature is coming soon!",
+    title: "AI Instrument Tuner",
+    description: "Tune your drums or guitar with our AI-powered tuner.",
+    link: "/tuner.html",
     icon: <Guitar className="h-6 w-6 text-white" />,
-    comingSoon: true,
+    buttonText: "Open Tuner",
   },
 ];
 
@@ -47,16 +48,14 @@ export function DashboardTools() {
           </CardHeader>
           <CardContent>
             <p className="text-gray-300 mb-4">{tool.description}</p>
-            {!tool.comingSoon && (
-              <a href={tool.link} target="_blank" rel="noopener noreferrer">
-                <Button
-                  variant="outline"
-                  className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black"
-                >
-                  {tool.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </a>
-            )}
+            <a href={tool.link} target="_blank" rel="noopener noreferrer">
+              <Button
+                variant="outline"
+                className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black"
+              >
+                {tool.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </a>
           </CardContent>
         </Card>
       ))}
