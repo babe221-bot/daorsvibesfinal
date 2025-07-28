@@ -75,21 +75,65 @@
 }
 
 @layer utilities {
-  .ui-card {
-    @apply bg-card border border-border rounded-xl shadow-md transition-all duration-300 hover:border-primary/80 hover:shadow-primary/10 hover:shadow-lg;
+  .glass-card {
+    @apply bg-white/5 border-0 shadow-lg backdrop-blur-xl text-white rounded-xl transition-all duration-300 relative overflow-hidden;
   }
 
-  /* You can keep glass-sidebar or change it to align with the new design */
-  .glass-sidebar {
-    background-color: hsl(var(--sidebar-background) / 0.5); /* Made it less transparent */
-    @apply backdrop-blur-md border-r border-white/5 shadow-2xl transition-all duration-300;
-  }
-
-  .gradient-btn {
-    @apply bg-gradient-to-r from-primary to-blue-400 text-primary-foreground border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.5)] transition-shadow duration-300;
+  .glass-card:hover {
+    @apply transform scale-[1.02] shadow-primary/20 shadow-2xl;
   }
   
-  .neon-underline {
-    @apply underline decoration-accent decoration-2 underline-offset-4;
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%);
+    transform: skewX(-25deg);
+    transition: left 0.6s ease-in-out;
+  }
+
+  .glass-card:hover::before {
+    left: 150%;
+  }
+
+  @keyframes fade-in-down {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .fade-in-down {
+    animation: fade-in-down 0.5s ease-out forwards;
+  }
+
+  .gradient-border-btn {
+    @apply relative bg-transparent border-0 text-white rounded-lg px-4 py-2 transition-all duration-300;
+  }
+
+  .gradient-border-btn::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)));
+    z-index: -1;
+    transition: all 0.3s ease;
+    opacity: 0;
+  }
+  
+  .gradient-border-btn:hover::before {
+    opacity: 1;
+  }
+  
+  .gradient-border-btn span {
+    @apply relative z-10;
   }
 }
