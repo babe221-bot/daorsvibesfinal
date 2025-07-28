@@ -3,6 +3,7 @@ import Header from "@/components/layout/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Clock, Plus, ListMusic } from "lucide-react";
+import Link from "next/link";
 
 const placeholderGigs = [
     { title: "Svirka u Pub-u", location: "Mostar, BiH", date: "2024-08-15", time: "21:00" },
@@ -60,10 +61,12 @@ export default function GigsPage() {
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-auto">
-                                    <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
-                                       <ListMusic className="mr-2 h-4 w-4" />
-                                       Kreiraj Playlistu
-                                    </Button>
+                                    <Link href="/dashboard/songs">
+                                        <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                                            <ListMusic className="mr-2 h-4 w-4" />
+                                            Kreiraj Playlistu
+                                        </Button>
+                                    </Link>
                                 </div>
                             </CardContent>
                         </Card>
