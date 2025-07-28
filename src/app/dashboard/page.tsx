@@ -1,6 +1,9 @@
 import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import { ToolsCard } from "@/components/tools-card";
+import { WelcomeCard } from "@/components/welcome-card";
+import { RecentPlaylistsCard } from "@/components/recent-playlists-card";
+import { RecentSongsCard } from "@/components/recent-songs-card";
 
 export default function DashboardPage() {
   return (
@@ -11,15 +14,19 @@ export default function DashboardPage() {
           <Header />
           <main className="flex-1 p-4 md:p-8 text-white fade-in-down">
             
-            <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
+            <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-3">
               
-              {/* Left Column */}
-              <div className="md:col-span-1 lg:col-span-1 space-y-8">
-                 {/* This area is now free for new content */}
+              {/* Left & Center Columns */}
+              <div className="lg:col-span-2 space-y-8">
+                 <WelcomeCard />
+                 <div className="grid gap-8 md:grid-cols-1 xl:grid-cols-2">
+                    <RecentPlaylistsCard />
+                    <RecentSongsCard />
+                 </div>
               </div>
 
               {/* Right Column */}
-              <div className="md:col-span-1 lg:col-span-1 space-y-8">
+              <div className="lg:col-span-1 space-y-8">
                 <ToolsCard />
               </div>
 
