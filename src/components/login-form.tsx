@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { loginUser } from "@/app/auth-actions";
-import { auth as clientAuth } from "@/lib/firebase";
+import { auth as clientAuth } from "@/lib/firebase-client";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
