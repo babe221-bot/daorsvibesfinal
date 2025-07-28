@@ -12,6 +12,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 
 export function SettingsForm() {
@@ -32,6 +39,21 @@ export function SettingsForm() {
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" defaultValue="daors@example.com" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="instrument">Instrument</Label>
+            <Select defaultValue="gitara">
+              <SelectTrigger id="instrument">
+                <SelectValue placeholder="Izaberite instrument" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="gitara">Gitara</SelectItem>
+                <SelectItem value="klavir">Klavir</SelectItem>
+                <SelectItem value="bubnjevi">Bubnjevi</SelectItem>
+                <SelectItem value="bas">Bas Gitara</SelectItem>
+                <SelectItem value="vokal">Vokal</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
            <Button variant="outline">Promijeni Lozinku</Button>
         </CardContent>
