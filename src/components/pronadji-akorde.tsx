@@ -187,7 +187,7 @@ ${extractedContent}`;
 
   // --- JSX Rendering ---
   return (
-    <div className="min-h-screen bg-background text-foreground p-4 sm:p-8 flex flex-col items-center">
+    <div className="text-foreground p-1 flex flex-col items-center">
       {(loading || isAiLoading) && (
           <div className="fixed top-4 right-4 bg-primary text-primary-foreground py-2 px-4 rounded-lg shadow-lg z-50 flex items-center">
               <Progress value={isAiLoading ? 25 : 75} className="w-full" />
@@ -196,16 +196,13 @@ ${extractedContent}`;
       )}
 
       <div className="w-full max-w-4xl">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-center mb-8">Pronadji Akorde</h1>
+        <h1 className="text-2xl font-bold text-center mb-4">Find &amp; Add Chords</h1>
 
         {error && <div className="bg-destructive text-destructive-foreground p-4 rounded-lg mb-4 text-center">{error}</div>}
         {message && <div className="bg-primary text-primary-foreground p-4 rounded-lg mb-4 text-center">{message}</div>}
 
-        <Card className="mb-8">
-            <CardHeader>
-                <CardTitle>Find Chords for a Song</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <Card className="mb-8 bg-transparent border-0 shadow-none">
+            <CardContent className="p-0">
                 <div className="flex flex-col sm:flex-row gap-4 mb-4">
                     <Input type="text" placeholder="Song URL (e.g., raw .txt or .pro file)" value={songUrl} onChange={(e) => setSongUrl(e.target.value)} className="flex-grow"/>
                     <Button onClick={handleDownloadAndExtract} disabled={loading || !songUrl}>Fetch Content</Button>
