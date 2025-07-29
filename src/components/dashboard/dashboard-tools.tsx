@@ -1,10 +1,17 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Search, Milestone, Users, Guitar, ArrowRight } from "lucide-react";
+import { Search, Milestone, Users, Guitar, Music, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 const TOOLS = [
+  {
+    title: "Chord Progression Generator",
+    description: "Generate chord progressions in any key.",
+    link: "/dashboard/chord-progression",
+    icon: <Music className="h-6 w-6 text-gray-300" />,
+    buttonText: "Generate",
+  },
   {
     title: "ProChordFinder",
     description: "Search for any song and get accurate chords instantly.",
