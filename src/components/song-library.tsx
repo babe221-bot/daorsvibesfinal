@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
+import SongScraper from './song-scraper'; // Import the new component
 
 // --- Modal Component for displaying AI-generated content ---
 const Modal = ({ isOpen, onClose, title, children }) => {
@@ -47,6 +48,7 @@ function SongLibrary() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [isScraping, setIsScraping] = useState(false); // New state for scraping
 
 
   // --- Global variables from Canvas environment ---
@@ -136,7 +138,7 @@ ${song.lyricsAndChords}`;
           setModalTitle(`Simplified Chords for "${song.title}"`);
           setModalContent(simplifiedText);
           setIsModalOpen(true);
-      } catch (err) {
+      } catch (err)_ {
           console.error("Error simplifying chords:", err);
           setError("Could not simplify chords.");
       } finally {
@@ -255,6 +257,13 @@ ${song.lyricsAndChords}`;
         setLoading(false);
     }
   }
+  
+  const handleSongScraped = (scrapedData) => {
+    setSongTitle(scrapedData.title);
+    setSongArtist(scrapedData.artist);
+    setLyricsAndChords(scrapedData.lyricsAndChords);
+    setMessage("Song data has been populated in the manual entry form. You can now save it to your library.");
+  };
 
   // --- JSX Rendering ---
   return (
@@ -263,10 +272,10 @@ ${song.lyricsAndChords}`;
           <pre className="bg-muted p-4 rounded-lg text-muted-foreground text-sm font-mono whitespace-pre-wrap">{modalContent}</pre>
       </Modal>
 
-      {(loading || isAiLoading || isSearching) && (
+      {(loading || isAiLoading || isSearching || isScraping) && (
           <div className="fixed top-4 right-4 bg-primary text-primary-foreground py-2 px-4 rounded-lg shadow-lg z-50 flex items-center">
               <Progress value={50} className="w-full" />
-              {isSearching ? 'Searching...' : (isAiLoading ? 'AI is thinking...' : 'Loading...')}
+              {isScraping ? 'Scraping...' : (isSearching ? 'Searching...' : (isAiLoading ? 'AI is thinking...' : 'Loading...'))}
           </div>
       )}
 
@@ -275,6 +284,26 @@ ${song.lyricsAndChords}`;
 
         {error && <div className="bg-destructive text-destructive-foreground p-4 rounded-lg mb-4 text-center">{error}</div>}
         {message && <div className="bg-primary text-primary-foreground p-4 rounded-lg mb-4 text-center">{message}</div>}
+        
+        <div className="mb-8">
+            <SongScraper onSongScraped={handleSongScraped} isScraping={isScraping} />
+        </div>
+
+        <Card className="mb-8">
+            <CardHeader><CardTitle>Add New Song Manually</CardTitle></CardHeader>
+            <CardContent>
+                <div className="space-y-4">
+                  <Textarea value={lyricsAndChords} onChange={(e) => setLyricsAndChords(e.target.value)} rows="8" className="w-full font-mono" placeholder="Paste lyrics and chords here..."></Textarea>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Input type="text" placeholder="Song Title (Required)" value={songTitle} onChange={(e) => setSongTitle(e.target.value)} className="flex-grow"/>
+                    <Input type="text" placeholder="Artist (Optional)" value={songArtist} onChange={(e) => setSongArtist(e.target.value)} className="flex-grow"/>
+                  </div>
+                  <div className="flex justify-end">
+                      <Button onClick={handleSaveSong} disabled={loading || !songTitle || !lyricsAndChords}>Save to Library</Button>
+                  </div>
+                </div>
+            </CardContent>
+        </Card>
         
         <Card className="mb-8">
             <CardHeader><CardTitle>Search Public Song Repository</CardTitle></CardHeader>
@@ -298,22 +327,6 @@ ${song.lyricsAndChords}`;
                         </div>
                     </div>
                 )}
-            </CardContent>
-        </Card>
-
-        <Card className="mb-8">
-            <CardHeader><CardTitle>Add New Song Manually</CardTitle></CardHeader>
-            <CardContent>
-                <div className="space-y-4">
-                  <Textarea value={lyricsAndChords} onChange={(e) => setLyricsAndChords(e.target.value)} rows="8" className="w-full font-mono" placeholder="Paste lyrics and chords here..."></Textarea>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Input type="text" placeholder="Song Title (Required)" value={songTitle} onChange={(e) => setSongTitle(e.target.value)} className="flex-grow"/>
-                    <Input type="text" placeholder="Artist (Optional)" value={songArtist} onChange={(e) => setSongArtist(e.target.value)} className="flex-grow"/>
-                  </div>
-                  <div className="flex justify-end">
-                      <Button onClick={handleSaveSong} disabled={loading || !songTitle || !lyricsAndChords}>Save to Library</Button>
-                  </div>
-                </div>
             </CardContent>
         </Card>
 
