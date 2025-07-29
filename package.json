@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"kill-port 9101 8082 9199 5000 4001 && firebase emulators:start --import=./fb-export --export-on-exit=./fb-export\" \"next dev\"",
+    "dev": "concurrently \"firebase emulators:start --import=./fb-export --export-on-exit=./fb-export\" \"next dev\"",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "next build",
