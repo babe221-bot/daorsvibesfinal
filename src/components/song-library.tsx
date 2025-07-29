@@ -6,21 +6,22 @@ import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, doc, se
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import SongScraper from './song-scraper';
+import { Library, Trash2, Wand2 } from 'lucide-react';
 
 const Modal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }> = ({ isOpen, onClose, title, children }) => {
     if (!isOpen) return null;
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent>
+            <DialogContent className="glass-card">
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>
-                {children}
+                <pre className="bg-background/50 p-4 rounded-lg text-foreground/80 text-sm font-mono whitespace-pre-wrap max-h-[60vh] overflow-auto">{children}</pre>
             </DialogContent>
         </Dialog>
     );
@@ -88,7 +89,7 @@ function SongLibrary() {
       console.error("Firebase init failed:", e);
       setError("Inicijalizacija aplikacije nije uspjela.");
     }
-  }, [firebaseConfig, initialAuthToken]);
+  }, []);
 
   useEffect(() => {
     if (db && userId && isAuthReady) {
@@ -274,61 +275,62 @@ ${song.lyricsAndChords}`;
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-4 sm:p-8 flex flex-col items-center">
+    <div className="w-full max-w-6xl mx-auto space-y-8">
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalTitle}>
-          <pre className="bg-muted p-4 rounded-lg text-muted-foreground text-sm font-mono whitespace-pre-wrap">{modalContent}</pre>
+          {modalContent}
       </Modal>
 
       {(loading || isAiLoading || isSearching || isScraping) && (
-          <div className="fixed top-4 right-4 bg-primary text-primary-foreground py-2 px-4 rounded-lg shadow-lg z-50 flex items-center">
-              <Progress value={50} className="w-full" />
-              {isScraping ? 'Dohvaćanje...' : (isSearching ? 'Pretraživanje...' : (isAiLoading ? 'AI razmišlja...' : 'Učitavanje...'))}
+          <div className="fixed top-20 right-4 bg-primary text-primary-foreground py-2 px-4 rounded-lg shadow-lg z-50 flex items-center gap-2">
+              <Progress value={50} className="w-24" />
+              <span>{isScraping ? 'Dohvaćanje...' : (isSearching ? 'Pretraživanje...' : (isAiLoading ? 'AI razmišlja...' : 'Učitavanje...'))}</span>
           </div>
       )}
 
-      <div className="w-full max-w-4xl">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-center mb-8">Biblioteka Pjesama</h1>
+      {error && <div className="bg-destructive text-destructive-foreground p-4 rounded-lg mb-4 text-center">{error}</div>}
+      {message && <div className="bg-primary/80 text-primary-foreground p-3 rounded-lg mb-4 text-center animate-pulse">{message}</div>}
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-8">
+          <SongScraper onSongScraped={handleSongScraped} isScraping={isScraping} />
 
-        {error && <div className="bg-destructive text-destructive-foreground p-4 rounded-lg mb-4 text-center">{error}</div>}
-        {message && <div className="bg-primary text-primary-foreground p-4 rounded-lg mb-4 text-center">{message}</div>}
-        
-        <div className="mb-8">
-            <SongScraper onSongScraped={handleSongScraped} isScraping={isScraping} />
+          <Card className="glass-card">
+              <CardHeader><CardTitle>Dodaj Novu Pjesmu Ručno</CardTitle></CardHeader>
+              <CardContent>
+                  <div className="space-y-4">
+                    <Textarea value={lyricsAndChords} onChange={(e) => setLyricsAndChords(e.target.value)} rows={8} className="w-full font-mono bg-white/10 border-white/30" placeholder="Zalijepite tekst i akorde ovdje..."></Textarea>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <Input type="text" placeholder="Naslov Pjesme (Obavezno)" value={songTitle} onChange={(e) => setSongTitle(e.target.value)} className="flex-grow bg-white/10 border-white/30"/>
+                      <Input type="text" placeholder="Izvođač (Opcionalno)" value={songArtist} onChange={(e) => setSongArtist(e.target.value)} className="flex-grow bg-white/10 border-white/30"/>
+                    </div>
+                    <div className="flex justify-end">
+                        <Button onClick={() => handleSaveSong(songTitle, songArtist, lyricsAndChords)} disabled={loading || !songTitle || !lyricsAndChords}>Spremi u Biblioteku</Button>
+                    </div>
+                  </div>
+              </CardContent>
+          </Card>
         </div>
-
-        <Card className="mb-8">
-            <CardHeader><CardTitle>Dodaj Novu Pjesmu Ručno</CardTitle></CardHeader>
-            <CardContent>
-                <div className="space-y-4">
-                  <Textarea value={lyricsAndChords} onChange={(e) => setLyricsAndChords(e.target.value)} rows={8} className="w-full font-mono" placeholder="Zalijepite tekst i akorde ovdje..."></Textarea>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Input type="text" placeholder="Naslov Pjesme (Obavezno)" value={songTitle} onChange={(e) => setSongTitle(e.target.value)} className="flex-grow"/>
-                    <Input type="text" placeholder="Izvođač (Opcionalno)" value={songArtist} onChange={(e) => setSongArtist(e.target.value)} className="flex-grow"/>
-                  </div>
-                  <div className="flex justify-end">
-                      <Button onClick={() => handleSaveSong(songTitle, songArtist, lyricsAndChords)} disabled={loading || !songTitle || !lyricsAndChords}>Spremi u Biblioteku</Button>
-                  </div>
-                </div>
-            </CardContent>
-        </Card>
         
-        <Card className="mb-8">
+        <Card className="glass-card">
             <CardHeader><CardTitle>Pretraži Javni Repozitorij Pjesama</CardTitle></CardHeader>
             <CardContent>
                 <div className="flex flex-col sm:flex-row gap-4">
-                    <Input type="text" placeholder="Pretraži po naslovu pjesme ili izvođaču..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="flex-grow"/>
+                    <Input type="text" placeholder="Pretraži po naslovu pjesme ili izvođaču..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="flex-grow bg-white/10 border-white/30"/>
                     <Button onClick={handleSearchPublicSongs} disabled={isSearching || !searchQuery}>Pretraži</Button>
                 </div>
                 {searchResults.length > 0 && (
                     <div className="mt-6">
                         <h3 className="text-xl font-semibold mb-3">Rezultati Pretrage</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
                             {searchResults.map((song) => (
-                                <Card key={song.id}>
-                                    <CardHeader><CardTitle>{song.title}</CardTitle><p className="text-muted-foreground">{song.artist}</p></CardHeader>
-                                    <CardContent>
-                                        <Button onClick={() => handleAddSongFromPublicRepo(song)} disabled={loading} className="w-full">Dodaj u Moju Biblioteku</Button>
-                                    </CardContent>
+                                <Card key={song.id} className="bg-white/10 border-white/20">
+                                    <CardHeader className="p-4 flex flex-row justify-between items-start">
+                                      <div>
+                                        <CardTitle className="text-lg">{song.title}</CardTitle>
+                                        <p className="text-muted-foreground text-sm">{song.artist}</p>
+                                      </div>
+                                       <Button onClick={() => handleAddSongFromPublicRepo(song)} disabled={loading} size="sm" className="shrink-0">Dodaj</Button>
+                                    </CardHeader>
                                 </Card>
                             ))}
                         </div>
@@ -336,42 +338,50 @@ ${song.lyricsAndChords}`;
                 )}
             </CardContent>
         </Card>
-
-        <Card>
-            <CardHeader><CardTitle>Vaša Biblioteka</CardTitle></CardHeader>
-            <CardContent>
-                {!isAuthReady ? <p>Povezivanje...</p> : songs.length === 0 ? <p>Još uvijek nema pjesama. Dodajte jednu iznad ili pretražite javni repozitorij!</p> : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {songs.map((song) => (
-                        <Card key={song.id} className="flex flex-col">
-                            <CardHeader>
-                                <CardTitle>{song.title}</CardTitle>
-                                {song.artist && <p className="text-muted-foreground">{song.artist}</p>}
-                            </CardHeader>
-                            <CardContent className="flex-grow">
-                                <pre className="max-h-48 overflow-y-auto bg-muted p-3 rounded-md text-sm font-mono whitespace-pre-wrap">
-                                    {song.lyricsAndChords}
-                                </pre>
-                                <div className="mt-4 flex justify-between items-center">
-                                    <p className="text-xs text-muted-foreground">Dodano: {song.timestamp ? new Date(song.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
-                                    <Button onClick={() => handleSimplifyChords(song)} disabled={isAiLoading} size="sm" variant="outline">✨ Pojednostavi</Button>
-                                </div>
-                                <Button onClick={() => handleDeleteSong(song.id)} disabled={loading} variant="destructive" size="sm" className="absolute top-3 right-3">
-                                    Obriši
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    ))}
-                    </div>
-                )}
-            </CardContent>
-        </Card>
-
       </div>
+
+      <Card className="glass-card">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <Library className="h-8 w-8 text-primary"/>
+              <div>
+                <CardTitle className="text-3xl">Vaša Biblioteka</CardTitle>
+                <CardDescription>Sve vaše spremljene pjesme na jednom mjestu.</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+              {!isAuthReady ? <p>Povezivanje...</p> : songs.length === 0 ? <p className="text-center text-muted-foreground py-8">Još uvijek nema pjesama. Dodajte jednu iznad ili pretražite javni repozitorij!</p> : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {songs.map((song) => (
+                      <Card key={song.id} className="flex flex-col bg-white/5 border-white/20 hover:bg-white/10 transition-colors">
+                          <CardHeader className="relative">
+                              <CardTitle>{song.title}</CardTitle>
+                              {song.artist && <p className="text-muted-foreground">{song.artist}</p>}
+                               <Button onClick={() => handleDeleteSong(song.id)} disabled={loading} variant="ghost" size="icon" className="absolute top-3 right-3 text-muted-foreground hover:text-destructive hover:bg-destructive/20">
+                                  <Trash2 className="h-4 w-4" />
+                              </Button>
+                          </CardHeader>
+                          <CardContent className="flex-grow">
+                              <pre className="max-h-48 overflow-y-auto bg-black/20 p-3 rounded-md text-sm font-mono whitespace-pre-wrap">
+                                  {song.lyricsAndChords}
+                              </pre>
+                              <div className="mt-4 flex justify-between items-center">
+                                  <p className="text-xs text-muted-foreground">Dodano: {song.timestamp ? new Date(song.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
+                                  <Button onClick={() => handleSimplifyChords(song)} disabled={isAiLoading} size="sm" variant="outline" className="bg-transparent border-primary/50 hover:bg-primary/20">
+                                    <Wand2 className="mr-2 h-4 w-4 text-primary"/> 
+                                    Pojednostavi
+                                  </Button>
+                              </div>
+                          </CardContent>
+                      </Card>
+                  ))}
+                  </div>
+              )}
+          </CardContent>
+      </Card>
     </div>
   );
 }
 
 export default SongLibrary;
-
-    
