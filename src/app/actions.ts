@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { suggestKeyChange } from "@/ai/flows/suggest-key-change";
 import { extractSongData } from "@/ai/flows/extract-song-data-flow";
+import { formatSongContent } from "@/ai/flows/format-song-content-flow";
 import type { KeyChangeSuggesterState, SongDataExtractorState } from "@/lib/types";
 
 const AudioUrlSchema = z.string().url({ message: "Molimo unesite važeći URL." });
@@ -58,4 +59,30 @@ export async function handleExtractSongData(
         const errorMessage = e instanceof Error ? e.message : "Došlo je do nepoznate greške.";
         return { error: `Došlo je do neočekivane greške: ${errorMessage}` };
     }
+}
+
+const SongContentSchema = z.string().min(1, { message: "Sadržaj ne može biti prazan." });
+
+export async function handleFormatSongContent(
+  content: string
+): Promise<{ formattedContent?: string; error?: string }> {
+  const validatedFields = SongContentSchema.safeParse(content);
+
+  if (!validatedFields.success) {
+    return {
+      error: "Sadržaj za formatiranje je nevažeći.",
+    };
+  }
+
+  try {
+    const result = await formatSongContent({ content: validatedFields.data });
+    if (!result || !result.formattedContent) {
+      return { error: "Nije uspjelo formatiranje sadržaja. Molimo pokušajte ponovo." };
+    }
+    return { formattedContent: result.formattedContent };
+  } catch (e) {
+    console.error(e);
+    const errorMessage = e instanceof Error ? e.message : "Došlo je do nepoznate greške.";
+    return { error: `Došlo je do neočekivane greške prilikom formatiranja: ${errorMessage}` };
+  }
 }

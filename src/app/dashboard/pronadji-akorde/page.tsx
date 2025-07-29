@@ -1,4 +1,3 @@
-"use client";
 import PronadjiAkorde from '@/components/pronadji-akorde';
 import React from 'react';
 import AppLayout from '@/components/layout/app-layout';
