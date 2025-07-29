@@ -3,7 +3,7 @@ import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import SongLibrary from '@/components/song-library';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Library } from "lucide-react";
+import { Music } from "lucide-react";
 import React from 'react';
 
 const SongLibraryPage = () => {
@@ -18,7 +18,7 @@ const SongLibraryPage = () => {
                <CardHeader>
                 <div className="flex items-center space-x-4">
                   <div className="p-3 bg-white/20 rounded-full">
-                    <Library className="h-8 w-8 text-white" />
+                    <Music className="h-8 w-8 text-white" />
                   </div>
                   <div>
                     <CardTitle className="text-3xl font-bold text-white">Biblioteka Pjesama</CardTitle>
