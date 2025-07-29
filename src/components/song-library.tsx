@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
-import SongScraper from './song-scraper';
+import PronadjiAkorde from './pronadji-akorde';
 import { Library, Trash2, Wand2 } from 'lucide-react';
 
 const Modal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }> = ({ isOpen, onClose, title, children }) => {
@@ -47,7 +47,6 @@ function SongLibrary() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<DocumentData[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [isScraping, setIsScraping] = useState(false);
   
   const firebaseConfig = {
     apiKey: "AIzaSyDxwAQf6RX8UHlbjPpnjMVX-0jS85K3bvw",
@@ -260,19 +259,6 @@ ${song.lyricsAndChords}`;
         setLoading(false);
     }
   }
-  
-  const handleSongScraped = async (scrapedData: { title: string; artist: string; lyricsAndChords: string }) => {
-    setIsScraping(true);
-    setError('');
-    setMessage('');
-    const saveSuccess = await handleSaveSong(scrapedData.title, scrapedData.artist, scrapedData.lyricsAndChords);
-    if (saveSuccess) {
-        setMessage("Pjesma je uspješno dohvaćena i dodana u vašu biblioteku!");
-    } else {
-        setMessage("Dohvaćeni podaci o pjesmi nisu mogli biti spremljeni u vašu biblioteku.");
-    }
-    setIsScraping(false);
-  };
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-8">
@@ -280,10 +266,10 @@ ${song.lyricsAndChords}`;
           {modalContent}
       </Modal>
 
-      {(loading || isAiLoading || isSearching || isScraping) && (
+      {(loading || isAiLoading || isSearching) && (
           <div className="fixed top-20 right-4 bg-primary text-primary-foreground py-2 px-4 rounded-lg shadow-lg z-50 flex items-center gap-2">
               <Progress value={50} className="w-24" />
-              <span>{isScraping ? 'Dohvaćanje...' : (isSearching ? 'Pretraživanje...' : (isAiLoading ? 'AI razmišlja...' : 'Učitavanje...'))}</span>
+              <span>{(isSearching ? 'Pretraživanje...' : (isAiLoading ? 'AI razmišlja...' : 'Učitavanje...'))}</span>
           </div>
       )}
 
@@ -292,7 +278,15 @@ ${song.lyricsAndChords}`;
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-8">
-          <SongScraper onSongScraped={handleSongScraped} isScraping={isScraping} />
+          <Card className="glass-card">
+            <CardHeader>
+                <CardTitle>Pronađi i Dodaj Akorde</CardTitle>
+                <CardDescription>Uvezite pjesme s URL-a ili ih dodajte ručno.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PronadjiAkorde />
+            </CardContent>
+          </Card>
 
           <Card className="glass-card">
               <CardHeader><CardTitle>Dodaj Novu Pjesmu Ručno</CardTitle></CardHeader>

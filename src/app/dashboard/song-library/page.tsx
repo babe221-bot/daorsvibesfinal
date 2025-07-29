@@ -2,7 +2,8 @@
 import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import SongLibrary from '@/components/song-library';
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Library } from "lucide-react";
 import React from 'react';
 
 const SongLibraryPage = () => {
@@ -13,6 +14,21 @@ const SongLibraryPage = () => {
         <div className="relative z-10">
           <Header />
           <main className="flex-1 p-4 md:p-8 text-white fade-in-down">
+            <Card className="glass-card mb-8">
+               <CardHeader>
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 bg-white/20 rounded-full">
+                    <Library className="h-8 w-8 text-white" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-3xl font-bold text-white">Biblioteka Pjesama</CardTitle>
+                    <CardDescription className="text-gray-300 text-lg">
+                      Upravljajte svojim pjesmama, uvezite nove i pretražite javnu arhivu.
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+            </Card>
             <SongLibrary />
           </main>
         </div>

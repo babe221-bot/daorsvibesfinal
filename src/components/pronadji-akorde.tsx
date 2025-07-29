@@ -97,8 +97,6 @@ export default function PronadjiAkorde() {
   return (
     <div className="text-foreground p-1 flex flex-col items-center">
       <div className="w-full max-w-4xl">
-        <h1 className="text-2xl font-bold text-center mb-4">Pronađi i Dodaj Akorde</h1>
-        
         <form action={formAction} className="space-y-4">
             <div className="space-y-2">
                 <Label>URL Pjesme</Label>
