@@ -15,7 +15,7 @@ import {
   SidebarSeparator,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key, LifeBuoy, Calendar, Milestone } from "lucide-react";
+import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key, LifeBuoy, Calendar, Milestone, Guitar } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { auth } from "@/lib/firebase-client";
@@ -60,11 +60,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-               <NextLink href="/dashboard/stats">
-                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/stats'} tooltip="Statistika">
+               <NextLink href="/dashboard/tuner">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/tuner'} tooltip="Tuner">
                     <span>
-                      <BarChart />
-                      <span>Statistika</span>
+                      <Guitar />
+                      <span>Tuner</span>
                     </span>
                   </SidebarMenuButton>
               </NextLink>
@@ -144,6 +144,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
          <SidebarFooter>
           <SidebarSeparator />
           <SidebarMenu>
+            <SidebarMenuItem>
+               <NextLink href="/dashboard/stats">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/stats'} tooltip="Statistika">
+                    <span>
+                      <BarChart />
+                      <span>Statistika</span>
+                    </span>
+                  </SidebarMenuButton>
+              </NextLink>
+            </SidebarMenuItem>
             <SidebarMenuItem>
                 <NextLink href="/dashboard/settings">
                     <SidebarMenuButton asChild isActive={pathname === '/dashboard/settings'} tooltip="Postavke">
