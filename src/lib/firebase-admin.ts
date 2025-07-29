@@ -1,23 +1,31 @@
 import * as admin from "firebase-admin";
 import "server-only";
 
-const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
-  ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-  : undefined;
+let adminDb: admin.firestore.Firestore | undefined;
 
-if (!admin.apps.length) {
-  if (serviceAccount) {
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
+try {
+  const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
+    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
+    : undefined;
+
+  if (!admin.apps.length) {
+    if (serviceAccount) {
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+      });
+      adminDb = admin.firestore();
+    } else {
+      console.warn(
+        "Firebase Admin SDK not initialized. Missing FIREBASE_SERVICE_ACCOUNT_KEY. Server-side Firebase features will be disabled."
+      );
+    }
   } else {
-    console.warn(
-      "Firebase Admin SDK not initialized. Missing FIREBASE_SERVICE_ACCOUNT_KEY. Server-side Firebase features will be disabled."
-    );
+    adminDb = admin.firestore();
   }
+} catch (e: any) {
+  console.error("Firebase Admin SDK initialization failed:", e.message);
 }
 
 const adminAuth = admin.apps.length ? admin.auth() : undefined;
-const adminDb = admin.apps.length ? admin.firestore() : undefined;
 
 export { adminAuth, adminDb };
