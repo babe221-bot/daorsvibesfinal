@@ -9,26 +9,5 @@
     "frameworksBackend": {
       "region": "europe-west1"
     }
-  },
-  "emulators": {
-    "auth": {
-      "host": "0.0.0.0",
-      "port": 9101
-    },
-    "firestore": {
-      "host": "0.0.0.0",
-      "port": 8082,
-      "rules": "firestore.rules"
-    },
-    "storage": {
-      "host": "0.0.0.0",
-      "port": 9199,
-      "rules": "storage.rules"
-    },
-    "ui": {
-      "enabled": true,
-      "host": "0.0.0.0",
-      "port": 4003
-    }
   }
 }
