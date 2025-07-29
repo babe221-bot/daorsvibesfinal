@@ -69,13 +69,13 @@ export default function InstrumentTuner() {
     const [note, setNote] = useState('--');
     const [frequency, setFrequency] = useState(0);
     const [cents, setCents] = useState(0);
-    const [mode, setMode] = useState&lt;TunerMode&gt;('guitar');
+    const [mode, setMode] = useState<TunerMode>('guitar');
     const [targetNote, setTargetNote] = useState(notePresets.guitar.notes[0].value);
 
-    const toneRef = useRef&lt;any&gt;(null);
-    const analyserRef = useRef&lt;any&gt;(null);
-    const micRef = useRef&lt;any&gt;(null);
-    const animationFrameRef = useRef&lt;number | null&gt;(null);
+    const toneRef = useRef<any>(null);
+    const analyserRef = useRef<any>(null);
+    const micRef = useRef<any>(null);
+    const animationFrameRef = useRef<number | null>(null);
 
     const startTuning = async () => {
         try {
@@ -200,69 +200,67 @@ export default function InstrumentTuner() {
     const isNoteInTune = Math.abs(cents) < 5;
 
     return (
-        &lt;div className="flex flex-col items-center justify-center p-4"&gt;
-            &lt;div className="tuner-mode-switch mb-6"&gt;
+        <div className="flex flex-col items-center justify-center p-4">
+            <div className="tuner-mode-switch mb-6">
                 {(Object.keys(notePresets) as TunerMode[]).map((key) => (
-                    &lt;button 
+                    <button 
                         key={key}
                         onClick={() => setMode(key)} 
                         className={cn(mode === key && 'active')}
-                    &gt;
+                    >
                         {notePresets[key].name}
-                    &lt;/button&gt;
+                    </button>
                 ))}
-            &lt;/div&gt;
+            </div>
             
-            &lt;div className="flex items-center justify-center space-x-3 mb-4 text-white"&gt;
-                &lt;label htmlFor="target-note" className="font-semibold"&gt;Target Note:&lt;/label&gt;
-                &lt;Select value={targetNote} onValueChange={setTargetNote} disabled={isTuning}&gt;
-                    &lt;SelectTrigger id="target-note" className="w-[200px] bg-white/10 border-white/30"&gt;
-                        &lt;SelectValue placeholder="Select a note" /&gt;
-                    &lt;/SelectTrigger&gt;
-                    &lt;SelectContent&gt;
+            <div className="flex items-center justify-center space-x-3 mb-4 text-white">
+                <label htmlFor="target-note" className="font-semibold">Target Note:</label>
+                <Select value={targetNote} onValueChange={setTargetNote} disabled={isTuning}>
+                    <SelectTrigger id="target-note" className="w-[200px] bg-white/10 border-white/30">
+                        <SelectValue placeholder="Select a note" />
+                    </SelectTrigger>
+                    <SelectContent>
                         {notePresets[mode].notes.map(note => (
-                            &lt;SelectItem key={note.value} value={note.value}&gt;{note.text}&lt;/SelectItem&gt;
+                            <SelectItem key={note.value} value={note.value}>{note.text}</SelectItem>
                         ))}
-                    &lt;/SelectContent&gt;
-                &lt;/Select&gt;
-            &lt;/div&gt;
+                    </SelectContent>
+                </Select>
+            </div>
             
-            &lt;div className="tuner-display my-4"&gt;
-                &lt;div 
+            <div className="tuner-display my-4">
+                <div 
                     id="needle" 
                     className={cn('needle', isNoteInTune && 'in-tune')} 
                     style={{ transform: `rotate(${needleRotation}deg)` }}
-                &gt;&lt;/div&gt;
+                ></div>
                 {Array.from({ length: 9 }).map((_, i) => {
                     const angle = (i - 4) * 11;
                     return (
-                        &lt;div key={i} className="tick-container" style={{ transform: `rotate(${angle}deg)` }}&gt;
-                            &lt;div className={cn("tick", i === 4 && "tick-center")}&gt;&lt;/div&gt;
+                        <div key={i} className="tick-container" style={{ transform: `rotate(${angle}deg)` }}>
+                            <div className={cn("tick", i === 4 && "tick-center")}></div>
                             {(i % 2 === 0) && (
-                                &lt;div className="tick-label" style={{ transform: `rotate(${-angle}deg) translateX(-50%)` }}&gt;
+                                <div className="tick-label" style={{ transform: `rotate(${-angle}deg) translateX(-50%)` }}>
                                     {(i - 4) * 10}
-                                &lt;/div&gt;
+                                </div>
                             )}
-                        &lt;/div&gt;
+                        </div>
                     );
                 })}
-            &lt;/div&gt;
+            </div>
 
-            &lt;div className="text-center my-4 text-white"&gt;
-                &lt;div className="note-display"&gt;{note}&lt;/div&gt;
-                &lt;div className="freq-display"&gt;{frequency.toFixed(2)} Hz&lt;/div&gt;
-            &lt;/div&gt;
+            <div className="text-center my-4 text-white">
+                <div className="note-display">{note}</div>
+                <div className="freq-display">{frequency.toFixed(2)} Hz</div>
+            </div>
 
-            &lt;div className="flex items-center justify-center space-x-4"&gt;
-                &lt;div className={cn("status-light", isTuning && "active")}&gt;&lt;/div&gt;
+            <div className="flex items-center justify-center space-x-4">
+                <div className={cn("status-light", isTuning && "active")}></div>
                 {!isTuning ? (
-                    &lt;Button onClick={startTuning} className="bg-primary hover:bg-primary/90 text-primary-foreground w-32"&gt;Start&lt;/Button&gt;
+                    <Button onClick={startTuning} className="bg-primary hover:bg-primary/90 text-primary-foreground w-32">Start</Button>
                 ) : (
-                    &lt;Button onClick={stopTuning} variant="destructive" className="w-32"&gt;Stop&lt;/Button&gt;
+                    <Button onClick={stopTuning} variant="destructive" className="w-32">Stop</Button>
                 )}
-            &lt;/div&gt;
-        &lt;/div&gt;
+            </div>
+        </div>
     );
 }
-
-    

@@ -15,7 +15,7 @@ export async function handleSuggestKeyChange(
 
   if (!validatedFields.success) {
     return {
-      error: validatedFields.error.flatten().fieldErrors.url?.[0] ?? "Dostavljen je nevažeći URL.",
+      error: validatedFields.error.flatten().formErrors[0] ?? "Dostavljen je nevažeći URL.",
     };
   }
 

@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 import { auth } from "firebase-admin";
-import { initFirebaseAdminApp } from "@/lib/firebase-admin";
 
 const RegisterSchema = z.object({
   name: z.string().min(2, { message: "Ime mora imati najmanje 2 karaktera." }),
@@ -16,13 +15,6 @@ const LoginSchema = z.object({
 });
 
 export async function registerUser(prevState: any, formData: FormData) {
-  try {
-    await initFirebaseAdminApp();
-  } catch (e: any) {
-    console.warn(e.message);
-    return { error: "Registracija novih korisnika je trenutno onemogućena. Molimo pokušajte kasnije." };
-  }
-
   const validatedFields = RegisterSchema.safeParse(Object.fromEntries(formData.entries()));
 
   if (!validatedFields.success) {
