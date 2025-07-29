@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 
 // --- Helper: Simple Helmet component for adding fonts ---
@@ -55,10 +55,9 @@ function SongLibrary() {
   const [auth, setAuth] = useState(null);
   const [userId, setUserId] = useState(null);
   const [isAuthReady, setIsAuthReady] = useState(false);
-  const [songUrl, setSongUrl] = useState('');
   const [songTitle, setSongTitle] = useState('');
   const [songArtist, setSongArtist] = useState('');
-  const [extractedContent, setExtractedContent] = useState('');
+  const [lyricsAndChords, setLyricsAndChords] = useState('');
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
@@ -129,7 +128,6 @@ function SongLibrary() {
   // --- Gemini API Call Helper ---
   const callGemini = async (prompt, jsonSchema = null) => {
       const apiKey = ""; // Handled by environment
-      // FIX: Reverted model to gemini-2.0-flash to resolve 403 Forbidden error.
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
       
       const payload = {
@@ -159,57 +157,6 @@ function SongLibrary() {
       return text;
   };
 
-  // --- Core App Logic & Handlers ---
-
-  const handleDownloadAndExtract = async () => {
-    if (!songUrl) { setError("Please enter a song URL."); return; }
-    setLoading(true);
-    setError('');
-    setMessage('');
-    setExtractedContent('');
-    try {
-        const prompt = `Please fetch the raw text content from the following URL and return only the text content. Do not add any commentary or formatting. URL: ${songUrl}`;
-        const text = await callGemini(prompt);
-        setExtractedContent(text);
-        setMessage("Content extracted. You can now save it or use AI to detect the title and artist.");
-    } catch (err) {
-      console.error("Error fetching content:", err);
-      setError(`Failed to fetch content. The URL might be invalid or inaccessible. Error: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  const handleDetectTitleAndArtist = async () => {
-      if (!extractedContent) { setError("No content to analyze."); return; }
-      setIsAiLoading(true);
-      setError('');
-      setMessage('');
-      try {
-          const prompt = `Analyze the following song lyrics and chords to identify the song title and artist. 
-
-${extractedContent}`;
-          const schema = {
-              type: "OBJECT",
-              properties: {
-                  title: { type: "STRING" },
-                  artist: { type: "STRING" }
-              },
-              required: ["title", "artist"]
-          };
-          const resultText = await callGemini(prompt, schema);
-          const resultJson = JSON.parse(resultText);
-          setSongTitle(resultJson.title || '');
-          setSongArtist(resultJson.artist || '');
-          setMessage("✨ Title and artist detected!");
-      } catch (err) {
-          console.error("Error detecting info:", err);
-          setError("Could not auto-detect song info. Please enter it manually.");
-      } finally {
-          setIsAiLoading(false);
-      }
-  };
-
   const handleSimplifyChords = async (song) => {
       setIsAiLoading(true);
       setError('');
@@ -234,7 +181,7 @@ ${song.lyricsAndChords}`;
 
   const handleSaveSong = async () => {
     if (!db || !userId) { setError("Database not connected."); return; }
-    if (!songTitle || !extractedContent) { setError("Title and content are required."); return; }
+    if (!songTitle || !lyricsAndChords) { setError("Title and content are required."); return; }
     setLoading(true);
     setError('');
     setMessage('');
@@ -243,15 +190,13 @@ ${song.lyricsAndChords}`;
       await addDoc(songsCollectionRef, {
         title: songTitle,
         artist: songArtist,
-        lyricsAndChords: extractedContent,
-        url: songUrl,
+        lyricsAndChords: lyricsAndChords,
         timestamp: serverTimestamp(),
       });
       setMessage("Song saved successfully!");
-      setSongUrl('');
       setSongTitle('');
       setSongArtist('');
-      setExtractedContent('');
+      setLyricsAndChords('');
     } catch (err) {
       console.error("Error saving song:", err);
       setError("Failed to save song.");
@@ -300,32 +245,21 @@ ${song.lyricsAndChords}`;
         {error && <div className="bg-destructive text-destructive-foreground p-4 rounded-lg mb-4 text-center">{error}</div>}
         {message && <div className="bg-primary text-primary-foreground p-4 rounded-lg mb-4 text-center">{message}</div>}
 
-        {userId && <p className="text-center text-xs mb-6 text-muted-foreground">User ID: <span className="font-mono break-all">{userId}</span></p>}
-
         <Card className="mb-8">
             <CardHeader>
                 <CardTitle>Add New Song</CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                    <Input type="text" placeholder="Song URL (e.g., raw .txt or .pro file)" value={songUrl} onChange={(e) => setSongUrl(e.target.value)} className="flex-grow"/>
-                    <Button onClick={handleDownloadAndExtract} disabled={loading || !songUrl}>Fetch Content</Button>
-                </div>
-
-                {extractedContent && (
                 <div className="mt-6">
-                  <h3 className="text-xl font-semibold mb-3">Edit & Save</h3>
-                  <Textarea value={extractedContent} onChange={(e) => setExtractedContent(e.target.value)} rows="10" className="w-full font-mono"></Textarea>
+                  <Textarea value={lyricsAndChords} onChange={(e) => setLyricsAndChords(e.target.value)} rows="10" className="w-full font-mono" placeholder="Paste lyrics and chords here..."></Textarea>
                   <div className="mt-4 flex flex-col sm:flex-row gap-4">
                     <Input type="text" placeholder="Song Title (Required)" value={songTitle} onChange={(e) => setSongTitle(e.target.value)} className="flex-grow"/>
                     <Input type="text" placeholder="Artist (Optional)" value={songArtist} onChange={(e) => setSongArtist(e.target.value)} className="flex-grow"/>
                   </div>
                   <div className="mt-4 flex flex-col sm:flex-row gap-4 justify-end">
-                      <Button onClick={handleDetectTitleAndArtist} disabled={isAiLoading || !extractedContent} variant="outline">✨ Auto-detect Info</Button>
-                      <Button onClick={handleSaveSong} disabled={loading || !songTitle || !extractedContent}>Save to Library</Button>
+                      <Button onClick={handleSaveSong} disabled={loading || !songTitle || !lyricsAndChords}>Save to Library</Button>
                   </div>
                 </div>
-              )}
             </CardContent>
         </Card>
 
