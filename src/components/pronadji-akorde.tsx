@@ -6,11 +6,10 @@ import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { db, auth } from '@/lib/firebase-client';
-import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
+import { auth } from '@/lib/firebase-client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useToast } from '@/hooks/use-toast';
-import { handleExtractSongData, handleFormatSongContent } from '@/app/actions';
+import { handleExtractSongData, handleFormatSongContent, handleSaveSong } from '@/app/actions';
 import type { SongDataExtractorState } from '@/lib/types';
 import { Label } from '@/components/ui/label';
 import { Sparkles } from 'lucide-react';
@@ -68,45 +67,32 @@ export default function PronadjiAkorde() {
     }
   };
 
-  const handleSaveSongToPublicRepo = async () => {
-    if (!db || !user || !songDetails) {
-      toast({ variant: 'destructive', title: 'Greška', description: 'Nije moguće spremiti. Provjerite jeste li prijavljeni.' });
+  const handleSaveSongClick = async () => {
+    if (!user || !songDetails) {
+      toast({ variant: 'destructive', title: 'Greška', description: 'Nema podataka za spremanje ili niste prijavljeni.' });
       return;
     }
-    if (!songDetails.title || !songDetails.lyricsAndChords) {
+     if (!songDetails.title || !songDetails.lyricsAndChords) {
       toast({ variant: 'destructive', title: 'Greška', description: 'Naslov i sadržaj su obavezni.' });
       return;
     }
+
     setIsSaving(true);
-    try {
-      const songsCollectionRef = collection(db, 'songs');
-      const q = query(songsCollectionRef, where("title", "==", songDetails.title), where("artist", "==", songDetails.artist));
-      const querySnapshot = await getDocs(q);
+    const result = await handleSaveSong({
+      ...songDetails,
+      userId: user.uid,
+    });
+    setIsSaving(false);
 
-      if (!querySnapshot.empty) {
-        toast({ variant: 'destructive', title: 'Greška', description: 'Ova pjesma već postoji u javnom repozitoriju.' });
-        setIsSaving(false);
-        return;
-      }
-
-      await addDoc(songsCollectionRef, {
-        title: songDetails.title,
-        artist: songDetails.artist,
-        lyricsAndChords: songDetails.lyricsAndChords,
-        url: songDetails.url,
-        timestamp: serverTimestamp(),
-        addedBy: user.uid
-      });
-      toast({ title: 'Uspjeh', description: 'Pjesma je uspješno dodana u javni repozitorij!' });
+    if (result.error) {
+      toast({ variant: 'destructive', title: 'Greška', description: result.error });
+    } else {
+      toast({ title: 'Uspjeh', description: result.message });
       setSongDetails(null);
       setSongUrl('');
-    } catch (err) {
-      console.error("Greška pri spremanju pjesme:", err);
-      toast({ variant: 'destructive', title: 'Greška', description: 'Nije uspjelo spremanje pjesme.' });
-    } finally {
-      setIsSaving(false);
     }
   };
+
 
   return (
     <div className="text-foreground p-1 flex flex-col items-center">
@@ -160,7 +146,7 @@ export default function PronadjiAkorde() {
                 <Sparkles className="mr-2 h-4 w-4" />
                 {isFormatting ? 'Formatiranje...' : 'Formatiraj pomoću AI'}
               </Button>
-              <Button onClick={handleSaveSongToPublicRepo} disabled={isSaving || !songDetails.title || !songDetails.lyricsAndChords}>
+              <Button onClick={handleSaveSongClick} disabled={isSaving || !songDetails.title || !songDetails.lyricsAndChords}>
                 {isSaving ? 'Spremanje...' : 'Dodaj u javni repozitorij'}
               </Button>
             </div>
