@@ -145,8 +145,18 @@ ${song.lyricsAndChords}`;
   };
 
   const handleSaveSong = async () => {
-    if (!db || !userId) { setError("Database not connected."); return; }
-    if (!songTitle || !lyricsAndChords) { setError("Title and content are required."); return; }
+    if (!db || !userId) {
+      setError("Database not connected.");
+      return;
+    }
+    if (songTitle.length < 2) {
+      setError("Title must be at least 2 characters long.");
+      return;
+    }
+    if (lyricsAndChords.length < 10) {
+      setError("Lyrics and chords must be at least 10 characters long.");
+      return;
+    }
     setLoading(true);
     setError('');
     setMessage('');
@@ -186,8 +196,14 @@ ${song.lyricsAndChords}`;
   };
 
   const handleSearchPublicSongs = async () => {
-    if (!db) { setError("Database not connected."); return; }
-    if (!searchQuery) { setError("Please enter a search query."); return; }
+    if (!db) {
+      setError("Database not connected.");
+      return;
+    }
+    if (searchQuery.length < 2) {
+      setError("Search query must be at least 2 characters long.");
+      return;
+    }
     setIsSearching(true);
     setError('');
     setSearchResults([]);

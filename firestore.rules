@@ -1,16 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Public collection of songs that any authenticated user can read from and add to.
-    match /songs/{songId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null;
-      // Users should not be able to delete or update songs from the public repository
-      allow update, delete: if false;
-    }
-
     // User-specific song library. Only the authenticated user can read or write to their library.
-    match /users/{userId}/songs/{songId} {
+    match /artifacts/{appId}/users/{userId}/songs/{songId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }
