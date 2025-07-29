@@ -78,11 +78,11 @@ export default function LoginPage() {
             </div>
           </div>
           <div className="flex flex-col space-y-2">
-            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
+            <Button variant="outline" className="w-full glass-card text-white" onClick={handleGoogleSignIn}>
                 <GoogleIcon />
                 <span className="ml-2">Google</span>
             </Button>
-            <Button variant="outline" className="w-full" onClick={handleGuestSignIn}>
+            <Button variant="outline" className="w-full glass-card text-white" onClick={handleGuestSignIn}>
                 <User className="h-5 w-5"/>
                 <span className="ml-2">Prijavi se kao gost</span>
             </Button>
