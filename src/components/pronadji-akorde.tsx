@@ -10,9 +10,10 @@ import { db, auth } from '@/lib/firebase-client';
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useToast } from '@/hooks/use-toast';
-import { handleExtractSongData } from '@/app/actions';
+import { handleExtractSongData, handleFormatSongContent } from '@/app/actions';
 import type { SongDataExtractorState } from '@/lib/types';
 import { Label } from '@/components/ui/label';
+import { Sparkles } from 'lucide-react';
 
 const initialState: SongDataExtractorState = {};
 
@@ -34,6 +35,7 @@ export default function PronadjiAkorde() {
 
   const [songDetails, setSongDetails] = useState<{ title: string; artist: string; lyricsAndChords: string; url: string } | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isFormatting, setIsFormatting] = useState(false);
 
   useEffect(() => {
     if (state.error) {
@@ -44,6 +46,27 @@ export default function PronadjiAkorde() {
       setSongDetails({ ...state.result, url: songUrl });
     }
   }, [state, toast, songUrl]);
+  
+  const handleFormatClick = async () => {
+    if (!songDetails?.lyricsAndChords) {
+      toast({ variant: 'destructive', title: 'Greška', description: 'Nema sadržaja za formatiranje.' });
+      return;
+    }
+    setIsFormatting(true);
+    try {
+      const result = await handleFormatSongContent(songDetails.lyricsAndChords);
+      if (result.error) {
+        toast({ variant: 'destructive', title: 'Greška formatiranja', description: result.error });
+      } else if (result.formattedContent) {
+        setSongDetails(prev => prev ? { ...prev, lyricsAndChords: result.formattedContent! } : null);
+        toast({ title: 'Uspjeh', description: 'Sadržaj je uspješno formatiran.' });
+      }
+    } catch (err) {
+       toast({ variant: 'destructive', title: 'Greška', description: 'Dogodila se neočekivana greška.' });
+    } finally {
+        setIsFormatting(false);
+    }
+  };
 
   const handleSaveSongToPublicRepo = async () => {
     if (!db || !user || !songDetails) {
@@ -132,7 +155,11 @@ export default function PronadjiAkorde() {
               rows={12}
               className="w-full font-mono bg-white/10 border-white/30"
             />
-            <div className="mt-4 flex justify-end">
+            <div className="mt-4 flex justify-between">
+              <Button onClick={handleFormatClick} disabled={isFormatting} variant="outline">
+                <Sparkles className="mr-2 h-4 w-4" />
+                {isFormatting ? 'Formatiranje...' : 'Formatiraj pomoću AI'}
+              </Button>
               <Button onClick={handleSaveSongToPublicRepo} disabled={isSaving || !songDetails.title || !songDetails.lyricsAndChords}>
                 {isSaving ? 'Spremanje...' : 'Dodaj u javni repozitorij'}
               </Button>
