@@ -12,7 +12,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useToast } from '@/hooks/use-toast';
 import { handleExtractSongData } from '@/app/actions';
 import type { SongDataExtractorState } from '@/lib/types';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Label } from '@/components/ui/label';
 
 const initialState: SongDataExtractorState = {};
 
@@ -91,22 +91,20 @@ export default function PronadjiAkorde() {
         <h1 className="text-2xl font-bold text-center mb-4">Pronađi i Dodaj Akorde</h1>
         
         <form action={formAction} className="space-y-4">
-            <FormItem>
-                <FormLabel>URL Pjesme</FormLabel>
-                <FormControl>
-                    <div className="flex flex-col sm:flex-row gap-2">
-                    <Input 
-                      name="songUrl"
-                      placeholder="URL .txt, .pro ili web stranice"
-                      value={songUrl}
-                      onChange={(e) => setSongUrl(e.target.value)}
-                      className="flex-grow bg-white/20 border-white/30 text-white placeholder:text-gray-300"
-                    />
-                    <SubmitButton />
-                    </div>
-                </FormControl>
-                {state.error && <FormMessage>{state.error}</FormMessage>}
-            </FormItem>
+            <div className="space-y-2">
+                <Label>URL Pjesme</Label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                <Input 
+                    name="songUrl"
+                    placeholder="URL .txt, .pro ili web stranice"
+                    value={songUrl}
+                    onChange={(e) => setSongUrl(e.target.value)}
+                    className="flex-grow bg-white/20 border-white/30 text-white placeholder:text-gray-300"
+                />
+                <SubmitButton />
+                </div>
+                {state.error && <p className="text-sm text-destructive mt-1">{state.error}</p>}
+            </div>
         </form>
 
         {state.result && songDetails && (
