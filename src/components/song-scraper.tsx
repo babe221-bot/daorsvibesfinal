@@ -47,19 +47,19 @@ const SongScraper = ({ onSongScraped, isScraping }) => {
   };
 
   return (
-    <Card>
-        <CardHeader><CardTitle>Add Song From URL</CardTitle></CardHeader>
+    <Card className="glass-card">
+        <CardHeader><CardTitle>Dodaj Pjesmu sa URL-a</CardTitle></CardHeader>
         <CardContent>
             <div className="space-y-4">
                 <Input
                     type="text"
-                    placeholder="Enter song URL..."
+                    placeholder="Unesite URL pjesme..."
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
-                    className="flex-grow"
+                    className="flex-grow bg-white/10 border-white/30"
                 />
                 <Button onClick={handleScrape} disabled={isLoading || isScraping} className="w-full">
-                    {isLoading ? 'Scraping...' : 'Scrape Song'}
+                    {isLoading ? 'Dohvaćanje...' : 'Dohvati Pjesmu'}
                 </Button>
                 {isLoading && <Progress value={50} className="w-full" />}
                 {error && <p className="text-destructive text-sm mt-2">{error}</p>}
