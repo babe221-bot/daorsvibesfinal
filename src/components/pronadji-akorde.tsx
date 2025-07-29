@@ -1,9 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
@@ -19,9 +16,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 
 const initialState: SongDataExtractorState = {};
 
-const SongUrlSchema = z.object({
-  songUrl: z.string().url({ message: 'Molimo unesite važeći URL.' }),
-});
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -36,14 +30,10 @@ export default function PronadjiAkorde() {
   const { toast } = useToast();
   const [user] = useAuthState(auth);
   const [state, formAction] = useActionState(handleExtractSongData, initialState);
+  const [songUrl, setSongUrl] = useState('');
 
   const [songDetails, setSongDetails] = useState<{ title: string; artist: string; lyricsAndChords: string; url: string } | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-
-  const form = useForm<z.infer<typeof SongUrlSchema>>({
-    resolver: zodResolver(SongUrlSchema),
-    defaultValues: { songUrl: '' },
-  });
 
   useEffect(() => {
     if (state.error) {
@@ -51,9 +41,9 @@ export default function PronadjiAkorde() {
     }
     if (state.result) {
       toast({ title: 'Uspjeh', description: state.message });
-      setSongDetails({ ...state.result, url: form.getValues('songUrl') });
+      setSongDetails({ ...state.result, url: songUrl });
     }
-  }, [state, toast, form]);
+  }, [state, toast, songUrl]);
 
   const handleSaveSongToPublicRepo = async () => {
     if (!db || !user || !songDetails) {
@@ -86,7 +76,7 @@ export default function PronadjiAkorde() {
       });
       toast({ title: 'Uspjeh', description: 'Pjesma je uspješno dodana u javni repozitorij!' });
       setSongDetails(null);
-      form.reset();
+      setSongUrl('');
     } catch (err) {
       console.error("Greška pri spremanju pjesme:", err);
       toast({ variant: 'destructive', title: 'Greška', description: 'Nije uspjelo spremanje pjesme.' });
@@ -100,26 +90,24 @@ export default function PronadjiAkorde() {
       <div className="w-full max-w-4xl">
         <h1 className="text-2xl font-bold text-center mb-4">Pronađi i Dodaj Akorde</h1>
         
-        <FormProvider {...form}>
-            <form action={formAction} className="space-y-4">
-                 <FormField
-                    control={form.control}
-                    name="songUrl"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>URL Pjesme</FormLabel>
-                            <FormControl>
-                                <div className="flex flex-col sm:flex-row gap-2">
-                                <Input placeholder="URL .txt, .pro ili web stranice" {...field} className="flex-grow bg-white/20 border-white/30 text-white placeholder:text-gray-300"/>
-                                <SubmitButton />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+        <form action={formAction} className="space-y-4">
+            <FormItem>
+                <FormLabel>URL Pjesme</FormLabel>
+                <FormControl>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                    <Input 
+                      name="songUrl"
+                      placeholder="URL .txt, .pro ili web stranice"
+                      value={songUrl}
+                      onChange={(e) => setSongUrl(e.target.value)}
+                      className="flex-grow bg-white/20 border-white/30 text-white placeholder:text-gray-300"
                     />
-            </form>
-        </FormProvider>
+                    <SubmitButton />
+                    </div>
+                </FormControl>
+                {state.error && <FormMessage>{state.error}</FormMessage>}
+            </FormItem>
+        </form>
 
         {state.result && songDetails && (
           <div className="mt-6 space-y-4">
