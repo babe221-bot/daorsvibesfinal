@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,7 +25,6 @@ function PronadjiAkorde() {
   const [message, setMessage] = useState('');
 
   // --- Global variables from Canvas environment ---
-  const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
   const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
   const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
@@ -147,29 +146,40 @@ ${extractedContent}`;
       }
   };
 
-  const handleSaveSong = async () => {
+  const handleSaveSongToPublicRepo = async () => {
     if (!db || !userId) { setError("Database not connected."); return; }
     if (!songTitle || !extractedContent) { setError("Title and content are required."); return; }
     setLoading(true);
     setError('');
     setMessage('');
     try {
-      const songsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/songs`);
+      // Check if the song already exists in the public repository
+      const songsCollectionRef = collection(db, 'songs');
+      const q = query(songsCollectionRef, where("title", "==", songTitle), where("artist", "==", songArtist));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        setError("This song already exists in the public repository.");
+        setLoading(false);
+        return;
+      }
+
       await addDoc(songsCollectionRef, {
         title: songTitle,
         artist: songArtist,
         lyricsAndChords: extractedContent,
         url: songUrl,
         timestamp: serverTimestamp(),
+        addedBy: userId
       });
-      setMessage("Song saved successfully!");
+      setMessage("Song added to the public repository successfully!");
       setSongUrl('');
       setSongTitle('');
       setSongArtist('');
       setExtractedContent('');
     } catch (err) {
       console.error("Error saving song:", err);
-      setError("Failed to save song.");
+      setError("Failed to save song to public repository.");
     } finally {
       setLoading(false);
     }
@@ -211,7 +221,7 @@ ${extractedContent}`;
                   </div>
                   <div className="mt-4 flex flex-col sm:flex-row gap-4 justify-end">
                       <Button onClick={handleDetectTitleAndArtist} disabled={isAiLoading || !extractedContent} variant="outline">✨ Auto-detect Info</Button>
-                      <Button onClick={handleSaveSong} disabled={loading || !songTitle || !extractedContent}>Add to Library</Button>
+                      <Button onClick={handleSaveSongToPublicRepo} disabled={loading || !songTitle || !extractedContent}>Add to Public Repository</Button>
                   </div>
                 </div>
               )}
