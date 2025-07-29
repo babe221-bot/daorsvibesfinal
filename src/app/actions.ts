@@ -4,7 +4,8 @@ import { z } from "zod";
 import { suggestKeyChange } from "@/ai/flows/suggest-key-change";
 import { extractSongData } from "@/ai/flows/extract-song-data-flow";
 import { formatSongContent } from "@/ai/flows/format-song-content-flow";
-import type { KeyChangeSuggesterState, SongDataExtractorState } from "@/lib/types";
+import type { KeyChangeSuggesterState, SongDataExtractorState, SaveSongResult } from "@/lib/types";
+import { adminDb } from "@/lib/firebase-admin";
 
 const AudioUrlSchema = z.string().url({ message: "Molimo unesite važeći URL." });
 
@@ -84,5 +85,51 @@ export async function handleFormatSongContent(
     console.error(e);
     const errorMessage = e instanceof Error ? e.message : "Došlo je do nepoznate greške.";
     return { error: `Došlo je do neočekivane greške prilikom formatiranja: ${errorMessage}` };
+  }
+}
+
+const SaveSongSchema = z.object({
+  title: z.string().min(2, "Naslov je obavezan."),
+  artist: z.string().optional(),
+  lyricsAndChords: z.string().min(10, "Sadržaj je obavezan."),
+  url: z.string().url().optional(),
+  userId: z.string(),
+});
+
+export async function handleSaveSong(
+  data: z.infer<typeof SaveSongSchema>
+): Promise<SaveSongResult> {
+  const validatedFields = SaveSongSchema.safeParse(data);
+  if (!validatedFields.success) {
+    return { error: "Nevažeći podaci za pjesmu." };
+  }
+  
+  const { title, artist, lyricsAndChords, url, userId } = validatedFields.data;
+
+  try {
+    const songsCollectionRef = adminDb.collection("songs");
+    const q = songsCollectionRef
+        .where("title", "==", title)
+        .where("artist", "==", artist || "");
+
+    const querySnapshot = await q.get();
+
+    if (!querySnapshot.empty) {
+      return { error: "Ova pjesma već postoji u javnom repozitoriju." };
+    }
+
+    await songsCollectionRef.add({
+      title,
+      artist: artist || "",
+      lyricsAndChords,
+      url: url || "",
+      timestamp: new Date(),
+      addedBy: userId,
+    });
+
+    return { success: true, message: "Pjesma je uspješno dodana u javni repozitorij!" };
+  } catch (err: any) {
+    console.error("Greška pri spremanju pjesme:", err);
+    return { error: `Nije uspjelo spremanje pjesme: ${err.message}` };
   }
 }

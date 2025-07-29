@@ -12,3 +12,9 @@ export interface SongDataExtractorState {
   error?: string;
   message?: string;
 }
+
+export interface SaveSongResult {
+  success?: boolean;
+  error?: string;
+  message?: string;
+}
