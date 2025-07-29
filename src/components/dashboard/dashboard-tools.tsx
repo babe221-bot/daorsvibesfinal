@@ -1,23 +1,30 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Search, Milestone, Users, Guitar, Music, ArrowRight } from "lucide-react";
+import { Search, Milestone, Users, Guitar, Music, ArrowRight, Library } from "lucide-react";
 import Link from "next/link";
 
 const TOOLS = [
+  {
+    title: "Song Library",
+    description: "Save, edit, and manage your song chords and lyrics.",
+    link: "/dashboard/song-library",
+    icon: <Library className="h-6 w-6 text-gray-300" />,
+    buttonText: "Open Library",
+  },
+  {
+    title: "Pronadji Akorde",
+    description: "Search for any song and get accurate chords instantly.",
+    link: "/dashboard/pronadji-akorde",
+    icon: <Search className="h-6 w-6 text-gray-300" />,
+    buttonText: "Find Chords",
+  },
   {
     title: "Chord Progression Generator",
     description: "Generate chord progressions in any key.",
     link: "/dashboard/chord-progression",
     icon: <Music className="h-6 w-6 text-gray-300" />,
     buttonText: "Generate",
-  },
-  {
-    title: "ProChordFinder",
-    description: "Search for any song and get accurate chords instantly.",
-    link: "https://prochordfinder.com",
-    icon: <Search className="h-6 w-6 text-gray-300" />,
-    buttonText: "Find Chords",
   },
   {
     title: "Metronome",
