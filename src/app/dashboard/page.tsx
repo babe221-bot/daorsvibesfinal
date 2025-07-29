@@ -2,7 +2,6 @@ import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import { ToolsCard } from "@/components/tools-card";
 import { WelcomeCard } from "@/components/welcome-card";
-import { RecentSongsCard } from "@/components/recent-songs-card";
 
 export default function DashboardPage() {
   return (
@@ -18,9 +17,6 @@ export default function DashboardPage() {
               {/* Left & Center Columns */}
               <div className="lg:col-span-2 space-y-8">
                  <WelcomeCard />
-                 <div className="grid gap-8 md:grid-cols-1">
-                    <RecentSongsCard />
-                 </div>
               </div>
 
               {/* Right Column */}
