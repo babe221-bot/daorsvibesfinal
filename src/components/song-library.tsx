@@ -110,7 +110,7 @@ function SongLibrary() {
   // --- Gemini API Call Helper ---
   const callGemini = async (prompt) => {
       const apiKey = ""; // Handled by environment
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
       const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
       const response = await fetch(apiUrl, {
           method: 'POST',
@@ -138,7 +138,7 @@ ${song.lyricsAndChords}`;
           setModalTitle(`Simplified Chords for "${song.title}"`);
           setModalContent(simplifiedText);
           setIsModalOpen(true);
-      } catch (err)_ {
+      } catch (err) {
           console.error("Error simplifying chords:", err);
           setError("Could not simplify chords.");
       } finally {
@@ -146,18 +146,18 @@ ${song.lyricsAndChords}`;
       }
   };
 
-  const handleSaveSong = async () => {
+  const handleSaveSong = async (title, artist, lyrics) => {
     if (!db || !userId) {
       setError("Database not connected.");
-      return;
+      return false;
     }
-    if (songTitle.length < 2) {
+    if (title.length < 2) {
       setError("Title must be at least 2 characters long.");
-      return;
+      return false;
     }
-    if (lyricsAndChords.length < 10) {
+    if (lyrics.length < 10) {
       setError("Lyrics and chords must be at least 10 characters long.");
-      return;
+      return false;
     }
     setLoading(true);
     setError('');
@@ -165,18 +165,23 @@ ${song.lyricsAndChords}`;
     try {
       const userSongsCollectionRef = collection(db, `users/${userId}/songs`);
       await addDoc(userSongsCollectionRef, {
-        title: songTitle,
-        artist: songArtist,
-        lyricsAndChords: lyricsAndChords,
+        title: title,
+        artist: artist,
+        lyricsAndChords: lyrics,
         timestamp: serverTimestamp(),
       });
       setMessage("Song saved successfully!");
-      setSongTitle('');
-      setSongArtist('');
-      setLyricsAndChords('');
+      // Clear manual form only if not coming from scraper to avoid clearing before scraper populates
+      if (title === songTitle && artist === songArtist && lyrics === lyricsAndChords) {
+        setSongTitle('');
+        setSongArtist('');
+        setLyricsAndChords('');
+      }
+      return true;
     } catch (err) {
       console.error("Error saving song:", err);
       setError("Failed to save song.");
+      return false;
     } finally {
       setLoading(false);
     }
@@ -258,11 +263,17 @@ ${song.lyricsAndChords}`;
     }
   }
   
-  const handleSongScraped = (scrapedData) => {
-    setSongTitle(scrapedData.title);
-    setSongArtist(scrapedData.artist);
-    setLyricsAndChords(scrapedData.lyricsAndChords);
-    setMessage("Song data has been populated in the manual entry form. You can now save it to your library.");
+  const handleSongScraped = async (scrapedData) => {
+    setIsScraping(true);
+    setError('');
+    setMessage('');
+    const saveSuccess = await handleSaveSong(scrapedData.title, scrapedData.artist, scrapedData.lyricsAndChords);
+    if (saveSuccess) {
+        setMessage("Song successfully scraped and added to your library!");
+    } else {
+        setMessage("Scraped song data could not be saved to your library.");
+    }
+    setIsScraping(false);
   };
 
   // --- JSX Rendering ---
@@ -299,7 +310,7 @@ ${song.lyricsAndChords}`;
                     <Input type="text" placeholder="Artist (Optional)" value={songArtist} onChange={(e) => setSongArtist(e.target.value)} className="flex-grow"/>
                   </div>
                   <div className="flex justify-end">
-                      <Button onClick={handleSaveSong} disabled={loading || !songTitle || !lyricsAndChords}>Save to Library</Button>
+                      <Button onClick={() => handleSaveSong(songTitle, songArtist, lyricsAndChords)} disabled={loading || !songTitle || !lyricsAndChords}>Save to Library</Button>
                   </div>
                 </div>
             </CardContent>
