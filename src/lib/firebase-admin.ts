@@ -14,12 +14,10 @@ if (!admin.apps.length) {
     console.warn(
       "Firebase Admin SDK not initialized. Missing FIREBASE_SERVICE_ACCOUNT_KEY. Server-side Firebase features will be disabled."
     );
-    // Initialize without credentials, some features might still work.
-    admin.initializeApp();
   }
 }
 
-const adminAuth = admin.auth();
-const adminDb = admin.firestore();
+const adminAuth = admin.apps.length ? admin.auth() : undefined;
+const adminDb = admin.apps.length ? admin.firestore() : undefined;
 
 export { adminAuth, adminDb };
