@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
-
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Header() {
   const [user, loading, error] = useAuthState(auth);
@@ -33,7 +33,6 @@ export default function Header() {
   };
 
   const getAvatarFallback = () => {
-    if (loading) return "";
     if (!user) return "DV";
     if (user.isAnonymous) return "G";
     return user.displayName?.substring(0, 2).toUpperCase() || "DV";
@@ -59,6 +58,9 @@ export default function Header() {
       <div className="md:hidden">
         <SidebarTrigger />
       </div>
+      {loading ? (
+        <Skeleton className="h-10 w-10 rounded-full" />
+      ) : (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
            <Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-full">
@@ -81,6 +83,7 @@ export default function Header() {
           <DropdownMenuItem onClick={handleSignOut}>Odjava</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      )}
     </header>
   );
 }
