@@ -15,7 +15,7 @@ import {
   SidebarSeparator,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key, LifeBuoy, Calendar, Milestone, Guitar, Search } from "lucide-react";
+import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, Key, LifeBuoy, Calendar, Milestone, Guitar, Search, Library } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { auth } from "@/lib/firebase-client";
@@ -75,6 +75,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     <span>
                       <Search />
                       <span>Pronađi Akorde</span>
+                    </span>
+                  </SidebarMenuButton>
+              </NextLink>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+               <NextLink href="/dashboard/song-library">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/song-library'} tooltip="Biblioteka Pjesama">
+                    <span>
+                      <Library />
+                      <span>Biblioteka Pjesama</span>
                     </span>
                   </SidebarMenuButton>
               </NextLink>
