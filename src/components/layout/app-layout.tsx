@@ -80,6 +80,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </NextLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
+               <NextLink href="/dashboard/chord-progression">
+                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/chord-progression'} tooltip="Chord Progression">
+                    <span>
+                      <Music />
+                      <span>Chord Progression</span>
+                    </span>
+                  </SidebarMenuButton>
+              </NextLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
                <NextLink href="/dashboard/gigs">
                   <SidebarMenuButton asChild isActive={pathname === '/dashboard/gigs'} tooltip="Moji Događaji">
                     <span>
