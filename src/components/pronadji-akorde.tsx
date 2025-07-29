@@ -9,8 +9,6 @@ import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { db, auth } from '@/lib/firebase-client';
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -28,7 +26,7 @@ const SongUrlSchema = z.object({
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending}>
+    <Button type="submit" disabled={pending} className="w-full sm:w-auto">
       {pending ? 'Dohvaćanje...' : 'Dohvati Sadržaj'}
     </Button>
   );
@@ -111,8 +109,8 @@ export default function PronadjiAkorde() {
                         <FormItem>
                             <FormLabel>URL Pjesme</FormLabel>
                             <FormControl>
-                                <div className="flex flex-col sm:flex-row gap-4">
-                                <Input placeholder="URL .txt ili .pro datoteke" {...field} />
+                                <div className="flex flex-col sm:flex-row gap-2">
+                                <Input placeholder="URL .txt, .pro ili web stranice" {...field} className="flex-grow bg-white/20 border-white/30 text-white placeholder:text-gray-300"/>
                                 <SubmitButton />
                                 </div>
                             </FormControl>
@@ -124,30 +122,30 @@ export default function PronadjiAkorde() {
         </FormProvider>
 
         {state.result && songDetails && (
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold mb-3">Uredi i Spremi</h3>
-            <Textarea
-              value={songDetails.lyricsAndChords}
-              onChange={(e) => setSongDetails(prev => prev ? { ...prev, lyricsAndChords: e.target.value } : null)}
-              rows="10"
-              className="w-full font-mono"
-            />
-            <div className="mt-4 flex flex-col sm:flex-row gap-4">
+          <div className="mt-6 space-y-4">
+            <h3 className="text-xl font-semibold">Uredi i Spremi</h3>
+             <div className="flex flex-col sm:flex-row gap-4">
               <Input
                 type="text"
                 placeholder="Naslov Pjesme (Obavezno)"
                 value={songDetails.title}
                 onChange={(e) => setSongDetails(prev => prev ? { ...prev, title: e.target.value } : null)}
-                className="flex-grow"
+                className="flex-grow bg-white/20 border-white/30"
               />
               <Input
                 type="text"
                 placeholder="Izvođač (Opcionalno)"
                 value={songDetails.artist}
                 onChange={(e) => setSongDetails(prev => prev ? { ...prev, artist: e.target.value } : null)}
-                className="flex-grow"
+                className="flex-grow bg-white/20 border-white/30"
               />
             </div>
+            <Textarea
+              value={songDetails.lyricsAndChords}
+              onChange={(e) => setSongDetails(prev => prev ? { ...prev, lyricsAndChords: e.target.value } : null)}
+              rows={12}
+              className="w-full font-mono bg-white/10 border-white/30"
+            />
             <div className="mt-4 flex justify-end">
               <Button onClick={handleSaveSongToPublicRepo} disabled={isSaving || !songDetails.title || !songDetails.lyricsAndChords}>
                 {isSaving ? 'Spremanje...' : 'Dodaj u javni repozitorij'}
