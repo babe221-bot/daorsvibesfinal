@@ -21,21 +21,16 @@ export function ToolsCard() {
         <div className="space-y-8">
             <Card className="glass-card">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-xl font-bold text-white">ProChordFinder</CardTitle>
+                    <CardTitle className="text-xl font-bold text-white">Song Scraper</CardTitle>
                     <Search className="h-6 w-6 text-gray-300" />
                 </CardHeader>
                 <CardContent>
-                    <p className="text-gray-300 mb-4">Search for any song and get accurate chords instantly.</p>
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
-                                Find Chords <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-[600px] glass-card">
-                            <PronadjiAkorde />
-                        </DialogContent>
-                    </Dialog>
+                    <p className="text-gray-300 mb-4">Import songs from a URL.</p>
+                     <Link href="/dashboard/pronadji-akorde">
+                        <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                            Open Scraper <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                    </Link>
                 </CardContent>
             </Card>
 
