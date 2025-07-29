@@ -1,8 +1,3 @@
-# Web Scraper Komponenta
-
-Ova komponenta je odgovorna za dohvatanje i ekstrahovanje sadržaja pesme sa datog URL-a.
-
-```javascript
 import React, { useState } from 'react';
 
 const Scraper = ({ onSongExtracted, loading, isAiLoading }) => {
@@ -177,10 +172,3 @@ ${extractedContent}`;
 };
 
 export default Scraper;
-```
-
-### Kako koristiti
-
-1.  Uvezite `Scraper` komponentu u vašu glavnu `App.js` datoteku.
-2.  Prosledite `onSongExtracted` funkciju kao prop. Ova funkcija će biti pozvana sa podacima o pesmi kada korisnik klikne na "Save to Library".
-3.  Upravljajte `loading` i `isAiLoading` stanjima u vašoj glavnoj komponenti i prosledite ih kao propse.
