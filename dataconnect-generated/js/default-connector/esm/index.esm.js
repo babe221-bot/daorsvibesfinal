@@ -1,7 +1,7 @@
 
 export const connectorConfig = {
   connector: 'default',
-  service: 'strumflow',
-  location: 'europe-central2'
+  service: 'studio',
+  location: 'us-central1'
 };
 
