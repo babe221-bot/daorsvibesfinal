@@ -12,7 +12,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
-const initialState = { error: undefined, fieldErrors: undefined, success: false, message: undefined };
+const initialState = { error: undefined, fieldErrors: undefined, success: false, message: '' };
 
 function SubmitButton() {
   const { pending } = useFormStatus();

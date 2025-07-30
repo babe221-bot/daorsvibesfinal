@@ -1,12 +1,12 @@
 specVersion: "v1"
 serviceId: "studio"
-location: "europe-central2"
+location: "us-central1"
 schema:
   source: "./schema"
   datasource:
     postgresql:
-      database: "postgres"
+      database: "fdcdb"
       cloudSql:
-        instanceId: "y"
+        instanceId: "studio-fdc"
       # schemaValidation: "COMPATIBLE"
 connectorDirs: ["./connector"]
