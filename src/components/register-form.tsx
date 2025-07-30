@@ -10,7 +10,7 @@ import { registerUser } from "@/app/auth-actions";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-const initialState = { error: undefined, fieldErrors: undefined, success: false, message: undefined };
+const initialState = { error: undefined, fieldErrors: undefined, success: false, message: "" };
 
 function SubmitButton() {
   const { pending } = useFormStatus();
