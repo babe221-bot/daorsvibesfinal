@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { initializeApp, getApp, getApps } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
 import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, doc, serverTimestamp, where, getDocs, Firestore, DocumentData } from 'firebase/firestore';
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Progress } from "@/components/ui/progress";
 import PronadjiAkorde from './pronadji-akorde';
 import { Library, Trash2, Wand2 } from 'lucide-react';
+import app from '@/lib/firebase';
 
 const Modal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }> = ({ isOpen, onClose, title, children }) => {
     if (!isOpen) return null;
@@ -48,19 +48,10 @@ function SongLibrary() {
   const [searchResults, setSearchResults] = useState<DocumentData[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   
-  const firebaseConfig = {
-    apiKey: "AIzaSyDxwAQf6RX8UHlbjPpnjMVX-0jS85K3bvw",
-    authDomain: "website-5a18c.firebaseapp.com",
-    projectId: "website-5a18c",
-    storageBucket: "website-5a18c.appspot.com",
-    messagingSenderId: "636702053767",
-    appId: "1:636702053767:web:efb577d6c53d4d06bd6f22",
-  };
   const initialAuthToken: string | null = null; // Assuming no initial token for this example
 
   useEffect(() => {
     try {
-      const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
       const firestoreDb = getFirestore(app);
       const firebaseAuth = getAuth(app);
       setDb(firestoreDb);
