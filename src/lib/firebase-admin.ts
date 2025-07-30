@@ -1,25 +1,23 @@
 import admin from "firebase-admin";
 
-let serviceAccount;
-try {
-    if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
-        serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+let adminDb: admin.firestore.Firestore;
+
+if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+    if (!admin.apps.length) {
+        try {
+            const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount),
+            });
+        } catch (e) {
+            console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY:", e);
+        }
     }
-} catch (e) {
-    console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY:", e);
+    adminDb = admin.firestore();
+} else {
+    console.warn("FIREBASE_SERVICE_ACCOUNT_KEY is not set. Firebase Admin SDK not initialized.");
+    // Provide a dummy implementation or handle the case where adminDb is not available.
+    adminDb = {} as admin.firestore.Firestore;
 }
 
-if (!admin.apps.length) {
-  try {
-      admin.initializeApp({
-        credential: serviceAccount
-          ? admin.credential.cert(serviceAccount)
-          : admin.credential.applicationDefault(),
-      });
-  } catch(e) {
-      console.error("Failed to initialize Firebase Admin SDK:", e);
-  }
-}
-
-export const adminDb = admin.firestore();
-export const adminAuth = admin.auth();
+export { adminDb };
