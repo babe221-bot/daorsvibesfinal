@@ -27,9 +27,11 @@ const chordProgressions = {
   ],
 };
 
+type Quality = "major" | "minor";
+
 export default function ChordProgressionGenerator() {
   const [key, setKey] = useState("C");
-  const [quality, setQuality] = useState("major");
+  const [quality, setQuality] = useState<Quality>("major");
   const [progression, setProgression] = useState("");
 
   const generateProgression = () => {
@@ -47,7 +49,7 @@ export default function ChordProgressionGenerator() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="quality">Quality</Label>
-          <Select value={quality} onValueChange={setQuality}>
+          <Select value={quality} onValueChange={(value) => setQuality(value as Quality)}>
             <SelectTrigger className="w-32">
               <SelectValue placeholder="Select quality" />
             </SelectTrigger>
