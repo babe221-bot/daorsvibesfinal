@@ -1,7 +1,7 @@
 
 export const connectorConfig = {
   connector: 'default',
-  service: 'studio',
-  location: 'us-central1'
+  service: 'y',
+  location: 'europe-central2'
 };
 
