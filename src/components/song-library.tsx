@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
-import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, doc, serverTimestamp, where, getDocs, Firestore, DocumentData } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, doc, serverTimestamp, where, getDocs, Firestore, DocumentData, Timestamp } from 'firebase/firestore';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,14 @@ import { Progress } from "@/components/ui/progress";
 import PronadjiAkorde from './pronadji-akorde';
 import { Library, Trash2, Wand2 } from 'lucide-react';
 import app from '@/lib/firebase';
+
+interface Song extends DocumentData {
+  id: string;
+  title: string;
+  artist?: string;
+  lyricsAndChords: string;
+  timestamp?: Timestamp;
+}
 
 const Modal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }> = ({ isOpen, onClose, title, children }) => {
     if (!isOpen) return null;
@@ -36,7 +44,7 @@ function SongLibrary() {
   const [songTitle, setSongTitle] = useState('');
   const [songArtist, setSongArtist] = useState('');
   const [lyricsAndChords, setLyricsAndChords] = useState('');
-  const [songs, setSongs] = useState<DocumentData[]>([]);
+  const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [error, setError] = useState('');
@@ -45,7 +53,7 @@ function SongLibrary() {
   const [modalContent, setModalContent] = useState('');
   const [modalTitle, setModalTitle] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<DocumentData[]>([]);
+  const [searchResults, setSearchResults] = useState<Song[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   
   const initialAuthToken: string | null = null; // Assuming no initial token for this example
@@ -86,8 +94,8 @@ function SongLibrary() {
       const userSongsCollectionRef = collection(db, `users/${userId}/songs`);
       const q = query(userSongsCollectionRef);
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        const fetchedSongs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        fetchedSongs.sort((a, b) => (b.timestamp?.toDate() || 0) - (a.timestamp?.toDate() || 0));
+        const fetchedSongs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Song[];
+        fetchedSongs.sort((a, b) => (b.timestamp?.toDate()?.getTime() || 0) - (a.timestamp?.toDate()?.getTime() || 0));
         setSongs(fetchedSongs);
       }, (err) => {
         console.error("Error fetching user songs:", err);
@@ -114,7 +122,7 @@ function SongLibrary() {
       return text;
   };
 
-  const handleSimplifyChords = async (song: DocumentData) => {
+  const handleSimplifyChords = async (song: Song) => {
       setIsAiLoading(true);
       setError('');
       try {
@@ -214,7 +222,7 @@ ${song.lyricsAndChords}`;
       titleSnapshot.forEach(doc => results[doc.id] = { id: doc.id, ...doc.data() });
       artistSnapshot.forEach(doc => results[doc.id] = { id: doc.id, ...doc.data() });
       
-      setSearchResults(Object.values(results));
+      setSearchResults(Object.values(results) as Song[]);
     } catch (err) {
       console.error("Greška pri pretraživanju javnih pjesama:", err);
       setError("Nije uspjelo pretraživanje pjesama.");
@@ -223,7 +231,7 @@ ${song.lyricsAndChords}`;
     }
   };
 
-  const handleAddSongFromPublicRepo = async (song: DocumentData) => {
+  const handleAddSongFromPublicRepo = async (song: Song) => {
     if (!db || !userId) { setError("Baza podataka nije povezana."); return; }
     setLoading(true);
     setError('');

@@ -2,15 +2,18 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 
 let firebaseConfig;
-try {
-    if (process.env.NEXT_PUBLIC_FIREBASE_CONFIG) {
-        firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG);
-    } else {
-        throw new Error("Firebase config environment variable not found.");
+
+if (typeof window !== "undefined") {
+    try {
+        if (process.env.NEXT_PUBLIC_FIREBASE_CONFIG) {
+            firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG);
+        } else {
+            throw new Error("Firebase config environment variable not found.");
+        }
+    } catch (e) {
+        console.error("Failed to parse Firebase config:", e);
+        firebaseConfig = undefined;
     }
-} catch (e) {
-    console.error("Failed to parse Firebase config:", e);
-    firebaseConfig = undefined;
 }
 
 
