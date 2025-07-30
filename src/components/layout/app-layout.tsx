@@ -36,7 +36,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   
   return (
     <SidebarProvider>
-      <Sidebar collapsible="desktop" className="glass-sidebar">
+      <Sidebar collapsible="icon" className="glass-sidebar">
         <SidebarContent>
           <SidebarHeader>
             <div className="flex items-center gap-2 p-2">
