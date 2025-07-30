@@ -1,0 +1,12 @@
+specVersion: "v1"
+serviceId: "studio"
+location: "europe-central2"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "postgres"
+      cloudSql:
+        instanceId: "y"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
