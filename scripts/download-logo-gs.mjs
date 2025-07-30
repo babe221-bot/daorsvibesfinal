@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import fetch from 'node-fetch';
 import path from 'path';
 
-const BUCKET = 'website-5a18c.appspot.com';
+const BUCKET = 'DaorsVibes.appspot.com';
 const OBJECT_PATH = 'DaorsVibes/generated-image (8).png';
 const TOKEN = '9cf04eea-e4ca-4000-840a-df41406f6a6a';
 

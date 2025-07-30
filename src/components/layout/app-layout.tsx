@@ -41,7 +41,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <SidebarHeader>
             <div className="flex items-center gap-2 p-2">
             <Image
-                src="https://storage.googleapis.com/website-5a18c.appspot.com/DaorsVibes/generated-image%20(8)_180x180.png"
+                src="https://storage.googleapis.com/DaorsVibes.appspot.com/DaorsVibes/generated-image%20(8)_180x180.png"
                 alt="DaorsVibes Logo"
                 width={180}
                 height={180}
