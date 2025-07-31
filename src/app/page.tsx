@@ -16,9 +16,6 @@ export default function Page() {
       </video>
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white bg-black bg-opacity-50">
         <h1 className="text-4xl font-bold md:text-6xl">DaorsVibes</h1>
-        <p className="mt-4 text-lg text-center md:text-2xl">
-          Transponiranje muzike pomoću vještačke inteligencije
-        </p>
         <div className="mt-8">
           <Link href="/login">
             <Button className="flashing-button">Započnimo</Button>
