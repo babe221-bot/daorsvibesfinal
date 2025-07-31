@@ -10,8 +10,7 @@
   "firestore": {
     "database": "(default)",
     "location": "europe-central2",
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
+    "rules": "firestore.rules"
   },
   "functions": [
     {
@@ -55,8 +54,5 @@
         "functions"
       ]
   },
-  "extensions": {},
-  "database": {
-    "rules": "database.rules.json"
-  }
+  "extensions": {}
 }
