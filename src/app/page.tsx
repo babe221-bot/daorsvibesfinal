@@ -15,7 +15,7 @@ export default function Page() {
         <source src="/logo-transformation-video.mp4" type="video/mp4" />
       </video>
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white bg-black bg-opacity-50">
-        <h1 className="text-4xl font-bold md:text-6xl">DaorsVibes</h1>
+        <h1 className="text-4xl font-bold md:text-6xl bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text" style={{'textShadow': '2px 2px 8px rgba(0,0,0,0.5)'}}>DaorsVibes</h1>
         <div className="mt-8">
           <Link href="/login">
             <Button className="flashing-button">Započnimo</Button>
