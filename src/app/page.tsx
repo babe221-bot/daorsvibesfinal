@@ -21,7 +21,7 @@ export default function Page() {
         <div className="mt-10">
           <Link href="/login" title="Započnite transformaciju">
             <div className="flashing-button rounded-full p-2">
-                 <svg
+              <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="none"
@@ -37,8 +37,10 @@ export default function Page() {
                         <stop offset="100%" stopColor="hsl(var(--accent))" />
                     </linearGradient>
                 </defs>
-                <path d="M19.143 8.357c-2.365-5.02-10.45-4.52-10.45 1.053 0 3.86 5.39 3.86 5.39-1.895 0-3.328-1.432-3.328-3.328s1.497-3.328 3.328-3.328c1.83 0 3.328 1.497 3.328 3.328v9.428c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4h.5" />
-                <circle cx="12.5" cy="17.5" r="1.5" />
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
               </svg>
             </div>
           </Link>
