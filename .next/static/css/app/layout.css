@@ -1005,6 +1005,9 @@ video {
 .max-w-md {
   max-width: 28rem;
 }
+.max-w-2xl {
+  max-width: 42rem;
+}
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -1677,6 +1680,9 @@ video {
 }
 .text-white\/80 {
   color: rgb(255 255 255 / 0.8);
+}
+.text-white\/90 {
+  color: rgb(255 255 255 / 0.9);
 }
 .underline-offset-4 {
   text-underline-offset: 4px;
