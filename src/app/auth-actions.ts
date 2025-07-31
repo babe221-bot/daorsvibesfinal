@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { auth } from "firebase-admin";
+import { adminAuth } from "@/lib/firebase-admin";
 
 const RegisterSchema = z.object({
   name: z.string().min(2, { message: "Ime mora imati najmanje 2 karaktera." }),
@@ -27,7 +27,7 @@ export async function registerUser(prevState: any, formData: FormData) {
   const { name, email, password } = validatedFields.data;
 
   try {
-    const userRecord = await auth().createUser({
+    const userRecord = await adminAuth.createUser({
       email,
       password,
       displayName: name,

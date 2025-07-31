@@ -1,6 +1,8 @@
 import admin from "firebase-admin";
+import { getApps } from "firebase-admin/app";
 
-if (!admin.apps.length) {
+// Inicijalizacija Firebase Admin SDK-a samo ako već nije inicijaliziran
+if (!getApps().length) {
     try {
         admin.initializeApp();
     } catch (e) {
@@ -8,7 +10,7 @@ if (!admin.apps.length) {
     }
 }
 
-
 const adminDb = admin.firestore();
+const adminAuth = admin.auth();
 
-export { adminDb };
+export { adminDb, adminAuth };
