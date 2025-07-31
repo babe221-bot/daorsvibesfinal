@@ -37,6 +37,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/pronadji-akorde/page.js"
+    ],
+    "/dashboard/ai-tools/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/ai-tools/page.js"
     ]
   }
 }
