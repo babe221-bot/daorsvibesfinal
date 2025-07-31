@@ -5,10 +5,11 @@ let firebaseConfig;
 
 if (typeof window !== "undefined") {
     try {
-        if (process.env.NEXT_PUBLIC_FIREBASE_CONFIG) {
-            firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG);
+        const configString = process.env.NEXT_PUBLIC_FIREBASE_CONFIG;
+        if (configString) {
+            firebaseConfig = JSON.parse(configString);
         } else {
-            throw new Error("Firebase config environment variable not found.");
+            console.error("Firebase config environment variable not found.");
         }
     } catch (e) {
         console.error("Failed to parse Firebase config:", e);
@@ -18,6 +19,6 @@ if (typeof window !== "undefined") {
 
 
 // Initialize Firebase
-const app = !getApps().length && firebaseConfig ? initializeApp(firebaseConfig) : getApp();
+const app = !getApps().length && firebaseConfig ? initializeApp(firebaseConfig) : (getApps().length > 0 ? getApp() : undefined);
 
 export default app;
