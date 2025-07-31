@@ -5,7 +5,7 @@ import { suggestKeyChange } from "@/ai/flows/suggest-key-change";
 import { extractSongData } from "@/ai/flows/extract-song-data-flow";
 import { formatSongContent } from "@/ai/flows/format-song-content-flow";
 import type { KeyChangeSuggesterState, SongDataExtractorState, SaveSongResult } from "@/lib/types";
-import { adminDb } from "@/lib/firebase-admin";
+import { getAdminDb } from "@/lib/firebase-admin";
 
 const AudioUrlSchema = z.string().url({ message: "Molimo unesite važeći URL." });
 
@@ -103,13 +103,11 @@ export async function handleSaveSong(
   if (!validatedFields.success) {
     return { error: "Nevažeći podaci za pjesmu." };
   }
-<<<<<<< HEAD
-=======
   
+  const adminDb = getAdminDb();
   if (!adminDb) {
       return { error: "Firebase Admin SDK nije inicijaliziran. Spremanje nije moguće." };
   }
->>>>>>> 393eea469d735144848945653dca895f2deb8842
 
   const { title, artist, lyricsAndChords, url, userId } = validatedFields.data;
 
