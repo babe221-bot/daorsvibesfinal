@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import { Button } from "@/components/ui/button";
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
 import Link from "next/link";
 import "./flashing-button.css";
 
@@ -13,6 +17,7 @@ export default function Page() {
       >
         <source src="/logo-transformation-video.mp4" type="video/mp4" />
       </video>
+<<<<<<< HEAD
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white bg-black bg-opacity-50 p-4">
         <h1 className="text-5xl font-bold text-center md:text-7xl bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text" style={{'textShadow': '2px 2px 8px rgba(0,0,0,0.5)'}}>DaorsVibes</h1>
         <p className="mt-4 text-lg text-center md:text-xl text-white/80 max-w-2xl" style={{'textShadow': '1px 1px 4px rgba(0,0,0,0.5)'}}>
@@ -43,6 +48,16 @@ export default function Page() {
                 <line x1="8" y1="23" x2="16" y2="23"></line>
               </svg>
             </div>
+=======
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white bg-black bg-opacity-50">
+        <h1 className="text-4xl font-bold md:text-6xl">DaorsVibes</h1>
+        <p className="mt-4 text-lg text-center md:text-2xl">
+          Transponiranje muzike pomoću vještačke inteligencije
+        </p>
+        <div className="mt-8">
+          <Link href="/login">
+            <Button className="flashing-button">Započnimo</Button>
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
           </Link>
         </div>
       </div>

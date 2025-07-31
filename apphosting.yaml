@@ -11,11 +11,14 @@ runConfig:
 env:
   # Configure environment variables.
   # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
+<<<<<<< HEAD
   - variable: NEXT_PUBLIC_FIREBASE_CONFIG
     value: '{"apiKey":"AIzaSyCjcN79Nc2ClSKOcratTZZrbBIO-flEI6Y","authDomain":"strumflow.firebaseapp.com","projectId":"strumflow","storageBucket":"strumflow.appspot.com","messagingSenderId":"542308709703","appId":"1:542308709703:web:a2de72bfd2127225c136c1"}'
     availability:
       - BUILD
       - RUNTIME
+=======
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
   - variable: NEXT_PUBLIC_BACKEND_URL
     value: https://muzika--strumflow.europe-west4.hosted.app
     availability:

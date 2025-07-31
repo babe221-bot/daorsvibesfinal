@@ -1,7 +1,11 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
+<<<<<<< HEAD
 import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, doc, serverTimestamp, where, getDocs, Firestore, DocumentData, Timestamp } from 'firebase/firestore';
+=======
+import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, doc, serverTimestamp, where, getDocs, Firestore, DocumentData } from 'firebase/firestore';
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +16,7 @@ import PronadjiAkorde from './pronadji-akorde';
 import { Library, Trash2, Wand2 } from 'lucide-react';
 import app from '@/lib/firebase';
 
+<<<<<<< HEAD
 interface Song extends DocumentData {
   id: string;
   title: string;
@@ -20,6 +25,8 @@ interface Song extends DocumentData {
   timestamp?: Timestamp;
 }
 
+=======
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
 const Modal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }> = ({ isOpen, onClose, title, children }) => {
     if (!isOpen) return null;
 
@@ -44,7 +51,11 @@ function SongLibrary() {
   const [songTitle, setSongTitle] = useState('');
   const [songArtist, setSongArtist] = useState('');
   const [lyricsAndChords, setLyricsAndChords] = useState('');
+<<<<<<< HEAD
   const [songs, setSongs] = useState<Song[]>([]);
+=======
+  const [songs, setSongs] = useState<DocumentData[]>([]);
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
   const [loading, setLoading] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [error, setError] = useState('');
@@ -53,7 +64,11 @@ function SongLibrary() {
   const [modalContent, setModalContent] = useState('');
   const [modalTitle, setModalTitle] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+<<<<<<< HEAD
   const [searchResults, setSearchResults] = useState<Song[]>([]);
+=======
+  const [searchResults, setSearchResults] = useState<DocumentData[]>([]);
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
   const [isSearching, setIsSearching] = useState(false);
   
   const initialAuthToken: string | null = null; // Assuming no initial token for this example
@@ -94,8 +109,13 @@ function SongLibrary() {
       const userSongsCollectionRef = collection(db, `users/${userId}/songs`);
       const q = query(userSongsCollectionRef);
       const unsubscribe = onSnapshot(q, (snapshot) => {
+<<<<<<< HEAD
         const fetchedSongs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Song[];
         fetchedSongs.sort((a, b) => (b.timestamp?.toDate()?.getTime() || 0) - (a.timestamp?.toDate()?.getTime() || 0));
+=======
+        const fetchedSongs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        fetchedSongs.sort((a, b) => (b.timestamp?.toDate() || 0) - (a.timestamp?.toDate() || 0));
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
         setSongs(fetchedSongs);
       }, (err) => {
         console.error("Error fetching user songs:", err);
@@ -122,7 +142,11 @@ function SongLibrary() {
       return text;
   };
 
+<<<<<<< HEAD
   const handleSimplifyChords = async (song: Song) => {
+=======
+  const handleSimplifyChords = async (song: DocumentData) => {
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
       setIsAiLoading(true);
       setError('');
       try {
@@ -222,7 +246,11 @@ ${song.lyricsAndChords}`;
       titleSnapshot.forEach(doc => results[doc.id] = { id: doc.id, ...doc.data() });
       artistSnapshot.forEach(doc => results[doc.id] = { id: doc.id, ...doc.data() });
       
+<<<<<<< HEAD
       setSearchResults(Object.values(results) as Song[]);
+=======
+      setSearchResults(Object.values(results));
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
     } catch (err) {
       console.error("Greška pri pretraživanju javnih pjesama:", err);
       setError("Nije uspjelo pretraživanje pjesama.");
@@ -231,7 +259,11 @@ ${song.lyricsAndChords}`;
     }
   };
 
+<<<<<<< HEAD
   const handleAddSongFromPublicRepo = async (song: Song) => {
+=======
+  const handleAddSongFromPublicRepo = async (song: DocumentData) => {
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
     if (!db || !userId) { setError("Baza podataka nije povezana."); return; }
     setLoading(true);
     setError('');

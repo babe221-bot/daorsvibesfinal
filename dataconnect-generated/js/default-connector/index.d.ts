@@ -10,6 +10,7 @@ export type DateString = string;
 
 
 
+<<<<<<< HEAD
 export interface ListenLog_Key {
   id: UUIDString;
   __typename?: 'ListenLog_Key';
@@ -41,3 +42,5 @@ export interface User_Key {
   __typename?: 'User_Key';
 }
 
+=======
+>>>>>>> 393eea469d735144848945653dca895f2deb8842

@@ -103,6 +103,13 @@ export async function handleSaveSong(
   if (!validatedFields.success) {
     return { error: "Nevažeći podaci za pjesmu." };
   }
+<<<<<<< HEAD
+=======
+  
+  if (!adminDb) {
+      return { error: "Firebase Admin SDK nije inicijaliziran. Spremanje nije moguće." };
+  }
+>>>>>>> 393eea469d735144848945653dca895f2deb8842
 
   const { title, artist, lyricsAndChords, url, userId } = validatedFields.data;
 
