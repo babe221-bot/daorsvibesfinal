@@ -20,8 +20,22 @@ export default function Page() {
           Sve što je muzičaru potrebno: od štimera i metronoma do kalendara s nastupima i biblioteke akorda.
         </p>
         <div className="mt-10">
-          <Link href="/login">
-            <Button className="flashing-button">zapocnimo sa transformacijom</Button>
+          <Link href="/login" title="Započnite transformaciju">
+            <div className="flashing-button rounded-full p-2">
+                 <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-20 h-20 text-white transition-transform duration-300 hover:scale-110 cursor-pointer"
+              >
+                <path d="M19.143 8.357c-2.365-5.02-10.45-4.52-10.45 1.053 0 3.86 5.39 3.86 5.39-1.895 0-3.328-1.432-3.328-3.328s1.497-3.328 3.328-3.328c1.83 0 3.328 1.497 3.328 3.328v9.428c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4h.5" />
+                <circle cx="12.5" cy="17.5" r="1.5" />
+              </svg>
+            </div>
           </Link>
         </div>
       </div>
