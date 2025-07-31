@@ -14,11 +14,14 @@ export default function Page() {
       >
         <source src="/logo-transformation-video.mp4" type="video/mp4" />
       </video>
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white bg-black bg-opacity-50">
-        <h1 className="text-4xl font-bold md:text-6xl bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text" style={{'textShadow': '2px 2px 8px rgba(0,0,0,0.5)'}}>DaorsVibes</h1>
-        <div className="mt-8">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white bg-black bg-opacity-50 p-4">
+        <h1 className="text-5xl font-bold text-center md:text-7xl bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text" style={{'textShadow': '2px 2px 8px rgba(0,0,0,0.5)'}}>DaorsVibes</h1>
+        <p className="mt-4 text-lg text-center md:text-xl text-white/80">
+          Vaš ultimativni muzički pratilac za tekstove, akorde i setliste.
+        </p>
+        <div className="mt-10">
           <Link href="/login">
-            <Button className="flashing-button">Započnimo</Button>
+            <Button className="flashing-button">zapocnimo sa transformacijom</Button>
           </Link>
         </div>
       </div>
