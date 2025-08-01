@@ -1,3 +1,4 @@
 {
-  "/dashboard/stats/page": "app/dashboard/stats/page.js"
+  "/dashboard/stats/page": "app/dashboard/stats/page.js",
+  "/dashboard/gigs/page": "app/dashboard/gigs/page.js"
 }
