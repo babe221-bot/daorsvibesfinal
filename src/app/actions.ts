@@ -77,7 +77,7 @@ export async function handleSaveSong(
   
   const adminDb = getAdminDb();
   if (!adminDb) {
-      return { error: "Firebase Admin SDK nije inicijaliziran. Spremanje nije moguće." };
+      return { error: "Firebase Admin SDK nije ispravno inicijaliziran. Spremanje nije moguće." };
   }
 
   const { title, artist, lyricsAndChords, url, userId } = validatedFields.data;
