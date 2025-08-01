@@ -15,6 +15,12 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/songs/page.js"
+    ],
+    "/dashboard/metronome/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/dashboard/metronome/page.css",
+      "static/chunks/app/dashboard/metronome/page.js"
     ]
   }
 }
