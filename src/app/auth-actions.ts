@@ -34,10 +34,17 @@ export async function registerUser(prevState: any, formData: FormData) {
     });
     return { success: true, message: `Korisnik ${userRecord.email} je uspješno kreiran.` };
   } catch (error: any) {
-    if (error.code === 'auth/email-already-exists') {
-      return { error: "Korisnik sa ovom email adresom već postoji." };
+    switch (error.code) {
+      case 'auth/email-already-exists':
+        return { error: "Korisnik sa ovom email adresom već postoji." };
+      case 'auth/invalid-email':
+        return { error: "Format email adrese nije ispravan." };
+      case 'auth/weak-password':
+        return { error: "Lozinka je preslaba. Molimo koristite jaču lozinku." };
+      default:
+        console.error("Registration Error:", error);
+        return { error: "Došlo je do neočekivane greške prilikom registracije. Molimo pokušajte ponovo." };
     }
-    return { error: "Došlo je do greške prilikom registracije." };
   }
 }
 
