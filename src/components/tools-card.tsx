@@ -8,11 +8,11 @@ import PronadjiAkorde from "./pronadji-akorde";
 
 const tools = [
   {
-    title: "Metronome",
-    description: "Keep your rhythm perfect with our integrated metronome.",
+    title: "Metronom",
+    description: "Održavajte savršen ritam uz naš integrirani metronom.",
     icon: <Milestone className="h-6 w-6 text-gray-300" />,
     href: "/dashboard/metronome",
-    buttonText: "Set Tempo",
+    buttonText: "Podesi Tempo",
   },
 ];
 
@@ -21,14 +21,14 @@ export function ToolsCard() {
         <div className="space-y-8">
             <Card className="glass-card">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-xl font-bold text-white">Song Scraper</CardTitle>
+                    <CardTitle className="text-xl font-bold text-white">Pronađi akorde</CardTitle>
                     <Search className="h-6 w-6 text-gray-300" />
                 </CardHeader>
                 <CardContent>
-                    <p className="text-gray-300 mb-4">Import songs from a URL.</p>
+                    <p className="text-gray-300 mb-4">Uvezite pjesme s URL-a.</p>
                      <Link href="/dashboard/pronadji-akorde">
                         <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
-                            Open Scraper <ArrowRight className="ml-2 h-4 w-4" />
+                            Otvori <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     </Link>
                 </CardContent>
