@@ -1,4 +1,4 @@
 {
-  "/dashboard/pronadji-akorde/page": "app/dashboard/pronadji-akorde/page.js",
-  "/dashboard/settings/page": "app/dashboard/settings/page.js"
+  "/dashboard/settings/page": "app/dashboard/settings/page.js",
+  "/dashboard/support/page": "app/dashboard/support/page.js"
 }
