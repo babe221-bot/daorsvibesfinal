@@ -6,10 +6,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/dashboard/pronadji-akorde/page": [
+    "/dashboard/gigs/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/pronadji-akorde/page.js"
+      "static/chunks/app/dashboard/gigs/page.js"
     ]
   }
 }
