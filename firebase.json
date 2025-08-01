@@ -1,5 +1,12 @@
 {
   "emulators": {
+    "firestore": {
+      "port": 8080
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    },
     "dataconnect": {
       "dataDir": "dataconnect/.dataconnect/pgliteData"
     }
@@ -17,8 +24,8 @@
       "source": "functions",
       "codebase": "default",
       "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint",
-        "npm --prefix \"$RESOURCE_DIR\" run build"
+        "npm --prefix "$RESOURCE_DIR" run lint",
+        "npm --prefix "$RESOURCE_DIR" run build"
       ],
       "ignore": [
         "node_modules",
@@ -47,12 +54,7 @@
       "backendId": "muzika",
       "rootDir": ".",
       "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "functions"
+        "node_modules"
       ]
-  },
-  "extensions": {}
+    }
 }
