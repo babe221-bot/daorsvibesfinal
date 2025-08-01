@@ -139,16 +139,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   </SidebarMenuButton>
               </NextLink>
             </SidebarMenuItem>
-            <SidebarMenuItem>
-               <NextLink href="/dashboard/ai-tools">
-                  <SidebarMenuButton asChild isActive={pathname === '/dashboard/ai-tools'} tooltip="AI Alati">
-                    <span>
-                      <Sparkles />
-                      <span>AI Alati</span>
-                    </span>
-                  </SidebarMenuButton>
-              </NextLink>
-            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
          <SidebarFooter>
