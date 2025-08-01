@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoginForm } from "@/components/login-form";
 import { RegisterForm } from "@/components/register-form";
 import { Button } from "@/components/ui/button";
-import { GoogleAuthProvider, signInAnonymously, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInAnonymously, signInWithRedirect, getRedirectResult } from "firebase/auth";
 import { auth } from "@/lib/firebase-client";
 import { useRouter } from "next/navigation";
 import { User } from "lucide-react";
@@ -25,15 +25,26 @@ function GoogleIcon() {
 export default function LoginPage() {
   const router = useRouter();
 
+  useEffect(() => {
+    const checkRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result && result.user) {
+          router.push("/dashboard");
+        }
+      } catch (error) {
+        console.error("Error during Google sign-in redirect:", error);
+      }
+    };
+    checkRedirectResult();
+  }, [router]);
+
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      if (result.user) {
-        router.push("/dashboard");
-      }
+      await signInWithRedirect(auth, provider);
     } catch (error) {
-      console.error("Error during Google sign-in:", error);
+      console.error("Error initiating Google sign-in:", error);
     }
   };
 
