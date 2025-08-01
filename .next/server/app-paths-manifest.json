@@ -1,1 +1,3 @@
-{}
+{
+  "/dashboard/song-library/page": "app/dashboard/song-library/page.js"
+}
