@@ -6,8 +6,9 @@ export interface SongDataExtractorState {
   message?: string;
 }
 
-export interface SaveSongResult {
-  success?: boolean;
-  error?: string;
-  message?: string;
-}
+// This type is no longer needed with client-side logic
+// export interface SaveSongResult {
+//   success?: boolean;
+//   error?: string;
+//   message?: string;
+// }

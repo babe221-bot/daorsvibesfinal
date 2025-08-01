@@ -1,25 +1,12 @@
-
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp } from "firebase/app";
 
-let firebaseConfig;
+// This check ensures we only try to parse the config once.
+const firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG 
+    ? JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG) 
+    : undefined;
 
-if (typeof window !== "undefined") {
-    try {
-        const configString = process.env.NEXT_PUBLIC_FIREBASE_CONFIG;
-        if (configString) {
-            firebaseConfig = JSON.parse(configString);
-        } else {
-            console.error("Firebase config environment variable not found.");
-        }
-    } catch (e) {
-        console.error("Failed to parse Firebase config:", e);
-        firebaseConfig = undefined;
-    }
-}
-
-
-// Initialize Firebase
-const app = !getApps().length && firebaseConfig ? initializeApp(firebaseConfig) : (getApps().length > 0 ? getApp() : undefined);
+// Initialize Firebase only if it hasn't been initialized yet.
+const app = !getApps().length && firebaseConfig ? initializeApp(firebaseConfig) : getApp();
 
 export default app;

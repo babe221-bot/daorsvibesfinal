@@ -6,13 +6,14 @@ import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { auth } from '@/lib/firebase-client';
+import { auth, db } from '@/lib/firebase-client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useToast } from '@/hooks/use-toast';
-import { handleExtractSongData, handleFormatSongContent, handleSaveSong } from '@/app/actions';
+import { handleExtractSongData } from '@/app/actions';
 import type { SongDataExtractorState } from '@/lib/types';
 import { Label } from '@/components/ui/label';
 import { Sparkles } from 'lucide-react';
+import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore';
 
 const initialState: SongDataExtractorState = {};
 
@@ -53,13 +54,10 @@ export default function PronadjiAkorde() {
     }
     setIsFormatting(true);
     try {
-      const result = await handleFormatSongContent(songDetails.lyricsAndChords);
-      if (result.error) {
-        toast({ variant: 'destructive', title: 'Greška formatiranja', description: result.error });
-      } else if (result.formattedContent) {
-        setSongDetails(prev => prev ? { ...prev, lyricsAndChords: result.formattedContent! } : null);
-        toast({ title: 'Uspjeh', description: 'Sadržaj je uspješno formatiran.' });
-      }
+        // Since handleFormatSongContent is now gone from actions, we'll keep this simple.
+        // In a real scenario, we might call a client-side AI function or a cloud function.
+        toast({ title: 'Info', description: 'Formatiranje pomoću AI trenutno nije dostupno.' });
+
     } catch (err) {
        toast({ variant: 'destructive', title: 'Greška', description: 'Dogodila se neočekivana greška.' });
     } finally {
@@ -78,18 +76,39 @@ export default function PronadjiAkorde() {
     }
 
     setIsSaving(true);
-    const result = await handleSaveSong({
-      ...songDetails,
-      userId: user.uid,
-    });
-    setIsSaving(false);
+    try {
+        const songsCollectionRef = collection(db, "songs");
+        const q = query(
+            songsCollectionRef,
+            where("title", "==", songDetails.title),
+            where("artist", "==", songDetails.artist || "")
+        );
 
-    if (result.error) {
-      toast({ variant: 'destructive', title: 'Greška', description: result.error });
-    } else {
-      toast({ title: 'Uspjeh', description: result.message });
-      setSongDetails(null);
-      setSongUrl('');
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            toast({ variant: 'destructive', title: 'Greška', description: 'Ova pjesma već postoji u javnom repozitoriju.' });
+            setIsSaving(false);
+            return;
+        }
+
+        await addDoc(songsCollectionRef, {
+            title: songDetails.title,
+            artist: songDetails.artist || "",
+            lyricsAndChords: songDetails.lyricsAndChords,
+            url: songDetails.url || "",
+            timestamp: serverTimestamp(),
+            addedBy: user.uid,
+        });
+
+        toast({ title: 'Uspjeh', description: "Pjesma je uspješno dodana u javni repozitorij!" });
+        setSongDetails(null);
+        setSongUrl('');
+    } catch (err: any) {
+        console.error("Greška pri spremanju pjesme:", err);
+        toast({ variant: 'destructive', title: 'Greška', description: `Nije uspjelo spremanje pjesme: ${err.message}` });
+    } finally {
+        setIsSaving(false);
     }
   };
 

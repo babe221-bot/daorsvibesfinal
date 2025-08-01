@@ -1,27 +1,5 @@
 {
   "node": {
-    "608791c7f9292c1ef82bd9884ed3db528cc9887630": {
-      "workers": {
-        "app/login/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fuser%2Fstudio%2Fsrc%2Fapp%2Fauth-actions.ts%22%2C%5B%7B%22id%22%3A%22608791c7f9292c1ef82bd9884ed3db528cc9887630%22%2C%22exportedName%22%3A%22loginUser%22%7D%2C%7B%22id%22%3A%22609d673bdc0a2ab0e3a8a703705e16b9848490296e%22%2C%22exportedName%22%3A%22registerUser%22%7D%5D%5D%5D&__client_imported__=true!",
-          "async": true
-        }
-      },
-      "layer": {
-        "app/login/page": "action-browser"
-      }
-    },
-    "609d673bdc0a2ab0e3a8a703705e16b9848490296e": {
-      "workers": {
-        "app/login/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fuser%2Fstudio%2Fsrc%2Fapp%2Fauth-actions.ts%22%2C%5B%7B%22id%22%3A%22608791c7f9292c1ef82bd9884ed3db528cc9887630%22%2C%22exportedName%22%3A%22loginUser%22%7D%2C%7B%22id%22%3A%22609d673bdc0a2ab0e3a8a703705e16b9848490296e%22%2C%22exportedName%22%3A%22registerUser%22%7D%5D%5D%5D&__client_imported__=true!",
-          "async": true
-        }
-      },
-      "layer": {
-        "app/login/page": "action-browser"
-      }
-    },
     "404744ccfbecd2fdd06c9c806e1fcc10261fb6de62": {
       "workers": {
         "app/dashboard/pronadji-akorde/page": {
