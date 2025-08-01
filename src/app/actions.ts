@@ -3,15 +3,14 @@
 import { z } from "zod";
 import { extractSongData } from "@/ai/flows/extract-song-data-flow";
 import { formatSongContent } from "@/ai/flows/format-song-content-flow";
-import type { SongDataExtractorState, SaveSongResult } from "@/lib/types";
-import { getAdminDb } from "@/lib/firebase-admin";
+import { simplifyChords } from "@/ai/flows/simplify-chords-flow";
 
 const SongUrlSchema = z.string().url({ message: "Molimo unesite važeći URL." });
 
 export async function handleExtractSongData(
-  prevState: SongDataExtractorState,
+  prevState: any,
   formData: FormData
-): Promise<SongDataExtractorState> {
+): Promise<any> {
     const validatedFields = SongUrlSchema.safeParse(formData.get("songUrl"));
     
     if (!validatedFields.success) {
@@ -59,53 +58,29 @@ export async function handleFormatSongContent(
   }
 }
 
-const SaveSongSchema = z.object({
-  title: z.string().min(2, "Naslov je obavezan."),
+const SimplifyChordsSchema = z.object({
+  title: z.string(),
   artist: z.string().optional(),
-  lyricsAndChords: z.string().min(10, "Sadržaj je obavezan."),
-  url: z.string().url().optional(),
-  userId: z.string(),
+  lyricsAndChords: z.string(),
 });
 
-export async function handleSaveSong(
-  data: z.infer<typeof SaveSongSchema>
-): Promise<SaveSongResult> {
-  const validatedFields = SaveSongSchema.safeParse(data);
-  if (!validatedFields.success) {
-    return { error: "Nevažeći podaci za pjesmu." };
-  }
-  
-  const adminDb = getAdminDb();
-  if (!adminDb) {
-      return { error: "Firebase Admin SDK nije ispravno inicijaliziran. Spremanje nije moguće." };
-  }
-
-  const { title, artist, lyricsAndChords, url, userId } = validatedFields.data;
-
-  try {
-    const songsCollectionRef = adminDb.collection("songs");
-    const q = songsCollectionRef
-        .where("title", "==", title)
-        .where("artist", "==", artist || "");
-
-    const querySnapshot = await q.get();
-
-    if (!querySnapshot.empty) {
-      return { error: "Ova pjesma već postoji u javnom repozitoriju." };
+export async function handleSimplifyChords(
+  data: z.infer<typeof SimplifyChordsSchema>
+): Promise<{ simplifiedContent?: string; error?: string }> {
+    const validatedFields = SimplifyChordsSchema.safeParse(data);
+    if (!validatedFields.success) {
+        return { error: "Nevažeći podaci za pjesmu." };
     }
 
-    await songsCollectionRef.add({
-      title,
-      artist: artist || "",
-      lyricsAndChords,
-      url: url || "",
-      timestamp: new Date(),
-      addedBy: userId,
-    });
-
-    return { success: true, message: "Pjesma je uspješno dodana u javni repozitorij!" };
-  } catch (err: any) {
-    console.error("Greška pri spremanju pjesme:", err);
-    return { error: `Nije uspjelo spremanje pjesme: ${err.message}` };
-  }
+    try {
+        const result = await simplifyChords(validatedFields.data);
+        if (!result || !result.simplifiedContent) {
+            return { error: "Nije uspjelo pojednostavljivanje akorda." };
+        }
+        return { simplifiedContent: result.simplifiedContent };
+    } catch (e) {
+        console.error(e);
+        const errorMessage = e instanceof Error ? e.message : "Došlo je do nepoznate greške.";
+        return { error: `Došlo je do greške prilikom pojednostavljivanja: ${errorMessage}` };
+    }
 }

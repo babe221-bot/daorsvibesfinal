@@ -11,6 +11,8 @@ import { Progress } from "@/components/ui/progress";
 import PronadjiAkorde from './pronadji-akorde';
 import { Library, Trash2, Wand2 } from 'lucide-react';
 import app from '@/lib/firebase';
+import { handleSimplifyChords } from '@/app/actions';
+import { useToast } from '@/hooks/use-toast';
 
 interface Song extends DocumentData {
   id: string;
@@ -37,6 +39,7 @@ const Modal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; chi
 
 
 function SongLibrary() {
+  const { toast } = useToast();
   const [db, setDb] = useState<Firestore | null>(null);
   const [auth, setAuth] = useState<any>(null); // Use 'any' for auth to avoid type conflicts
   const [userId, setUserId] = useState<string | null>(null);
@@ -105,40 +108,31 @@ function SongLibrary() {
     }
   }, [db, userId, isAuthReady]);
 
-
-  const callGemini = async (prompt: string) => {
-      const apiKey = ""; // Handled by environment
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-      const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-      const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-      });
-      if (!response.ok) throw new Error(`API zahtjev nije uspio: ${response.status}`);
-      const result = await response.json();
-      const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error("Nevažeći API odgovor.");
-      return text;
-  };
-
-  const handleSimplifyChords = async (song: Song) => {
+  const onSimplifyChords = async (song: Song) => {
       setIsAiLoading(true);
       setError('');
       try {
-          const prompt = `Pojednostavi akorde za sljedeću pjesmu:
+          const result = await handleSimplifyChords({
+              title: song.title,
+              artist: song.artist,
+              lyricsAndChords: song.lyricsAndChords
+          });
 
-Naslov: ${song.title}
-Izvođač: ${song.artist}
+          if (result.error) {
+              throw new Error(result.error);
+          }
 
-${song.lyricsAndChords}`;
-          const simplifiedText = await callGemini(prompt);
-          setModalTitle(`Pojednostavljeni akordi za "${song.title}"`);
-          setModalContent(simplifiedText);
-          setIsModalOpen(true);
+          if (result.simplifiedContent) {
+              setModalTitle(`Pojednostavljeni akordi za "${song.title}"`);
+              setModalContent(result.simplifiedContent);
+              setIsModalOpen(true);
+          } else {
+              throw new Error("Nije primljen pojednostavljeni sadržaj.");
+          }
       } catch (err: any) {
           console.error("Greška pri pojednostavljivanju akorda:", err);
           setError(`Nije moguće pojednostaviti akorde: ${err.message}`);
+          toast({ variant: 'destructive', title: 'Greška', description: `Nije moguće pojednostaviti akorde: ${err.message}` });
       } finally {
           setIsAiLoading(false);
       }
@@ -361,7 +355,7 @@ ${song.lyricsAndChords}`;
                               </pre>
                               <div className="mt-4 flex justify-between items-center">
                                   <p className="text-xs text-muted-foreground">Dodano: {song.timestamp ? new Date(song.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
-                                  <Button onClick={() => handleSimplifyChords(song)} disabled={isAiLoading} size="sm" variant="outline" className="bg-transparent border-primary/50 hover:bg-primary/20">
+                                  <Button onClick={() => onSimplifyChords(song)} disabled={isAiLoading} size="sm" variant="outline" className="bg-transparent border-primary/50 hover:bg-primary/20">
                                     <Wand2 className="mr-2 h-4 w-4 text-primary"/> 
                                     Pojednostavi
                                   </Button>
