@@ -12,7 +12,7 @@ env:
   # Configure environment variables.
   # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
   - variable: NEXT_PUBLIC_FIREBASE_CONFIG
-    value: '{"apiKey":"AIzaSyCjcN79Nc2ClSKOcratTZZrbBIO-flEI6Y","authDomain":"strumflow.firebaseapp.com","projectId":"strumflow","storageBucket":"strumflow.appspot.com","messagingSenderId":"542308709703","appId":"1:542308709703:web:a2de72bfd2127225c136c1"}'
+    value: '{"apiKey":"AIzaSyCjcN79Nc2ClSKOcratTZZrbBIO-flEI6Y","authDomain":"strumflow.firebaseapp.com","projectId":"strumflow","storageBucket":"strumflow.firebasestorage.app","messagingSenderId":"542308709703","appId":"1:542308709703:web:b3d736517ac9c6fd184862"}'
     availability:
       - BUILD
       - RUNTIME
