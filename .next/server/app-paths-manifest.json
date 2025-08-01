@@ -1,5 +1,4 @@
 {
-  "/page": "app/page.js",
-  "/login/page": "app/login/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/dashboard/pronadji-akorde/page": "app/dashboard/pronadji-akorde/page.js",
+  "/page": "app/page.js"
 }
