@@ -214,3 +214,5 @@ Aug 01, 2025 12:43:00 AM com.google.cloud.datastore.emulator.firestore.websocket
 INFO: Websocket client disconnected
 Aug 01, 2025 12:43:00 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
 INFO: Websocket client disconnected
+Aug 01, 2025 12:43:15 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
+INFO: Websocket client disconnected

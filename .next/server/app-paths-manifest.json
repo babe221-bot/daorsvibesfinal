@@ -1,4 +1,3 @@
 {
-  "/dashboard/metronome/page": "app/dashboard/metronome/page.js",
-  "/dashboard/ai-tools/page": "app/dashboard/ai-tools/page.js"
+  "/dashboard/gigs/page": "app/dashboard/gigs/page.js"
 }

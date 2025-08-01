@@ -10,22 +10,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/gigs/page.js"
-    ],
-    "/dashboard/songs/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/songs/page.js"
-    ],
-    "/dashboard/metronome/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/dashboard/metronome/page.css",
-      "static/chunks/app/dashboard/metronome/page.js"
-    ],
-    "/dashboard/ai-tools/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/ai-tools/page.js"
     ]
   }
 }
