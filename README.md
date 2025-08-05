@@ -11,7 +11,6 @@ DaorsVibes is a comprehensive web application designed for musicians to enhance 
 - **Transposition**: Transpose chords to different keys with a single click, supporting all standard keys and capo adjustments with real-time previews.
 - **Automatic Key Change Suggestion**: AI-powered tool to suggest optimal key changes for a given audio URL.
 - **Audio Integration**: Seamlessly integrate audio playback from URLs, local files, or services like Spotify/YouTube.
-- **YouTube Transcription Tool**: Integrates a YouTube transcription tool to generate synchronized lyrics and chords in real-time.
 
 ## Technologies Used:
 
@@ -31,16 +30,23 @@ To get a local copy up and running, follow these simple steps.
 
 ### Installation:
 
-1.  Clone the repo:
+1.  **Clone the repo:**
     ```sh
     git clone https://github.com/your_username_/your_project_name.git
     ```
-2.  Install NPM packages:
+2.  **Install NPM packages:**
     ```sh
     npm install
     ```
-3. Set up your Firebase project and update the configuration in `src/lib/firebase-client.ts` and `src/lib/firebase-admin.ts`.
-4. Create a `.env.local` file with your environment variables.
+3.  **Set up Firebase:**
+    *   Create a project on the [Firebase Console](https://console.firebase.google.com/).
+    *   Enable Authentication (Email/Password, Google, etc.).
+    *   Set up Firestore.
+    *   Get your Firebase project configuration. Go to your project's settings and find your web app's configuration object.
+4.  **Set up environment variables:**
+    *   Create a `.env.local` file in the root of the project.
+    *   Copy the contents of `.env.example` into `.env.local`.
+    *   Replace the placeholder values in `.env.local` with your actual Firebase project configuration.
 
 ### Running the application:
 
@@ -62,3 +68,19 @@ This will start the development server at `http://localhost:3000`.
 ## Styling:
 
 This project follows the styling guidelines outlined in `docs/blueprint.md`, which includes a specific color palette, typography, and layout principles to create a serene and user-friendly experience.
+
+## Roadmap
+
+Our roadmap includes the following planned features:
+
+- **YouTube Transcription Tool**: An AI-powered tool to transcribe YouTube videos and generate synchronized lyrics and chords.
+- **Advanced Audio Integration**: Deeper integration with services like Spotify and Apple Music.
+- **Collaborative Setlists**: Allow multiple users to edit and contribute to setlists in real-time.
+
+## Contributing
+
+Contributions are welcome! Please see our [contributing guidelines](CONTRIBUTING.md) for more details on how to get started.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
