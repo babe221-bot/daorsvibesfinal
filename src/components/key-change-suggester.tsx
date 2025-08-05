@@ -45,7 +45,7 @@ export default function KeyChangeSuggester() {
       >
         <Input
           name="audioUrl"
-          placeholder="https://example.com/my-song.mp3"
+          placeholder="https://example.com/my-song.wav"
           required
           className="flex-grow bg-white/20 border-white/30 text-white placeholder:text-gray-300"
         />
@@ -53,22 +53,26 @@ export default function KeyChangeSuggester() {
       </form>
 
       {state.result && (
-        <div className="space-y-4">
-          <h3 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Sparkles className="text-accent h-6 w-6"/>
-            Suggestions
-          </h3>
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+              <Sparkles className="text-accent h-6 w-6"/>
+              Suggestions
+            </h3>
+            <p className="text-gray-300">Original key detected: <span className="font-bold text-white">{state.result.detectedKey}</span></p>
+          </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {state.result.suggestedKeyChanges.map((suggestion, index) => (
-              <Card key={index} className="bg-white/10 border-0 shadow-lg backdrop-blur-xl">
-                <CardContent className="p-4">
+              <Card key={index} className="bg-white/10 border-0 shadow-lg backdrop-blur-xl flex flex-col">
+                <CardContent className="p-4 flex flex-col flex-grow">
                   <div className="flex justify-between items-baseline mb-2">
                     <p className="font-bold text-lg text-white">{suggestion.key}</p>
                     <p className="text-sm text-gray-300">
                       {(suggestion.confidence * 100).toFixed(0)}% confidence
                     </p>
                   </div>
-                  <Progress value={suggestion.confidence * 100} className="h-2 [&>div]:bg-gradient-to-r [&>div]:from-accent [&>div]:to-primary" />
+                  <Progress value={suggestion.confidence * 100} className="h-2 mb-4 [&>div]:bg-gradient-to-r [&>div]:from-accent [&>div]:to-primary" />
+                  <p className="text-sm text-gray-200 flex-grow">{suggestion.justification}</p>
                 </CardContent>
               </Card>
             ))}
