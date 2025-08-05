@@ -40,6 +40,7 @@
     "@radix-ui/react-toast": "^1.2.6",
     "@radix-ui/react-tooltip": "^1.1.8",
     "@tanstack/react-query": "^5.51.15",
+    "aubiojs": "0.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
@@ -61,7 +62,7 @@
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.0",
     "tone": "^14.7.77",
-    "wav": "^1.0.2",
+    "wavefile": "^11.0.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

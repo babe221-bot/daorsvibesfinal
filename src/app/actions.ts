@@ -4,6 +4,8 @@ import { z } from "zod";
 import { extractSongData } from "@/ai/flows/extract-song-data-flow";
 import { formatSongContent } from "@/ai/flows/format-song-content-flow";
 import { simplifyChords } from "@/ai/flows/simplify-chords-flow";
+import { suggestKeyChange } from "@/ai/flows/suggest-key-change";
+import type { KeyChangeSuggesterState } from "@/lib/types";
 
 const SongUrlSchema = z.string().url({ message: "Molimo unesite važeći URL." });
 
@@ -83,4 +85,31 @@ export async function handleSimplifyChords(
         const errorMessage = e instanceof Error ? e.message : "Došlo je do nepoznate greške.";
         return { error: `Došlo je do greške prilikom pojednostavljivanja: ${errorMessage}` };
     }
+}
+
+const AudioUrlSchema = z.string().url({ message: "Please enter a valid URL." });
+
+export async function handleSuggestKeyChange(
+  prevState: KeyChangeSuggesterState,
+  formData: FormData
+): Promise<KeyChangeSuggesterState> {
+  const validatedFields = AudioUrlSchema.safeParse(formData.get("audioUrl"));
+
+  if (!validatedFields.success) {
+    return {
+      error: validatedFields.error.flatten().formErrors[0] || "Invalid URL provided.",
+    };
+  }
+
+  try {
+    const result = await suggestKeyChange({ audioUrl: validatedFields.data });
+    if (!result) {
+      return { error: "Failed to get suggestions for this URL. Please try another." };
+    }
+    return { result };
+  } catch (e) {
+    console.error(e);
+    const errorMessage = e instanceof Error ? e.message : "An unknown error occurred.";
+    return { error: `An unexpected error occurred: ${errorMessage}` };
+  }
 }
