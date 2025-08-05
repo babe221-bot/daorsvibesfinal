@@ -13,6 +13,7 @@ import { Library, Trash2, Wand2 } from 'lucide-react';
 import app from '@/lib/firebase';
 import { handleSimplifyChords } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
 
 interface Song extends DocumentData {
   id: string;
@@ -341,11 +342,12 @@ function SongLibrary() {
               {!isAuthReady ? <p>Povezivanje...</p> : songs.length === 0 ? <p className="text-center text-muted-foreground py-8">Još uvijek nema pjesama. Dodajte jednu iznad ili pretražite javni repozitorij!</p> : (
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {songs.map((song) => (
-                      <Card key={song.id} className="flex flex-col bg-white/5 border-white/20 hover:bg-white/10 transition-colors">
+                    <Link href={`/dashboard/songs/${song.id}`} key={song.id}>
+                      <Card className="flex flex-col bg-white/5 border-white/20 hover:bg-white/10 transition-colors h-full">
                           <CardHeader className="relative">
                               <CardTitle>{song.title}</CardTitle>
                               {song.artist && <p className="text-muted-foreground">{song.artist}</p>}
-                               <Button onClick={() => handleDeleteSong(song.id)} disabled={loading} variant="ghost" size="icon" className="absolute top-3 right-3 text-muted-foreground hover:text-destructive hover:bg-destructive/20">
+                               <Button onClick={(e) => { e.preventDefault(); handleDeleteSong(song.id); }} disabled={loading} variant="ghost" size="icon" className="absolute top-3 right-3 text-muted-foreground hover:text-destructive hover:bg-destructive/20">
                                   <Trash2 className="h-4 w-4" />
                               </Button>
                           </CardHeader>
@@ -355,13 +357,14 @@ function SongLibrary() {
                               </pre>
                               <div className="mt-4 flex justify-between items-center">
                                   <p className="text-xs text-muted-foreground">Dodano: {song.timestamp ? new Date(song.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
-                                  <Button onClick={() => onSimplifyChords(song)} disabled={isAiLoading} size="sm" variant="outline" className="bg-transparent border-primary/50 hover:bg-primary/20">
+                                  <Button onClick={(e) => { e.preventDefault(); onSimplifyChords(song);}} disabled={isAiLoading} size="sm" variant="outline" className="bg-transparent border-primary/50 hover:bg-primary/20">
                                     <Wand2 className="mr-2 h-4 w-4 text-primary"/> 
                                     Pojednostavi
                                   </Button>
                               </div>
                           </CardContent>
                       </Card>
+                    </Link>
                   ))}
                   </div>
               )}
