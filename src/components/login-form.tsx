@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useFormStatus } from "react-dom";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,15 +8,7 @@ import { auth as clientAuth } from "@/lib/firebase-client";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? "Prijavljivanje..." : "Prijavi se"}
-    </Button>
-  );
-}
+import { SubmitButton } from "./ui/submit-button";
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -66,7 +56,7 @@ export function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <SubmitButton />
+          <SubmitButton pendingText="Prijavljivanje...">Prijavi se</SubmitButton>
         </form>
       </CardContent>
     </Card>

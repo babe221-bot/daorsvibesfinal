@@ -1,23 +1,13 @@
 "use client";
 
-import { useFormStatus } from "react-dom";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase-client";
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? "Registracija..." : "Registruj se"}
-    </Button>
-  );
-}
+import { SubmitButton } from "./ui/submit-button";
 
 export function RegisterForm() {
   const { toast } = useToast();
@@ -80,7 +70,7 @@ export function RegisterForm() {
             <Label htmlFor="password">Lozinka</Label>
             <Input id="password" name="password" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
           </div>
-          <SubmitButton />
+          <SubmitButton pendingText="Registracija...">Registruj se</SubmitButton>
         </form>
       </CardContent>
     </Card>
