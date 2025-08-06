@@ -27,7 +27,7 @@ export function ToolsCard() {
                 <CardContent>
                     <p className="text-gray-300 mb-4">Uvezite pjesme s URL-a.</p>
                      <Link href="/dashboard/pronadji-akorde">
-                        <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                        <Button variant="outline-glass" className="w-full">
                             Otvori <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     </Link>
@@ -45,19 +45,19 @@ export function ToolsCard() {
                         {tool.href ? (
                              tool.href.startsWith("http") ? (
                                 <a href={tool.href} target="_blank" rel="noopener noreferrer" className="w-full">
-                                    <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                                    <Button variant="outline-glass" className="w-full">
                                         {tool.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
                                     </Button>
                                 </a>
                             ) : (
                                 <Link href={tool.href} className="w-full">
-                                    <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                                    <Button variant="outline-glass" className="w-full">
                                         {tool.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
                                     </Button>
                                 </Link>
                             )
                         ) : (
-                            <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                            <Button variant="outline-glass" className="w-full">
                                 {tool.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>
                         )}
@@ -74,7 +74,7 @@ export function ToolsCard() {
                 <CardContent>
                     <p className="text-gray-300 mb-4">Povežite svoj Google Kalendar da pratite vrijeme i lokacije svojih svirki.</p>
                      <Link href="/dashboard/gigs">
-                        <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                        <Button variant="outline-glass" className="w-full">
                             Moji Događaji <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     </Link>
@@ -90,7 +90,7 @@ export function ToolsCard() {
                 <CardContent>
                     <p className="text-gray-300 mb-4">Tune your drums or guitar with our AI-powered tuner.</p>
                      <Link href="/dashboard/tuner">
-                        <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                        <Button variant="outline-glass" className="w-full">
                             Open Tuner <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     </Link>
