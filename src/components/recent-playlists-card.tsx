@@ -33,7 +33,7 @@ export function RecentPlaylistsCard() {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+        <Button variant="outline-glass" className="w-full">
             Vidi sve playliste <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </CardFooter>

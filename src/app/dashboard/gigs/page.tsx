@@ -28,7 +28,7 @@ export default function GigsPage() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" className="bg-transparent text-white border-white hover:bg-white hover:text-black">
+              <Button variant="outline-glass">
                 <Plus className="mr-2 h-4 w-4" />
                 Dodaj Događaj
               </Button>
@@ -56,7 +56,7 @@ export default function GigsPage() {
                   </div>
                   <div className="w-full sm:w-auto">
                     <Link href="/dashboard/songs">
-                      <Button variant="outline" className="w-full bg-transparent text-white border-white hover:bg-white hover:text-black">
+                      <Button variant="outline-glass" className="w-full">
                         <ListMusic className="mr-2 h-4 w-4" />
                         Kreiraj Playlistu
                       </Button>
