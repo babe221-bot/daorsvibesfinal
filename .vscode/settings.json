@@ -2,5 +2,7 @@
     "terminal.integrated.accessibleViewFocusOnCommandExecution": true,
     "terminal.integrated.accessibleViewPreserveCursorPosition": true,
     "terminal.integrated.autoReplies": {},
-    "terminal.integrated.commandsToSkipShell": []
+    "terminal.integrated.commandsToSkipShell": [],
+    "IDX.agenticWorkspace": true,
+    "IDX.corgiMode": true
 }
