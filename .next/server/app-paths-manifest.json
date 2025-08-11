@@ -1,5 +1,5 @@
 {
-  "/login/page": "app/login/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/tuner/page": "app/dashboard/tuner/page.js"
+  "/dashboard/tuner/page": "app/dashboard/tuner/page.js",
+  "/dashboard/song-library/page": "app/dashboard/song-library/page.js",
+  "/dashboard/playlists/page": "app/dashboard/playlists/page.js"
 }

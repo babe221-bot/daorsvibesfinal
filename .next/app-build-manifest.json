@@ -27,6 +27,16 @@
       "static/chunks/main-app.js",
       "static/css/app/dashboard/tuner/page.css",
       "static/chunks/app/dashboard/tuner/page.js"
+    ],
+    "/dashboard/song-library/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/song-library/page.js"
+    ],
+    "/dashboard/playlists/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/playlists/page.js"
     ]
   }
 }
