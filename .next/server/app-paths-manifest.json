@@ -1,7 +1,1 @@
-{
-  "/dashboard/page": "app/dashboard/page.js",
-  "/login/page": "app/login/page.js",
-  "/dashboard/pronadji-akorde/page": "app/dashboard/pronadji-akorde/page.js",
-  "/page": "app/page.js",
-  "/dashboard/tuner/page": "app/dashboard/tuner/page.js"
-}
+{}
