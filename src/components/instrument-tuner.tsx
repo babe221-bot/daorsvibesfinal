@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import './instrument-tuner.css';
+import * as Tone from 'tone';
 
 const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
@@ -72,22 +73,17 @@ export default function InstrumentTuner() {
     const [mode, setMode] = useState<TunerMode>('guitar');
     const [targetNote, setTargetNote] = useState(notePresets.guitar.notes[0].value);
 
-    const toneRef = useRef<any>(null);
-    const analyserRef = useRef<any>(null);
-    const micRef = useRef<any>(null);
+    const analyserRef = useRef<Tone.Analyser | null>(null);
+    const micRef = useRef<Tone.UserMedia | null>(null);
     const animationFrameRef = useRef<number | null>(null);
 
     const startTuning = async () => {
         try {
-            if (!toneRef.current) {
-                const Tone = await import('tone');
-                toneRef.current = Tone;
-            }
-            await toneRef.current.start();
-            micRef.current = new toneRef.current.UserMedia();
+            await Tone.start();
+            micRef.current = new Tone.UserMedia();
             await micRef.current.open();
 
-            analyserRef.current = new toneRef.current.Analyser('fft', 2048);
+            analyserRef.current = new Tone.Analyser('fft', 2048);
             micRef.current.connect(analyserRef.current);
             setIsTuning(true);
         } catch (error) {
@@ -139,8 +135,7 @@ export default function InstrumentTuner() {
     };
 
     const tuningLoop = () => {
-        if (!isTuning || !analyserRef.current || !toneRef.current) return;
-        const Tone = toneRef.current;
+        if (!isTuning || !analyserRef.current) return;
         const fftData = analyserRef.current.getValue();
         if (fftData instanceof Float32Array) {
             const fundamentalFreq = findFundamentalFreq(fftData, Tone.context.sampleRate);
