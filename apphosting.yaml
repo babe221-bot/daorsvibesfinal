@@ -2,7 +2,7 @@
 # This is the name that will be used for the backend in the Firebase console.
 # If you don't specify a backend, a default backend will be created
 # with the name of the project.
-backend: muzika
+backend: daorsvibes
 
 # The entrypoint to run when a container starts.
 # If not specified, the container's default entrypoint is used.
@@ -19,7 +19,7 @@ env:
       - BUILD
       - RUNTIME
   - variable: NEXT_PUBLIC_BACKEND_URL
-    value: https://muzika--strumflow.europe-west4.hosted.app
+    value: https://daorsvibes--strumflow.europe-west4.hosted.app
     availability:
       - BUILD
       - RUNTIME
