@@ -88,7 +88,7 @@ export function Metronome() {
         beatCountRef.current = 0;
         setIsPlaying(true);
         scheduleNote();
-      } catch (e) {
+      } catch {
          toast({
             variant: "destructive",
             title: "Audio Error",
@@ -126,7 +126,7 @@ export function Metronome() {
       }
       scheduleNote();
     }
-  }, [tempo, isPlaying, scheduleNote]);
+   }, [isPlaying, scheduleNote, tempo]);
 
   return (
     <div className="flex flex-col items-center p-4 rounded-lg text-white">

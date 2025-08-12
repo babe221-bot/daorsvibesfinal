@@ -58,7 +58,7 @@ export default function PronadjiAkorde() {
         // In a real scenario, we might call a client-side AI function or a cloud function.
         toast({ title: 'Info', description: 'Formatiranje pomoću AI trenutno nije dostupno.' });
 
-    } catch (e) {
+    } catch {
        toast({ variant: 'destructive', title: 'Greška', description: 'Dogodila se neočekivana greška.' });
     } finally {
         setIsFormatting(false);
