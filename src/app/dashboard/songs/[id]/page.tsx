@@ -1,9 +1,6 @@
-"use client";
-import React, { useEffect } from 'react';
-import SongPlayer from '@/components/song-player';
+import SongPlayerPage from './song-player-page';
+import { getSong } from '@/lib/firebase-admin';
 import { notFound } from 'next/navigation';
-import { useAuth } from '@/hooks/use-auth';
-import { useSong } from '@/hooks/use-song';
 
 interface SongPageProps {
   params: {
@@ -11,32 +8,12 @@ interface SongPageProps {
   };
 }
 
-export default function SongPage({ params }: SongPageProps) {
-  const { userId, loading: authLoading, error: authError } = useAuth();
-  const { song, loading: songLoading, error: songError } = useSong(userId, params.id);
-
-  useEffect(() => {
-    if (!songLoading && !song) {
-      notFound();
-    }
-  }, [songLoading, song]);
-
-  if (authLoading || songLoading) {
-    return <div>Loading...</div>;
-  }
-
-  const error = authError || songError;
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+export default async function SongPage({ params }: SongPageProps) {
+  const song = await getSong(params.id);
 
   if (!song) {
-    return notFound();
+    notFound();
   }
 
-  return (
-    <div className="h-screen">
-      <SongPlayer song={song} />
-    </div>
-  );
+  return <SongPlayerPage song={song} />;
 }

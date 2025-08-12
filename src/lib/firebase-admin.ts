@@ -1,6 +1,7 @@
 import admin from "firebase-admin";
 import { getApps, initializeApp, getApp } from "firebase-admin/app";
 import { credential } from "firebase-admin";
+import { Song } from "./types";
 
 function initializeAdminApp() {
     if (getApps().length === 0) {
@@ -43,6 +44,22 @@ function getAdminAuth() {
         return null;
     }
     return admin.auth();
+}
+
+export async function getSong(songId: string): Promise<Song | null> {
+  const db = getAdminDb();
+  if (!db) {
+    return null;
+  }
+
+  const songRef = db.collection('songs').doc(songId);
+  const songDoc = await songRef.get();
+
+  if (!songDoc.exists) {
+    return null;
+  }
+
+  return { id: songDoc.id, ...songDoc.data() } as Song;
 }
 
 export { getAdminDb, getAdminAuth };
