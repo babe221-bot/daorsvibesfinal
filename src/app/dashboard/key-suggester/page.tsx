@@ -28,7 +28,7 @@ export default function KeySuggesterPage() {
               </CardHeader>
               <CardContent>
                 <p className="mb-6 text-gray-200">
-                  Our AI-powered tool analyzes song structures to suggest optimal key changes, making your music more dynamic and engaging. Whether you're a producer, a DJ, or a musician, get instant recommendations to elevate your sound.
+                  Our AI-powered tool analyzes song structures to suggest optimal key changes, making your music more dynamic and engaging. Whether you&apos;re a producer, a DJ, or a musician, get instant recommendations to elevate your sound.
                 </p>
                 <KeyChangeSuggester />
               </CardContent>

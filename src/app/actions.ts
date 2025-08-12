@@ -5,14 +5,20 @@ import { extractSongData } from "@/ai/flows/extract-song-data-flow";
 import { formatSongContent } from "@/ai/flows/format-song-content-flow";
 import { simplifyChords } from "@/ai/flows/simplify-chords-flow";
 import { suggestKeyChange } from "@/ai/flows/suggest-key-change";
-import type { KeyChangeSuggesterState } from "@/lib/types";
+import type { KeyChangeSuggesterState, SongData } from "@/lib/types";
 
 const SongUrlSchema = z.string().url({ message: "Molimo unesite važeći URL." });
 
+export interface ExtractSongDataState {
+    result?: SongData;
+    message?: string;
+    error?: string;
+}
+
 export async function handleExtractSongData(
-  prevState: any,
+  prevState: ExtractSongDataState,
   formData: FormData
-): Promise<any> {
+): Promise<ExtractSongDataState> {
     const validatedFields = SongUrlSchema.safeParse(formData.get("songUrl"));
     
     if (!validatedFields.success) {
