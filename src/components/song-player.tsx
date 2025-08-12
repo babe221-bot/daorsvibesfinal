@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, ZoomIn, ZoomOut, Plus, Minus } from 'lucide-react';
@@ -23,7 +23,7 @@ const SongPlayer: React.FC<SongPlayerProps> = ({ song }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<number | null>(null);
 
-  const startScrolling = () => {
+  const startScrolling = useCallback(() => {
     if (contentRef.current) {
       const scroll = () => {
         if (contentRef.current) {
@@ -33,7 +33,7 @@ const SongPlayer: React.FC<SongPlayerProps> = ({ song }) => {
       };
       scrollRef.current = requestAnimationFrame(scroll);
     }
-  };
+  }, [scrollSpeed]);
 
   const stopScrolling = () => {
     if (scrollRef.current) {
@@ -49,7 +49,7 @@ const SongPlayer: React.FC<SongPlayerProps> = ({ song }) => {
       stopScrolling();
     }
     return () => stopScrolling();
-  }, [isPlaying, scrollSpeed]);
+  }, [isPlaying, scrollSpeed, startScrolling]);
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);

@@ -11,7 +11,7 @@ export function Metronome() {
   const { toast } = useToast();
   const [isPlaying, setIsPlaying] = useState(false);
   const [tempo, setTempo] = useState(120);
-  const [beatsPerMeasure, setBeatsPerMeasure] = useState(4);
+  const beatsPerMeasure = 4;
   const [currentBeat, setCurrentBeat] = useState(-1);
   const [needleRotation, setNeedleRotation] = useState(0);
 
@@ -79,7 +79,7 @@ export function Metronome() {
     } else {
       try {
         if (!audioContextRef.current) {
-          audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+          audioContextRef.current = new (window.AudioContext || (window as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)();
         }
         if (audioContextRef.current.state === 'suspended') {
           await audioContextRef.current.resume();
@@ -88,7 +88,7 @@ export function Metronome() {
         beatCountRef.current = 0;
         setIsPlaying(true);
         scheduleNote();
-      } catch (error) {
+      } catch (e) {
          toast({
             variant: "destructive",
             title: "Audio Error",

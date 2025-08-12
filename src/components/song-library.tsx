@@ -20,7 +20,7 @@ const db = getFirestore(app);
 
 function SongLibrary() {
   const { toast } = useToast();
-  const { user, userId, loading: authLoading, error: authError } = useAuth();
+  const { userId, loading: authLoading, error: authError } = useAuth();
   const { songs, loading: songsLoading, error: songsError } = useUserSongs(userId);
 
   const [songTitle, setSongTitle] = useState('');
@@ -59,10 +59,11 @@ function SongLibrary() {
       } else {
         throw new Error("Nije primljen pojednostavljeni sadržaj.");
       }
-    } catch (err: any) {
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred.";
       console.error("Greška pri pojednostavljivanju akorda:", err);
-      setError(`Nije moguće pojednostaviti akorde: ${err.message}`);
-      toast({ variant: 'destructive', title: 'Greška', description: `Nije moguće pojednostaviti akorde: ${err.message}` });
+      setError(`Nije moguće pojednostaviti akorde: ${errorMessage}`);
+      toast({ variant: 'destructive', title: 'Greška', description: `Nije moguće pojednostaviti akorde: ${errorMessage}` });
     } finally {
       setIsAiLoading(false);
     }
@@ -124,9 +125,9 @@ function SongLibrary() {
       const artistQuery = query(publicSongsRef, where("artist", ">=", searchQuery), where("artist", "<=", searchQuery + '\uf8ff'));
       
       const [titleSnapshot, artistSnapshot] = await Promise.all([getDocs(titleQuery), getDocs(artistQuery)]);
-      const results: { [key: string]: any } = {};
-      titleSnapshot.forEach(doc => results[doc.id] = { id: doc.id, ...doc.data() });
-      artistSnapshot.forEach(doc => results[doc.id] = { id: doc.id, ...doc.data() });
+      const results: { [key: string]: Song } = {};
+      titleSnapshot.forEach(doc => results[doc.id] = { id: doc.id, ...doc.data() } as Song);
+      artistSnapshot.forEach(doc => results[doc.id] = { id: doc.id, ...doc.data() } as Song);
       
       setSearchResults(Object.values(results));
     } catch (err) {

@@ -33,18 +33,21 @@ export function RegisterForm() {
         title: "Uspješna registracija",
         description: `Korisnik ${userCredential.user.email} je uspješno kreiran. Sada se možete prijaviti.`,
       });
-    } catch (error: any) {
+    } catch (error) {
       let errorMessage = "Došlo je do neočekivane greške prilikom registracije. Molimo pokušajte ponovo.";
-      switch (error.code) {
-        case 'auth/email-already-in-use':
-          errorMessage = "Korisnik sa ovom email adresom već postoji.";
-          break;
-        case 'auth/invalid-email':
-          errorMessage = "Format email adrese nije ispravan.";
-          break;
-        case 'auth/weak-password':
-          errorMessage = "Lozinka je preslaba. Molimo koristite jaču lozinku.";
-          break;
+      if (typeof error === 'object' && error !== null && 'code' in error) {
+        const errorCode = (error as {code: string}).code;
+        switch (errorCode) {
+          case 'auth/email-already-in-use':
+            errorMessage = "Korisnik sa ovom email adresom već postoji.";
+            break;
+          case 'auth/invalid-email':
+            errorMessage = "Format email adrese nije ispravan.";
+            break;
+          case 'auth/weak-password':
+            errorMessage = "Lozinka je preslaba. Molimo koristite jaču lozinku.";
+            break;
+        }
       }
       toast({
         variant: "destructive",

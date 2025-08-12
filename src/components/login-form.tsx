@@ -21,8 +21,8 @@ export function LoginForm() {
     try {
       await signInWithEmailAndPassword(clientAuth, email, password);
       router.push("/dashboard");
-    } catch (error: any) {
-      if (error.code === 'auth/invalid-credential') {
+    } catch (error) {
+      if (typeof error === 'object' && error !== null && 'code' in error && (error as {code: string}).code === 'auth/invalid-credential') {
         toast({
           variant: "destructive",
           title: "Greška prilikom prijave",

@@ -10,12 +10,12 @@ import { auth, db } from '@/lib/firebase-client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useToast } from '@/hooks/use-toast';
 import { handleExtractSongData } from '@/app/actions';
-import type { SongDataExtractorState } from '@/lib/types';
+import type { ExtractSongDataState } from '@/lib/types';
 import { Label } from '@/components/ui/label';
 import { Sparkles } from 'lucide-react';
 import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore';
 
-const initialState: SongDataExtractorState = {};
+const initialState: ExtractSongDataState = {};
 
 
 function SubmitButton() {
@@ -58,7 +58,7 @@ export default function PronadjiAkorde() {
         // In a real scenario, we might call a client-side AI function or a cloud function.
         toast({ title: 'Info', description: 'Formatiranje pomoću AI trenutno nije dostupno.' });
 
-    } catch (err) {
+    } catch (e) {
        toast({ variant: 'destructive', title: 'Greška', description: 'Dogodila se neočekivana greška.' });
     } finally {
         setIsFormatting(false);
@@ -104,9 +104,10 @@ export default function PronadjiAkorde() {
         toast({ title: 'Uspjeh', description: "Pjesma je uspješno dodana u javni repozitorij!" });
         setSongDetails(null);
         setSongUrl('');
-    } catch (err: any) {
+    } catch (err) {
         console.error("Greška pri spremanju pjesme:", err);
-        toast({ variant: 'destructive', title: 'Greška', description: `Nije uspjelo spremanje pjesme: ${err.message}` });
+        const errorMessage = err instanceof Error ? err.message : "An unknown error occurred.";
+        toast({ variant: 'destructive', title: 'Greška', description: `Nije uspjelo spremanje pjesme: ${errorMessage}` });
     } finally {
         setIsSaving(false);
     }
