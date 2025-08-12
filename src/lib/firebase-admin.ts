@@ -14,8 +14,12 @@ function initializeAdminApp() {
             } else {
                 initializeApp();
             }
-        } catch (e: any) {
-            console.error("Firebase admin initialization error:", e.message);
+        } catch (e) {
+            if (e instanceof Error) {
+                console.error("Firebase admin initialization error:", e.message);
+            } else {
+                console.error("Firebase admin initialization error:", e);
+            }
             // Return null or throw a more specific error to be caught by callers
             return null;
         }
