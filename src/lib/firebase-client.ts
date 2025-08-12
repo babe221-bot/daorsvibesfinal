@@ -1,9 +1,11 @@
 
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { initializeAuth, indexedDBLocalPersistence, browserLocalPersistence, connectAuthEmulator } from 'firebase/auth';
 import { initializeFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import app from './firebase';
 
-const auth = getAuth(app);
+const auth = initializeAuth(app, {
+  persistence: [indexedDBLocalPersistence, browserLocalPersistence]
+});
 const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
 });
