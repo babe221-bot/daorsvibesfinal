@@ -1,9 +1,3 @@
-const nextJest = require('next/jest')
-
-const createJestConfig = nextJest({
-  dir: './',
-})
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // your existing next config
@@ -16,6 +10,6 @@ const nextConfig = {
       },
     ],
   },
-}
+};
 
-module.exports = createJestConfig(nextConfig)
+module.exports = nextConfig;
