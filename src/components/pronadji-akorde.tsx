@@ -125,7 +125,7 @@ export default function PronadjiAkorde() {
                     name="songUrl"
                     placeholder="URL .txt, .pro ili web stranice"
                     value={songUrl}
-                    onChange={(e) => setSongUrl(e.target.value)}
+                    onChange={(e) => setSongUrl(e.target..value)}
                     className="flex-grow bg-white/20 border-white/30 text-white placeholder:text-gray-300"
                 />
                 <SubmitButton />
