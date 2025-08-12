@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -21,7 +22,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Header() {
   const [user, loading] = useAuthState(auth);
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleSignOut = async () => {
     try {
@@ -58,7 +64,7 @@ export default function Header() {
       <div className="md:hidden">
         <SidebarTrigger />
       </div>
-      {loading ? (
+      {!isClient || loading ? (
         <Skeleton className="h-10 w-10 rounded-full" />
       ) : (
       <DropdownMenu>
