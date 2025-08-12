@@ -41,6 +41,7 @@
     "wavefile": "^11.0.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^15.4.6",
     "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
