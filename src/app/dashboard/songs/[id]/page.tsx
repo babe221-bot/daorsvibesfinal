@@ -6,7 +6,13 @@ import { notFound } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { useSong } from '@/hooks/use-song';
 
-export default function SongPage({ params }: { params: { id: string } }) {
+interface SongPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default function SongPage({ params }: SongPageProps) {
   const { userId, loading: authLoading, error: authError } = useAuth();
   const { song, loading: songLoading, error: songError } = useSong(userId, params.id);
 
