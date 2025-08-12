@@ -2,9 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Search, Milestone, Guitar, ArrowRight, Calendar } from "lucide-react";
 import Link from "next/link";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import PronadjiAkorde from "./pronadji-akorde";
-
 
 const tools = [
   {

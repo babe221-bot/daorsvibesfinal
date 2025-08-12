@@ -17,7 +17,7 @@ export function useAuth() {
         try {
           const userCredential = await signInAnonymously(auth);
           setUser(userCredential.user);
-        } catch (e: any) {
+        } catch (e) {
           console.error("Anonymous sign-in failed:", e);
           setError("Authentication failed. Please try again.");
         }
