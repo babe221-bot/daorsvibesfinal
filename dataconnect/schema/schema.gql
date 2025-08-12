@@ -1,58 +1,3 @@
-<<<<<<< HEAD
-type User @table {
-  displayName: String!
-  createdAt: Timestamp!
-  email: String
-  photoUrl: String
-}
-
-type Track @table {
-  title: String!
-  artistName: String!
-  createdAt: Timestamp!
-  albumTitle: String
-  releaseYear: Int
-  genres: [String]
-  durationSeconds: Int
-  externalId: String
-}
-
-type ListenLog @table {
-  user: User!
-  track: Track!
-  listenDate: Timestamp!
-  createdAt: Timestamp!
-  context: String
-  notes: String
-}
-
-type Review @table {
-  user: User!
-  track: Track!
-  rating: Int!
-  isPublic: Boolean!
-  createdAt: Timestamp!
-  updatedAt: Timestamp!
-  textReview: String
-}
-
-type Playlist @table {
-  user: User!
-  name: String!
-  isPublic: Boolean!
-  createdAt: Timestamp!
-  updatedAt: Timestamp!
-  description: String
-}
-
-type PlaylistTrack @table(key: ["playlist", "track"]) {
-  playlist: Playlist!
-  track: Track!
-  position: Int!
-  addedAt: Timestamp!
-  notes: String
-}
-=======
 # # Example schema for simple movie review app
 
 # # User table is keyed by Firebase Auth UID.
@@ -105,4 +50,3 @@ type PlaylistTrack @table(key: ["playlist", "track"]) {
 #   reviewText: String
 #   reviewDate: Date! @default(expr: "request.time")
 # }
->>>>>>> 393eea469d735144848945653dca895f2deb8842

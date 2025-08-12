@@ -1,30 +1,23 @@
-# The name of the backend.
-# This is the name that will be used for the backend in the Firebase console.
-# If you don't specify a backend, a default backend will be created
-# with the name of the project.
-backend: daorsvibes
-
-# The entrypoint to run when a container starts.
-# If not specified, the container's default entrypoint is used.
-entrypoint: npm run start
+# Settings for Backend (on Cloud Run).
+# See https://firebase.google.com/docs/app-hosting/configure#cloud-run
+runConfig:
+  minInstances: 0
+  # maxInstances: 100
+  # concurrency: 80
+  # cpu: 1
+  # memoryMiB: 512
 
 # Environment variables and secrets.
-# See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
-env:
+# env:
   # Configure environment variables.
   # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
-  - variable: NEXT_PUBLIC_FIREBASE_CONFIG
-    value: '{"apiKey":"AIzaSyCX6PUqtE2SlQBuehPoqIGF22rw5zPQvH4","authDomain":"daorsvibesfinal.firebaseapp.com","databaseURL":"https://daorsvibesfinal-default-rtdb.europe-west1.firebasedatabase.app","projectId":"daorsvibesfinal","storageBucket":"daorsvibesfinal.firebasestorage.app","messagingSenderId":"546716533764","appId":"1:546716533764:web:273ccf84167a614ac12151","measurementId":"G-R5TM91LP8J"}'
-    availability:
-      - BUILD
-      - RUNTIME
-  - variable: NEXT_PUBLIC_BACKEND_URL
-    value: https://daorsvibes--strumflow.europe-west4.hosted.app
-    availability:
-      - BUILD
-      - RUNTIME
   # - variable: MESSAGE
   #   value: Hello world!
   #   availability:
   #     - BUILD
   #     - RUNTIME
+
+  # Grant access to secrets in Cloud Secret Manager.
+  # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
+  # - variable: MY_SECRET
+  #   secret: mySecretRef

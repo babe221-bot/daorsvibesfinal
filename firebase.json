@@ -9,15 +9,28 @@
     },
     "dataconnect": {
       "dataDir": "dataconnect/.dataconnect/pgliteData"
-    }
+    },
+    "apphosting": {
+      "port": 5002,
+      "rootDirectory": "./",
+      "startCommand": "npm run dev"
+    },
+    "functions": {
+      "port": 5001
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "singleProjectMode": true
   },
   "dataconnect": {
     "source": "dataconnect"
   },
   "firestore": {
     "database": "(default)",
-    "location": "europe-central2",
-    "rules": "firestore.rules"
+    "location": "eur3",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   },
   "functions": [
     {
@@ -33,7 +46,8 @@
         "firebase-debug.log",
         "firebase-debug.*.log",
         "*.local"
-      ]
+      ],
+      "runtime": "python313"
     }
   ],
   "hosting": {
@@ -44,24 +58,54 @@
       "**/node_modules/**"
     ],
     "frameworksBackend": {
-      "region": "us-central1",
-      "id": "daorsvibes"
+      "region": "europe-west1"
     }
   },
   "storage": {
     "rules": "storage.rules"
   },
-  "apphosting": {
-    "backendId": "daorsvibes",
-    "rootDir": ".",
-    "ignore": [
-      "node_modules"
-    ]
-  },
+  "apphosting": [
+    {
+      "backendId": "daorsvibes",
+      "rootDir": ".",
+      "ignore": [
+        "node_modules"
+      ]
+    },
+    {
+      "backendId": "daorsvibes",
+      "rootDir": "/",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ]
+    },
+    {
+      "backendId": "daorsvibes",
+      "rootDir": "/",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ]
+    }
+  ],
   "firebase_hosting": {
     "deploymentHostingUrl": "https://daorsvibesfinal.web.app"
   },
   "cloud_run_deploy": {},
   "gemini_api": {},
-  "secrets_manager": {}
+  "secrets_manager": {},
+  "remoteconfig": {
+    "template": "remoteconfig.template.json"
+  },
+  "extensions": {},
+  "database": {
+    "rules": "database.rules.json"
+  }
 }
