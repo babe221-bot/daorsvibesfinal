@@ -15,9 +15,7 @@ import {
   SidebarSeparator,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, ListMusic, Music, Sparkles, BarChart, Settings, LogOut, LifeBuoy, Calendar, Milestone, Guitar, Search, Library } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "../ui/button";
+import { LayoutDashboard, ListMusic, Music, BarChart, Settings, LogOut, LifeBuoy, Calendar, Milestone, Guitar, Search, Library } from "lucide-react";
 import { auth } from "@/lib/firebase-client";
 import { useRouter } from "next/navigation";
 

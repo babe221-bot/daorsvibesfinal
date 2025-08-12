@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
@@ -96,7 +96,7 @@ export default function InstrumentTuner() {
         }
     };
 
-    const stopTuning = () => {
+    const stopTuning = useCallback(() => {
         if (micRef.current) {
             micRef.current.close();
         }
@@ -107,9 +107,9 @@ export default function InstrumentTuner() {
         if (animationFrameRef.current) {
             cancelAnimationFrame(animationFrameRef.current);
         }
-    };
+    }, []);
     
-    const findFundamentalFreq = (fftData: Float32Array, sampleRate: number): number => {
+    const findFundamentalFreq = useCallback((fftData: Float32Array, sampleRate: number): number => {
         let maxVal = -Infinity;
         let maxIndex = -1;
 
@@ -124,17 +124,17 @@ export default function InstrumentTuner() {
 
         const freq = maxIndex * sampleRate / (analyserRef.current!.size * 2);
         return (freq > 30 && freq < 1200) ? freq : 0;
-    };
+    }, []);
 
-    const freqToNoteDetails = (freq: number) => {
+    const freqToNoteDetails = useCallback((freq: number) => {
         const noteNum = 12 * (Math.log(freq / 440) / Math.log(2));
         const roundedNoteNum = Math.round(noteNum) + 69;
         const noteName = noteStrings[roundedNoteNum % 12];
         const octave = Math.floor(roundedNoteNum / 12) - 1;
         return { name: `${noteName}${octave}`, noteName, octave, roundedNoteNum };
-    };
+    }, []);
 
-    const tuningLoop = () => {
+    const tuningLoop = useCallback(() => {
         if (!isTuning || !analyserRef.current) return;
         const fftData = analyserRef.current.getValue();
         if (fftData instanceof Float32Array) {
@@ -173,7 +173,7 @@ export default function InstrumentTuner() {
             }
         }
         animationFrameRef.current = requestAnimationFrame(tuningLoop);
-    };
+    }, [isTuning, targetNote, mode, findFundamentalFreq, freqToNoteDetails]);
 
     useEffect(() => {
         if (isTuning) {
@@ -184,12 +184,12 @@ export default function InstrumentTuner() {
                 cancelAnimationFrame(animationFrameRef.current);
             }
         };
-    }, [isTuning, targetNote, mode]);
+    }, [isTuning, tuningLoop]);
     
     useEffect(() => {
         stopTuning();
         setTargetNote(notePresets[mode].notes[0].value);
-    }, [mode]);
+    }, [mode, stopTuning]);
 
     const needleRotation = Math.max(-45, Math.min(45, cents * 0.9));
     const isNoteInTune = Math.abs(cents) < 5;
