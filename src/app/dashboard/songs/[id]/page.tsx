@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, use } from 'react';
+import React, { useEffect } from 'react';
 import SongPlayer from '@/components/song-player';
 import { notFound } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
@@ -12,9 +12,8 @@ interface SongPageProps {
 }
 
 export default function SongPage({ params }: SongPageProps) {
-  const { id } = use(params);
   const { userId, loading: authLoading, error: authError } = useAuth();
-  const { song, loading: songLoading, error: songError } = useSong(userId, id);
+  const { song, loading: songLoading, error: songError } = useSong(userId, params.id);
 
   useEffect(() => {
     if (!songLoading && !song) {
