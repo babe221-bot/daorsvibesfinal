@@ -1,40 +1,41 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { Toaster } from "@/components/ui/toaster";
-import { cn } from '@/lib/utils';
+
+import type { Metadata } from 'next'
+import { PT_Sans, Playfair_Display } from 'next/font/google'
+import './globals.css'
+import { cn } from '@/lib/utils'
+
+const ptSans = PT_Sans({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-body',
+})
+
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-headline',
+})
 
 export const metadata: Metadata = {
-  title: 'DaorsVibes',
-  description: 'Vaš ultimativni muzički pratilac za tekstove, akorde i setliste.',
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'black-translucent',
-    title: 'DaorsVibes',
-  },
-  icons: {
-    icon: [
-      { url: '/icons/logo-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/icons/logo-16x16.png', sizes: '16x16', type: 'image/png' },
-    ],
-    apple: '/icons/logo-128x128.png',
-  },
-};
+  title: 'DaorsVibes - Your Music Companion',
+  description: 'Tools and resources for musicians.',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="bs" className="dark">
-      <body className={cn("font-body antialiased min-h-screen")}>
-        {/* Video placeholder removed - needs actual video file */}
-        <div className="relative z-0 bg-background/70 min-h-svh">
-            {children}
-        </div>
-        <Toaster />
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          'min-h-screen bg-background font-body antialiased',
+          ptSans.variable,
+          playfairDisplay.variable
+        )}
+      >
+        {children}
       </body>
     </html>
-  );
+  )
 }
