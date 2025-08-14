@@ -2,7 +2,13 @@ import SongPlayerPage from './song-player-page';
 import { getSong } from '@/lib/firebase-admin';
 import { notFound } from 'next/navigation';
 
-export default async function SongPage({ params }) {
+interface SongPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default async function SongPage({ params }: SongPageProps) {
   const song = await getSong(params.id);
 
   if (!song) {

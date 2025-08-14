@@ -1,6 +1,23 @@
 import type { ExtractSongDataOutput } from '@/ai/flows/extract-song-data-flow';
 import type { SuggestKeyChangeOutput } from '@/ai/flows/suggest-key-change';
 
+export interface Song {
+  id: string;
+  title: string;
+  artist?: string;
+  lyrics?: string;
+  simplifiedChords?: string;
+  originalChords?: string;
+  transposedChords?: string;
+  transposedKey?: string;
+  capo?: number;
+  tags?: string[];
+  comments?: string[];
+  ratings?: number[];
+  avgRating?: number;
+  userId: string;
+}
+
 export interface SongDataExtractorState {
   result?: ExtractSongDataOutput;
   error?: string;
