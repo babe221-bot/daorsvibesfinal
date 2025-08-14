@@ -75,8 +75,8 @@ export async function detectKeyFromSamples(
     const pitch = pitchDetector.do(frame);
     if (pitch > 0) {
       const midiNote = 69 + 12 * Math.log2(pitch / 440);
-      const chromaIndex = Math.round(midiNote) % 12;
-      chroma[chromaIndex]++;
+      const chromaIndex = (Math.round(midiNote) % 12 + 12) % 12;
+      chroma[chromaIndex] = chroma[chromaIndex]! + 1;
     }
   }
 
