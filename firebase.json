@@ -73,17 +73,7 @@
       ]
     }
   ],
-  "firebase_hosting": {
-    "deploymentHostingUrl": "https://daorsvibesfinal.web.app"
-  },
-  "cloud_run_deploy": {},
-  "gemini_api": {},
-  "secrets_manager": {},
   "remoteconfig": {
     "template": "remoteconfig.template.json"
-  },
-  "extensions": {},
-  "database": {
-    "rules": "database.rules.json"
   }
 }
