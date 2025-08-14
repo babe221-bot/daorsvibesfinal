@@ -16,6 +16,7 @@ export interface Song {
   ratings?: number[];
   avgRating?: number;
   userId: string;
+  lyricsAndChords?: string; // Add this line
 }
 
 export interface SongDataExtractorState {
