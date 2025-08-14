@@ -113,15 +113,15 @@ export async function detectKeyFromSamples(
     let majorScore = 0;
     let minorScore = 0;
     for (let j = 0; j < 12; j++) {
-      majorScore += chroma[j] * majorProfile[(j - i + 12) % 12];
-      minorScore += chroma[j] * minorProfile[(j - i + 12) % 12];
+      majorScore += chroma[j]! * majorProfile[(j - i + 12) % 12]!;
+      minorScore += chroma[j]! * minorProfile[(j - i + 12) % 12]!;
     }
 
     if (majorScore > bestMatch.score) {
-      bestMatch = { key: keys[i], score: majorScore, mode: 'Major' };
+      bestMatch = { key: keys[i]!, score: majorScore, mode: 'Major' };
     }
     if (minorScore > bestMatch.score) {
-      bestMatch = { key: keys[i], score: minorScore, mode: 'Minor' };
+      bestMatch = { key: keys[i]!, score: minorScore, mode: 'Minor' };
     }
   }
 

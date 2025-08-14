@@ -12,6 +12,8 @@ export interface KeyChangeSuggesterState {
   error?: string;
 }
 
+export type SongData = ExtractSongDataOutput;
+
 // This type is no longer needed with client-side logic
 // export interface SaveSongResult {
 //   success?: boolean;
