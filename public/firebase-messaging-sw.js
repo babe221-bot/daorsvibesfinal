@@ -1,16 +1,15 @@
-
 import { initializeApp } from "firebase/app";
 import { getMessaging } from "firebase/messaging/sw";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCX6PUqtE2SlQBuehPoqIGF22rw5zPQvH4",
-  authDomain: "daorsvibesfinal.firebaseapp.com",
-  databaseURL: "https://daorsvibesfinal-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "daorsvibesfinal",
-  storageBucket: "daorsvibesfinal.firebasestorage.app",
-  messagingSenderId: "546716533764",
-  appId: "1:546716533764:web:273ccf84167a614ac12151",
-  measurementId: "G-R5TM91LP8J"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);

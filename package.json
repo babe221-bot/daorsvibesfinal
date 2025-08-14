@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/bundle-sw.mjs",
     "start": "next start",
     "lint": "next lint"
   },
@@ -28,6 +28,7 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "aubiojs": "^0.2.1",
     "class-variance-authority": "^0.7.1",
+    "esbuild": "^0.25.9",
     "firebase": "^12.1.0",
     "genkit": "^1.16.0",
     "lucide-react": "^0.539.0",
