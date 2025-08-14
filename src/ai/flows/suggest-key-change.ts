@@ -10,6 +10,14 @@ import { WaveFile } from 'wavefile';
 import aubio from 'aubiojs';
 import { z } from 'zod';
 
+export type PitchMethod =
+  | 'default'
+  | 'schmitt'
+  | 'fcomb'
+  | 'mcomb'
+  | 'yin'
+  | 'yinfft';
+
 export type SuggestKeyChangeOutput = z.infer<
   typeof SuggestKeyChangeOutputSchema
 >;
@@ -33,7 +41,7 @@ export async function suggestKeyChange(
   const wav = new WaveFile(buffer);
   wav.toBitDepth('32f');
   wav.toSampleRate(44100);
-  const samples = wav.getSamples(true) as Float32Array;
+  const samples = wav.getSamples(true) as unknown as Float32Array;
 
   const { Pitch } = await aubio();
   const detectedKey = await detectKeyFromSamples(samples, Pitch);
@@ -44,7 +52,7 @@ export async function suggestKeyChange(
 export async function detectKeyFromSamples(
   samples: Float32Array,
   Pitch: new (
-    type: string,
+    type: PitchMethod,
     bufferSize: number,
     hopSize: number,
     sampleRate: number
