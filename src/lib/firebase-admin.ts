@@ -6,9 +6,17 @@ import { Song } from "./types";
 function initializeAdminApp() {
     if (getApps().length === 0) {
         try {
-            // In a hosted environment, GOOGLE_APPLICATION_CREDENTIALS should not be set
-            // and the SDK will automatically discover credentials.
-            if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+            if (process.env.FIREBASE_PRIVATE_KEY) {
+                initializeApp({
+                    credential: credential.cert({
+                        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+                        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+                        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+                    }),
+                });
+            } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+                // In a hosted environment, GOOGLE_APPLICATION_CREDENTIALS should not be set
+                // and the SDK will automatically discover credentials.
                 initializeApp({
                     credential: credential.applicationDefault(),
                 });
