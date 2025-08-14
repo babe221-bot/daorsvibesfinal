@@ -51,15 +51,19 @@
     }
   ],
   "hosting": {
-    "source": ".",
+    "site": "daorsvibesfinal-4cdbe",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-    "frameworksBackend": {
-      "region": "europe-west1"
-    }
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   },
   "storage": {
     "rules": "storage.rules"
@@ -71,9 +75,24 @@
       "ignore": [
         "node_modules"
       ]
+    },
+    {
+      "backendId": "zadnjiabd",
+      "rootDir": "/",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ]
     }
   ],
   "remoteconfig": {
     "template": "remoteconfig.template.json"
+  },
+  "extensions": {},
+  "database": {
+    "rules": "database.rules.json"
   }
 }
