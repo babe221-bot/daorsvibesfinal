@@ -5,6 +5,7 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Play, Pause, Plus, Minus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { ErrorBoundary } from '@/components/error-boundary';
 import './metronome.css';
 
 export function Metronome() {
@@ -20,6 +21,33 @@ export function Metronome() {
   const scheduleAheadTime = 0.1;
   const timerRef = useRef<number | null>(null);
   const beatCountRef = useRef<number>(0);
+  const [audioInitialized, setAudioInitialized] = useState(false);
+
+  const initAudioContext = useCallback(async () => {
+    if (!audioContextRef.current) {
+      try {
+        audioContextRef.current = new (window.AudioContext || (window as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)();
+        if (audioContextRef.current.state === 'suspended') {
+          await audioContextRef.current.resume();
+        }
+        setAudioInitialized(true);
+        return true;
+      } catch (error) {
+        console.error("Error initializing audio context:", error);
+        return false;
+      }
+    } else if (audioContextRef.current.state === 'suspended') {
+      try {
+        await audioContextRef.current.resume();
+        setAudioInitialized(true);
+        return true;
+      } catch (error) {
+        console.error("Error resuming audio context:", error);
+        return false;
+      }
+    }
+    return true;
+  }, []);
 
   const scheduleNote = useCallback(() => {
     if (!audioContextRef.current) return;
@@ -78,17 +106,17 @@ export function Metronome() {
 
     } else {
       try {
-        if (!audioContextRef.current) {
-          audioContextRef.current = new (window.AudioContext || (window as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)();
+        // Initialize audio context on user interaction
+        const initialized = await initAudioContext();
+        if (!initialized) {
+          throw new Error("Could not initialize audio context");
         }
-        if (audioContextRef.current.state === 'suspended') {
-          await audioContextRef.current.resume();
-        }
-        nextNoteTimeRef.current = audioContextRef.current.currentTime + 0.1; // Add a small buffer
+        
+        nextNoteTimeRef.current = audioContextRef.current!.currentTime + 0.1; // Add a small buffer
         beatCountRef.current = 0;
         setIsPlaying(true);
         scheduleNote();
-      } catch {
+      } catch (error) {
          toast({
             variant: "destructive",
             title: "Audio Error",
@@ -129,7 +157,8 @@ export function Metronome() {
    }, [isPlaying, scheduleNote, tempo]);
 
   return (
-    <div className="flex flex-col items-center p-4 rounded-lg text-white">
+    <ErrorBoundary>
+      <div className="flex flex-col items-center p-4 rounded-lg text-white">
       <div className="w-full max-w-md flex flex-col items-center">
         
         <div className="metronome-container">
@@ -195,5 +224,6 @@ export function Metronome() {
         </Button>
       </div>
     </div>
+    </ErrorBoundary>
   );
 }

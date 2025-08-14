@@ -5,8 +5,19 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { ErrorBoundary } from '@/components/error-boundary';
+import { loadTone } from '@/utils/audio-loader';
 import './instrument-tuner.css';
-import { Analyser, UserMedia, start, context } from 'tone';
+
+// Define types for dynamically loaded Tone.js modules
+type ToneModule = {
+  Analyser: any;
+  UserMedia: any;
+  start: () => Promise<void>;
+  context: any;
+};
+
+let toneModule: ToneModule | null = null;
 
 const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
@@ -56,7 +67,7 @@ type TunerMode = keyof typeof notePresets;
 
 const noteToFreq = (note: string): number => {
     const noteParts = note.match(/([A-G]#?)([0-9])/);
-    if (!noteParts) return 0;
+    if (!noteParts || !noteParts[1] || !noteParts[2]) return 0;
     const keyNumber = noteStrings.indexOf(noteParts[1]);
     const octave = parseInt(noteParts[2], 10);
     if (keyNumber === -1) return 0;
@@ -71,19 +82,30 @@ export default function InstrumentTuner() {
     const [frequency, setFrequency] = useState(0);
     const [cents, setCents] = useState(0);
     const [mode, setMode] = useState<TunerMode>('guitar');
-    const [targetNote, setTargetNote] = useState(notePresets.guitar.notes[0].value);
+    const [targetNote, setTargetNote] = useState(notePresets.guitar.notes[0]?.value || 'autodetect');
 
-    const analyserRef = useRef<Analyser | null>(null);
-    const micRef = useRef<UserMedia | null>(null);
+    const analyserRef = useRef<any>(null);
+    const micRef = useRef<any>(null);
     const animationFrameRef = useRef<number | null>(null);
 
     const startTuning = async () => {
         try {
-            await start();
-            micRef.current = new UserMedia();
+            // Load Tone.js dynamically if not already loaded
+            if (!toneModule) {
+                const tone = await loadTone();
+                toneModule = {
+                    Analyser: tone.Analyser,
+                    UserMedia: tone.UserMedia,
+                    start: tone.start,
+                    context: tone.context
+                };
+            }
+
+            await toneModule.start();
+            micRef.current = new toneModule.UserMedia();
             await micRef.current.open();
 
-            analyserRef.current = new Analyser('fft', 2048);
+            analyserRef.current = new toneModule.Analyser('fft', 2048);
             micRef.current.connect(analyserRef.current);
             setIsTuning(true);
         } catch (error) {
@@ -114,8 +136,9 @@ export default function InstrumentTuner() {
         let maxIndex = -1;
 
         for (let i = 1; i < fftData.length; i++) {
-            if (fftData[i] > maxVal) {
-                maxVal = fftData[i];
+            const value = fftData[i];
+            if (value !== undefined && value > maxVal) {
+                maxVal = value;
                 maxIndex = i;
             }
         }
@@ -138,7 +161,7 @@ export default function InstrumentTuner() {
         if (!isTuning || !analyserRef.current) return;
         const fftData = analyserRef.current.getValue();
         if (fftData instanceof Float32Array) {
-            const fundamentalFreq = findFundamentalFreq(fftData, context.sampleRate);
+            const fundamentalFreq = findFundamentalFreq(fftData, toneModule?.context.sampleRate || 44100);
             
             if (fundamentalFreq > 0) {
                 const currentNoteDetails = freqToNoteDetails(fundamentalFreq);
@@ -188,14 +211,15 @@ export default function InstrumentTuner() {
     
     useEffect(() => {
         stopTuning();
-        setTargetNote(notePresets[mode].notes[0].value);
+        setTargetNote(notePresets[mode].notes[0]?.value || 'autodetect');
     }, [mode, stopTuning]);
 
     const needleRotation = Math.max(-45, Math.min(45, cents * 0.9));
     const isNoteInTune = Math.abs(cents) < 5;
 
     return (
-        <div className="flex flex-col items-center justify-center p-4">
+        <ErrorBoundary>
+            <div className="flex flex-col items-center justify-center p-4">
             <div className="tuner-mode-switch mb-6">
                 {(Object.keys(notePresets) as TunerMode[]).map((key) => (
                     <button 
@@ -257,5 +281,6 @@ export default function InstrumentTuner() {
                 )}
             </div>
         </div>
+        </ErrorBoundary>
     );
 }

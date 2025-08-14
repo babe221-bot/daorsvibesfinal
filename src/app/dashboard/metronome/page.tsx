@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Metronome } from "@/components/metronome";
+import LazyMetronome from "@/components/lazy-metronome";
 import { Milestone } from "lucide-react";
 
 export default function MetronomePage() {
@@ -30,7 +30,7 @@ export default function MetronomePage() {
           <p className="mb-6 text-gray-200 text-center">
             Podesite tempo i održavajte ritam pod kontrolom pomoću našeg vizualnog metronoma. Savršeno za vježbanje, snimanje ili nastupe uživo.
           </p>
-          <Metronome />
+          <LazyMetronome />
         </CardContent>
       </Card>
     </DashboardPageLayout>

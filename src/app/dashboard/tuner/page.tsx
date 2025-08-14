@@ -2,7 +2,7 @@ import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Guitar } from "lucide-react";
-import InstrumentTuner from "@/components/instrument-tuner";
+import LazyInstrumentTuner from "@/components/lazy-instrument-tuner";
 
 export default function TunerPage() {
   return (
@@ -27,7 +27,7 @@ export default function TunerPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <InstrumentTuner />
+                <LazyInstrumentTuner />
               </CardContent>
             </Card>
           </main>
