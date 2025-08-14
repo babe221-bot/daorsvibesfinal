@@ -71,28 +71,6 @@
       "ignore": [
         "node_modules"
       ]
-    },
-    {
-      "backendId": "daorsvibes",
-      "rootDir": "/",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "functions"
-      ]
-    },
-    {
-      "backendId": "daorsvibes",
-      "rootDir": "/",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "functions"
-      ]
     }
   ],
   "firebase_hosting": {

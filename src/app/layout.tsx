@@ -29,13 +29,7 @@ export default function RootLayout({
   return (
     <html lang="bs" className="dark">
       <body className={cn("font-body antialiased min-h-screen")}>
-        <video
-            src="/logo-transformation-video.mp4"
-            autoPlay
-            loop
-            muted
-            className="video-background"
-        />
+        {/* Video placeholder removed - needs actual video file */}
         <div className="relative z-0 bg-background/70 min-h-svh">
             {children}
         </div>

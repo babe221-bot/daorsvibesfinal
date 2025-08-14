@@ -5,15 +5,7 @@ import Head from "next/head";
 export default function Page() {
   return (
     <div className="relative h-screen w-screen overflow-hidden">
-      <video
-        autoPlay
-        loop
-        muted
-        className="absolute top-1/2 left-1/2 w-full h-full object-cover -translate-x-1/2 -translate-y-1/2"
-        style={{ objectPosition: "center 20%" }}
-      >
-        <source src="/logo-transformation-video.mp4" type="video/mp4" />
-      </video>
+      {/* Video placeholder removed - needs actual video file */}
       <Head>
         <title>DaorsVibes</title>
         <meta name="description" content="Sve što je muzičaru potrebno: od štimera i metronoma do kalendara s nastupima i biblioteke akorda." />
