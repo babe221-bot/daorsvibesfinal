@@ -4,3 +4,6 @@ node_modules
 
 # Next.js
 .next
+
+# Problematic file
+0.8.
