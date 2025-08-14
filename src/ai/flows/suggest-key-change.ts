@@ -68,7 +68,9 @@ export async function detectKeyFromSamples(
 
   for (let i = 0; i < samples.length; i += hopSize) {
     const frame = samples.slice(i, i + hopSize);
-    if (frame.length < hopSize) break;
+    if (frame.length < hopSize) {
+      break;
+    }
 
     const pitch = pitchDetector.do(frame);
     if (pitch > 0) {
@@ -111,8 +113,8 @@ export async function detectKeyFromSamples(
     let majorScore = 0;
     let minorScore = 0;
     for (let j = 0; j < 12; j++) {
-      majorScore += chroma[j] * majorProfile[(j - i + 12) % 12];
-      minorScore += chroma[j] * minorProfile[(j - i + 12) % 12];
+      majorScore += chroma[j]! * majorProfile[(j - i + 12) % 12];
+      minorScore += chroma[j]! * minorProfile[(j - i + 12) % 12];
     }
 
     if (majorScore > bestMatch.score) {
