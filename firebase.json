@@ -36,7 +36,8 @@
     ]
   },
   "storage": {
-    "rules": "storage.rules"
+    "rules": "storage.rules",
+    "bucket": "daorsvibesfinal.firebasestorage.app"
   },
   "apphosting": [
     {
@@ -44,7 +45,8 @@
       "rootDir": ".",
       "ignore": [
         "node_modules"
-      ]
+      ],
+      "alwaysDeployFromSource": true
     }
   ],
   "remoteconfig": {
