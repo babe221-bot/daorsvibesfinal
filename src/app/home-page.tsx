@@ -12,7 +12,7 @@ export default function HomePage() {
         loop
         muted
         className="video-background"
-        src="https://storage.googleapis.com/ffdsa/Logo_Transformation_Video_Creation_Guide.mp4"
+        src="/logo-transformation-video.mp4"
       />
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white bg-black bg-opacity-50 p-4">
         <h1 className="text-5xl font-bold text-center md:text-7xl bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text" style={{'textShadow': '2px 2px 8px rgba(0,0,0,0.5)'}}>DaorsVibes</h1>
