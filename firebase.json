@@ -20,20 +20,11 @@
   ],
   "hosting": {
     "site": "daorsvibesfinal-4cdbe",
-    "public": "public",
+    "public": "out",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "run": {
-          "serviceId": "daorsvibes",
-          "region": "us-central1"
-        }
-      }
     ]
   },
   "storage": {
