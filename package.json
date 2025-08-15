@@ -38,6 +38,7 @@
     "aubiojs": "^0.2.1",
     "class-variance-authority": "^0.7.1",
     "dotenv": "^17.2.1",
+    "embla-carousel-fade": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "esbuild": "^0.25.9",
     "firebase": "^12.1.0",
