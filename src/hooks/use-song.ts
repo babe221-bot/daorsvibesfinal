@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import app from '@/lib/firebase';
+import { auth } from '@/lib/firebase-client';
 import { Song } from './use-user-songs'; // Reuse the Song interface
 
-const db = getFirestore(app);
+const db = getFirestore(auth.app);
 
 export function useSong(userId: string | null | undefined, songId: string) {
   const [song, setSong] = useState<Song | null>(null);
