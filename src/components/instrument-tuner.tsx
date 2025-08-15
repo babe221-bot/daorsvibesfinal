@@ -7,15 +7,10 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { loadTone } from '@/utils/audio-loader';
+import { initAudio } from '@/lib/audio';
 import './instrument-tuner.css';
 
-// Define types for dynamically loaded Tone.js modules
-type ToneModule = {
-  Analyser: any;
-  UserMedia: any;
-  start: () => Promise<void>;
-  context: any;
-};
+type ToneModule = Awaited<ReturnType<typeof loadTone>>;
 
 let toneModule: ToneModule | null = null;
 
@@ -90,18 +85,17 @@ export default function InstrumentTuner() {
 
     const startTuning = async () => {
         try {
-            // Load Tone.js dynamically if not already loaded
-            if (!toneModule) {
-                const tone = await loadTone();
-                toneModule = {
-                    Analyser: tone.Analyser,
-                    UserMedia: tone.UserMedia,
-                    start: tone.start,
-                    context: tone.context
-                };
+            const audioContext = await initAudio();
+            if (!audioContext) {
+                throw new Error("Could not initialize audio context");
             }
+            
+            if (!toneModule) {
+                toneModule = await loadTone();
+            }
+            
+            toneModule.setContext(audioContext);
 
-            await toneModule.start();
             micRef.current = new toneModule.UserMedia();
             await micRef.current.open();
 
@@ -158,10 +152,10 @@ export default function InstrumentTuner() {
     }, []);
 
     const tuningLoop = useCallback(() => {
-        if (!isTuning || !analyserRef.current) return;
+        if (!isTuning || !analyserRef.current || !toneModule) return;
         const fftData = analyserRef.current.getValue();
         if (fftData instanceof Float32Array) {
-            const fundamentalFreq = findFundamentalFreq(fftData, toneModule?.context.sampleRate || 44100);
+            const fundamentalFreq = findFundamentalFreq(fftData, toneModule.context.sampleRate);
             
             if (fundamentalFreq > 0) {
                 const currentNoteDetails = freqToNoteDetails(fundamentalFreq);
