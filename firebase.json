@@ -16,16 +16,6 @@
       "predeploy": [
         "npm --prefix functions run build"
       ]
-    },
-    {
-      "source": ".",
-      "codebase": "daorsvibes",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log"
-      ]
     }
   ],
   "hosting": {
@@ -55,17 +45,6 @@
       "rootDir": ".",
       "ignore": [
         "node_modules"
-      ]
-    },
-    {
-      "backendId": "zadnjiabd",
-      "rootDir": "/",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "functions"
       ]
     }
   ],
