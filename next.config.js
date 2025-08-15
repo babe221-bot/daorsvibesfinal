@@ -4,18 +4,15 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const nextConfig = {
+  // Turbopack configuration for aliasing 'fs' to an empty module
   experimental: {
     turbo: {
       resolveAlias: {
-        'fs': 'false',
+        'fs': './empty-module.js',
       },
     },
   },
-  resolve: {
-    alias: {
-      'fs': 'false',
-    },
-  },
+  // Webpack configuration for aliasing 'fs' to an empty module
   webpack: (config, { isServer }) => {
     // Fixes npm packages that depend on `fs` module
     if (!isServer) {

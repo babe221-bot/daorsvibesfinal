@@ -152,7 +152,7 @@ export default function PronadjiAkorde() {
                 type="text"
                 placeholder="Izvođač (Opcionalno)"
                 value={songDetails.artist}
-                onChange={(e) => setSongDetails(prev => prev ? { ...prev, artist: e.g. target.value } : null)}
+                onChange={(e) => setSongDetails(prev => prev ? { ...prev, artist: e.target.value } : null)}
                 className="flex-grow bg-white/20 border-white/30"
               />
             </div>
