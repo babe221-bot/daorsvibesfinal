@@ -20,11 +20,19 @@
   ],
   "hosting": {
     "site": "daorsvibesfinal-4cdbe",
-    "public": "out",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "apphosting": {
+          "backendId": "daorsvibes"
+        }
+      }
     ]
   },
   "storage": {
