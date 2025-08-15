@@ -35,15 +35,10 @@
       }
     ]
   },
-  "storage": [
-    {
-      "rules": "storage.rules",
-      "bucket": "daorsvibesfinal.firebasestorage.app"
-    },
-    {
-      "bucket": "ffdsa"
-    }
-  ],
+  "storage": {
+    "rules": "storage.rules",
+    "bucket": "daorsvibesfinal.firebasestorage.app"
+  },
   "apphosting": [
     {
       "backendId": "daorsvibes",
@@ -59,6 +54,6 @@
   },
   "extensions": {},
   "database": {
-    "rules": "database.rules.json"
+    "rules": "database.rules"
   }
 }
