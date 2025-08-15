@@ -1,34 +1,5 @@
 {
-  "emulators": {
-    "firestore": {
-      "port": 8080
-    },
-    "ui": {
-      "enabled": true,
-      "port": 4000
-    },
-    "dataconnect": {
-      "dataDir": "dataconnect/.dataconnect/pgliteData"
-    },
-    "apphosting": {
-      "port": 5002,
-      "rootDirectory": "./",
-      "startCommand": "npm run dev"
-    },
-    "functions": {
-      "port": 5001
-    },
-    "hosting": {
-      "port": 5000
-    },
-    "singleProjectMode": true
-  },
-  "dataconnect": {
-    "source": "dataconnect"
-  },
   "firestore": {
-    "database": "(default)",
-    "location": "eur3",
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
@@ -36,23 +7,30 @@
     {
       "source": "functions",
       "codebase": "default",
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint",
-        "npm --prefix \"$RESOURCE_DIR\" run build"
-      ],
       "ignore": [
         "node_modules",
         ".git",
         "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
+        "firebase-debug.*.log"
       ],
-      "runtime": "python313"
+      "predeploy": [
+        "npm --prefix functions run build"
+      ]
+    },
+    {
+      "source": ".",
+      "codebase": "daorsvibes",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
     }
   ],
   "hosting": {
     "site": "daorsvibesfinal-4cdbe",
-    "public": "public",
+    "public": "hosting/dist",
     "ignore": [
       "firebase.json",
       "**/.*",

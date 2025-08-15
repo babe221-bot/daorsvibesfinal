@@ -4,13 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, ZoomIn, ZoomOut, Plus, Minus } from 'lucide-react';
-
-interface Song {
-  id: string;
-  title: string;
-  artist?: string;
-  lyricsAndChords: string;
-}
+import { Song } from '@/lib/types';
 
 interface SongPlayerProps {
   song: Song;
@@ -64,7 +58,9 @@ const SongPlayer: React.FC<SongPlayerProps> = ({ song }) => {
   };
 
   const handleSpeedChange = (value: number[]) => {
-    setScrollSpeed(value[0]);
+    if (value[0] !== undefined) {
+      setScrollSpeed(value[0]);
+    }
   };
 
   return (

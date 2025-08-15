@@ -120,14 +120,16 @@ export function Metronome() {
          toast({
             variant: "destructive",
             title: "Audio Error",
-            description: "Could not start audio context. Please allow audio playback in your browser settings.",
+            description: "Could not start audio playback in your browser settings.",
         });
       }
     }
   };
 
   const handleTempoChange = (value: number[]) => {
-    setTempo(value[0]);
+    if (value[0] !== undefined) {
+      setTempo(value[0]);
+    }
   };
 
   const adjustTempo = (amount: number) => {

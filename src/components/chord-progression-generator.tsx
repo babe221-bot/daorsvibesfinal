@@ -37,7 +37,9 @@ export default function ChordProgressionGenerator() {
   const generateProgression = () => {
     const progressions = chordProgressions[quality];
     const randomProgression = progressions[Math.floor(Math.random() * progressions.length)];
-    setProgression(randomProgression);
+    if (randomProgression) {
+      setProgression(randomProgression);
+    }
   };
 
   return (

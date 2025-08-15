@@ -11,7 +11,7 @@ if (!getApps().length) {
   app = initializeApp(firebaseConfig);
   analytics = getAnalytics(app);
 } else {
-  app = getApps()[0];
+  app = getApps()[0]!;
   analytics = getAnalytics(app);
 }
 

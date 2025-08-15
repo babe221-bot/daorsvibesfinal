@@ -16,10 +16,10 @@ export interface Song {
   ratings?: number[];
   avgRating?: number;
   userId: string;
-  lyricsAndChords?: string; // Add this line
+  lyricsAndChords: string;
 }
 
-export interface SongDataExtractorState {
+export interface ExtractSongDataState {
   result?: ExtractSongDataOutput;
   error?: string;
   message?: string;
@@ -31,10 +31,3 @@ export interface KeyChangeSuggesterState {
 }
 
 export type SongData = ExtractSongDataOutput;
-
-// This type is no longer needed with client-side logic
-// export interface SaveSongResult {
-//   success?: boolean;
-//   error?: string;
-//   message?: string;
-// }
