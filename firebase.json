@@ -30,7 +30,7 @@
   ],
   "hosting": {
     "site": "daorsvibesfinal-4cdbe",
-    "public": "hosting/dist",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
