@@ -29,16 +29,21 @@
     "rewrites": [
       {
         "source": "**",
-        "apphosting": {
-          "backendId": "daorsvibes"
+        "run": {
+          "serviceId": "daorsvibes"
         }
       }
     ]
   },
-  "storage": {
-    "rules": "storage.rules",
-    "bucket": "daorsvibesfinal.firebasestorage.app"
-  },
+  "storage": [
+    {
+      "rules": "storage.rules",
+      "bucket": "daorsvibesfinal.firebasestorage.app"
+    },
+    {
+      "bucket": "ffdsa"
+    }
+  ],
   "apphosting": [
     {
       "backendId": "daorsvibes",
