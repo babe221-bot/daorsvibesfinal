@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build && node scripts/bundle-sw.mjs",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
