@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
-import { getAuth, onAuthStateChanged, signInAnonymously, User } from 'firebase/auth';
-import app from '@/lib/firebase';
 
-const auth = getAuth(app);
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged, signInAnonymously, User } from 'firebase/auth';
+import { auth } from '@/lib/firebase-client';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -18,8 +17,8 @@ export function useAuth() {
           const userCredential = await signInAnonymously(auth);
           setUser(userCredential.user);
         } catch (e) {
-          console.error("Anonymous sign-in failed:", e);
-          setError("Authentication failed. Please try again.");
+          console.error('Anonymous sign-in failed:', e);
+          setError('Authentication failed. Please try again.');
         }
       }
       setLoading(false);

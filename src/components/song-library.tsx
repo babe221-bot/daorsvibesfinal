@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState } from 'react';
 import { getFirestore, collection, addDoc, query, deleteDoc, doc, serverTimestamp, where, getDocs } from 'firebase/firestore';
@@ -8,15 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Progress } from "@/components/ui/progress";
 import PronadjiAkorde from './pronadji-akorde';
 import { Library, Trash2, Wand2 } from 'lucide-react';
-import app from '@/lib/firebase';
+import { firestore } from '@/lib/firebase-client';
 import { handleSimplifyChords } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { useUserSongs, Song } from '@/hooks/use-user-songs';
 import Modal from '@/components/ui/modal';
-
-const db = getFirestore(app);
 
 function SongLibrary() {
   const { toast } = useToast();
@@ -78,7 +77,7 @@ function SongLibrary() {
     setError('');
     setMessage('');
     try {
-      await addDoc(collection(db, `users/${userId}/songs`), {
+      await addDoc(collection(firestore, `users/${userId}/songs`), {
         title,
         artist,
         lyricsAndChords: lyrics,
@@ -103,7 +102,7 @@ function SongLibrary() {
     setLoading(true);
     setError('');
     try {
-      await deleteDoc(doc(db, `users/${userId}/songs`, songId));
+      await deleteDoc(doc(firestore, `users/${userId}/songs`, songId));
       setMessage("Pjesma je obrisana.");
     } catch (err) {
       console.error("Greška pri brisanju pjesme:", err);
@@ -120,7 +119,7 @@ function SongLibrary() {
     setError('');
     setSearchResults([]);
     try {
-      const publicSongsRef = collection(db, 'songs');
+      const publicSongsRef = collection(firestore, 'songs');
       const titleQuery = query(publicSongsRef, where("title", ">=", searchQuery), where("title", "<=", searchQuery + '\uf8ff'));
       const artistQuery = query(publicSongsRef, where("artist", ">=", searchQuery), where("artist", "<=", searchQuery + '\uf8ff'));
       
@@ -144,12 +143,12 @@ function SongLibrary() {
     setLoading(true);
     setError('');
     try {
-        const q = query(collection(db, `users/${userId}/songs`), where("title", "==", song.title), where("artist", "==", song.artist));
+        const q = query(collection(firestore, `users/${userId}/songs`), where("title", "==", song.title), where("artist", "==", song.artist));
         if (!(await getDocs(q)).empty) {
             setMessage("Ova pjesma se već nalazi u vašoj biblioteci.");
             return;
         }
-        await addDoc(collection(db, `users/${userId}/songs`), { ...song, timestamp: serverTimestamp() });
+        await addDoc(collection(firestore, `users/${userId}/songs`), { ...song, timestamp: serverTimestamp() });
         setMessage(`"${song.title}" dodano u vašu biblioteku!`);
     } catch (err) {
         console.error("Greška pri dodavanju pjesme:", err);

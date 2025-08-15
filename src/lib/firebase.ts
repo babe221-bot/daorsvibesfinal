@@ -1,19 +1,15 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp, getApps, FirebaseApp } from "firebase/app";
-import { getAnalytics, Analytics } from "firebase/analytics";
-import { firebaseConfig } from "./firebase-config";
 
+import admin from 'firebase-admin';
+import { getApps } from 'firebase-admin/app';
+import { firebaseAdminConfig } from './firebase-config';
 
-// Initialize Firebase
-let app: FirebaseApp;
-let analytics: Analytics;
 if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
-  analytics = getAnalytics(app);
-} else {
-  app = getApps()[0]!;
-  analytics = getAnalytics(app);
+  admin.initializeApp({
+    credential: admin.credential.cert(firebaseAdminConfig),
+  });
 }
 
-export default app;
-export { analytics };
+const auth = admin.auth();
+const firestore = admin.firestore();
+
+export { auth, firestore };

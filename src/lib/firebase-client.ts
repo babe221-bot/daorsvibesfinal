@@ -1,29 +1,28 @@
 
-import {
-  getAuth,
-  connectAuthEmulator,
-} from 'firebase/auth';
-import {
-  getFirestore,
-  connectFirestoreEmulator,
-} from 'firebase/firestore';
-import app from './firebase';
+import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
+import { getAnalytics, Analytics, isSupported } from 'firebase/analytics';
+import { getAuth, Auth } from 'firebase/auth';
+import { getFirestore, Firestore } from 'firebase/firestore';
+import { firebaseConfig } from './firebase-config';
 
-const auth = getAuth(app);
-const db = getFirestore(app);
+let app: FirebaseApp;
+let auth: Auth;
+let firestore: Firestore;
+let analytics: Analytics | undefined;
 
-if (process.env.NEXT_PUBLIC_EMULATOR_HOST) {
-  const host = process.env.NEXT_PUBLIC_EMULATOR_HOST;
-  try {
-    connectAuthEmulator(auth, `http://${host}:9099`);
-  } catch (e) {
-    console.error(e);
-  }
-  try {
-    connectFirestoreEmulator(db, host, 8080);
-  } catch (e) {
-    console.error(e);
-  }
+if (typeof window !== 'undefined' && !getApps().length) {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  firestore = getFirestore(app);
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  });
+} else {
+  app = getApps()[0];
+  auth = getAuth(app);
+  firestore = getFirestore(app);
 }
 
-export { auth, db };
+export { app, auth, firestore, analytics };

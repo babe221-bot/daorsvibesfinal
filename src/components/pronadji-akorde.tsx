@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useState } from 'react';
@@ -6,7 +7,7 @@ import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { auth, db } from '@/lib/firebase-client';
+import { auth, firestore } from '@/lib/firebase-client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useToast } from '@/hooks/use-toast';
 import { handleExtractSongData } from '@/app/actions';
@@ -79,7 +80,7 @@ export default function PronadjiAkorde() {
 
     setIsSaving(true);
     try {
-        const songsCollectionRef = collection(db, "songs");
+        const songsCollectionRef = collection(firestore, "songs");
         const q = query(
             songsCollectionRef,
             where("title", "==", songDetails.title),
@@ -151,7 +152,7 @@ export default function PronadjiAkorde() {
                 type="text"
                 placeholder="Izvođač (Opcionalno)"
                 value={songDetails.artist}
-                onChange={(e) => setSongDetails(prev => prev ? { ...prev, artist: e.target.value } : null)}
+                onChange={(e) => setSongDetails(prev => prev ? { ...prev, artist: e.g. target.value } : null)}
                 className="flex-grow bg-white/20 border-white/30"
               />
             </div>

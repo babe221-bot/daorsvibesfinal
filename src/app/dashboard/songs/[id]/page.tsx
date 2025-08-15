@@ -1,5 +1,6 @@
+
 import SongPlayerPage from './song-player-page';
-import { getSong } from '@/lib/firebase-admin';
+import { getSong } from '@/lib/firebase.server';
 import { notFound } from 'next/navigation';
 
 export default async function SongPage({ params }: any) {

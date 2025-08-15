@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
-import { getFirestore, collection, query, onSnapshot, DocumentData, Timestamp } from 'firebase/firestore';
-import app from '@/lib/firebase';
 
-const db = getFirestore(app);
+import { useState, useEffect } from 'react';
+import { collection, query, onSnapshot, DocumentData, Timestamp } from 'firebase/firestore';
+import { firestore } from '@/lib/firebase-client';
 
 export interface Song extends DocumentData {
   id: string;
@@ -24,7 +23,7 @@ export function useUserSongs(userId: string | null | undefined) {
     }
 
     setLoading(true);
-    const userSongsCollectionRef = collection(db, `users/${userId}/songs`);
+    const userSongsCollectionRef = collection(firestore, `users/${userId}/songs`);
     const q = query(userSongsCollectionRef);
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -33,8 +32,8 @@ export function useUserSongs(userId: string | null | undefined) {
       setSongs(fetchedSongs);
       setLoading(false);
     }, (err) => {
-      console.error("Error fetching user songs:", err);
-      setError("Failed to load your songs.");
+      console.error('Error fetching user songs:', err);
+      setError('Failed to load your songs.');
       setLoading(false);
     });
 
