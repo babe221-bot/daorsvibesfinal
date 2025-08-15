@@ -3,6 +3,7 @@ import Header from "@/components/layout/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Key } from "lucide-react";
 import KeyChangeSuggester from "@/components/key-change-suggester";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 export default function KeySuggesterPage() {
   return (
@@ -30,7 +31,9 @@ export default function KeySuggesterPage() {
                 <p className="mb-6 text-gray-200">
                   Our AI-powered tool analyzes song structures to suggest optimal key changes, making your music more dynamic and engaging. Whether you&apos;re a producer, a DJ, or a musician, get instant recommendations to elevate your sound.
                 </p>
-                <KeyChangeSuggester />
+                <ErrorBoundary>
+                  <KeyChangeSuggester />
+                </ErrorBoundary>
               </CardContent>
             </Card>
           </main>

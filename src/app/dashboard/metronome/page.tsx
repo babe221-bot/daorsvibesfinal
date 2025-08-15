@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import LazyMetronome from "@/components/lazy-metronome";
 import { Milestone } from "lucide-react";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 export default function MetronomePage() {
   return (
@@ -30,7 +31,9 @@ export default function MetronomePage() {
           <p className="mb-6 text-gray-200 text-center">
             Podesite tempo i održavajte ritam pod kontrolom pomoću našeg vizualnog metronoma. Savršeno za vježbanje, snimanje ili nastupe uživo.
           </p>
-          <LazyMetronome />
+          <ErrorBoundary>
+            <LazyMetronome />
+          </ErrorBoundary>
         </CardContent>
       </Card>
     </DashboardPageLayout>

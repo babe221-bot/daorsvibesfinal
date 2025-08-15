@@ -4,6 +4,7 @@ import SongLibrary from '@/components/song-library';
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Music } from "lucide-react";
 import React from 'react';
+import { ErrorBoundary } from "@/components/error-boundary";
 
 const SongLibraryPage = () => {
   return (
@@ -23,7 +24,9 @@ const SongLibraryPage = () => {
           </div>
         </CardHeader>
       </Card>
-      <SongLibrary />
+      <ErrorBoundary>
+        <SongLibrary />
+      </ErrorBoundary>
     </DashboardPageLayout>
   );
 };

@@ -1,8 +1,9 @@
 import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Guitar } from "lucide-react";
+import { Guitar } from "luc-ide-react";
 import LazyInstrumentTuner from "@/components/lazy-instrument-tuner";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 export default function TunerPage() {
   return (
@@ -27,7 +28,9 @@ export default function TunerPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <LazyInstrumentTuner />
+                <ErrorBoundary>
+                  <LazyInstrumentTuner />
+                </ErrorBoundary>
               </CardContent>
             </Card>
           </main>

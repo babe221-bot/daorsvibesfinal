@@ -2,6 +2,7 @@ import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import { DashboardStats } from "@/components/dashboard-stats";
 import { RecentPlaylistsCard } from "@/components/recent-playlists-card";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 export default function StatsPage() {
   return (
@@ -12,9 +13,13 @@ export default function StatsPage() {
           <Header />
           <main className="flex-1 p-4 md:p-8 text-white fade-in-down">
             <h1 className="text-3xl font-bold mb-8">Statistika</h1>
-            <DashboardStats />
+            <ErrorBoundary>
+              <DashboardStats />
+            </ErrorBoundary>
             <div className="mt-8">
-              <RecentPlaylistsCard />
+              <ErrorBoundary>
+                <RecentPlaylistsCard />
+              </ErrorBoundary>
             </div>
           </main>
         </div>

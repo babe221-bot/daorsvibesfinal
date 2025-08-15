@@ -3,6 +3,7 @@ import React from 'react';
 import AppLayout from '@/components/layout/app-layout';
 import Header from '@/components/layout/header';
 import { Card } from '@/components/ui/card';
+import { ErrorBoundary } from '@/components/error-boundary';
 
 const PronadjiAkordePage = () => {
   return (
@@ -13,7 +14,9 @@ const PronadjiAkordePage = () => {
           <Header />
           <main className="flex-1 p-4 md:p-8 text-white fade-in-down">
              <Card className="glass-card">
+              <ErrorBoundary>
                 <PronadjiAkorde />
+              </ErrorBoundary>
              </Card>
           </main>
         </div>

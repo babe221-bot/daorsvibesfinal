@@ -1,6 +1,7 @@
 import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import { SettingsForm } from "@/components/settings-form";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 export default function SettingsPage() {
   return (
@@ -12,7 +13,9 @@ export default function SettingsPage() {
           <main className="flex-1 p-4 md:p-8 text-white fade-in-down">
             <div className="mx-auto max-w-4xl space-y-8">
                 <h1 className="text-3xl font-bold">Postavke</h1>
-                <SettingsForm />
+                <ErrorBoundary>
+                  <SettingsForm />
+                </ErrorBoundary>
             </div>
           </main>
         </div>
