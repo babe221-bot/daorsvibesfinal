@@ -1,8 +1,10 @@
 'use client'
 import Link from "next/link";
 import "./flashing-button.css";
+import { useAuthRedirect } from "@/hooks/use-auth-redirect";
 
 export default function HomePage() {
+  useAuthRedirect();
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       <video
