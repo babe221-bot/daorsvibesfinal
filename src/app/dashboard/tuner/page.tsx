@@ -1,7 +1,7 @@
 import AppLayout from "@/components/layout/app-layout";
 import Header from "@/components/layout/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Guitar } from "luc-ide-react";
+import { Guitar } from "lucide-react";
 import LazyInstrumentTuner from "@/components/lazy-instrument-tuner";
 import { ErrorBoundary } from "@/components/error-boundary";
 
