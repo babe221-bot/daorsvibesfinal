@@ -29,11 +29,6 @@ const stats = [
 ];
 
 export function DashboardStats() {
-  // Simulate an error
-  if (true) {
-    throw new Error("This is a test error to verify the ErrorBoundary.");
-  }
-
   return (
     <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 mb-8">
       {stats.map((stat) => (
