@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { PT_Sans, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
+import { app } from '../lib/firebase-client'
 
 const ptSans = PT_Sans({
   subsets: ['latin'],
