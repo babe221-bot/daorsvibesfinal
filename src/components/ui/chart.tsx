@@ -89,29 +89,26 @@
               {payload.map((item: any) => {
                 const key = `${nameKey || item.dataKey || "value"}`
                 const itemConfig = getPayloadConfigFromPayload(config, item, key)
-     
+      
                 if (!itemConfig) {
                   return null
                 }
-     
-                const color = itemConfig?.theme ? itemConfig.theme : itemConfig?.color
-     
+      
+                const color = itemConfig?.theme
+                  ? itemConfig.theme.light
+                  : itemConfig?.color
+      
                 return (
-                  <div key={item.value} className="flex items-center gap-1.5">
+                  <div
+                    key={item.value}
+                    className="flex items-center gap-1.5"
+                  >
                     {!hideIcon && (
-                      <RechartsPrimitive.Legend
-                        align="left"
-                        verticalAlign="middle"
-                        height={24}
-                        width={24}
-                        payload={[
-                          {
-                            value: item.value,
-                            type: "square",
-                            color: color?.light,
-                          },
-                        ]}
-                        formatter={() => <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: color?.light }} />}
+                      <div
+                        className="h-3 w-3 rounded-sm"
+                        style={{
+                          backgroundColor: color || item.color,
+                        }}
                       />
                     )}
                     {itemConfig?.label || item.value}
