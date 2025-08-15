@@ -38,7 +38,7 @@
         HTMLDivElement,
         React.HTMLAttributes<HTMLDivElement> & {
           config: ChartConfig
-          children: React.ReactNode
+          children: React.ReactElement
         }
       >(({ className, config, children, ...props }, ref) => {
         return (
