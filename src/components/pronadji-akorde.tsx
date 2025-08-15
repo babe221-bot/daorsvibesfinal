@@ -14,6 +14,7 @@ import type { ExtractSongDataState } from '@/lib/types';
 import { Label } from '@/components/ui/label';
 import { Sparkles } from 'lucide-react';
 import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore';
+import { formatSongContent } from '@/ai/flows/format-song-content-flow';
 
 const initialState: ExtractSongDataState = {};
 
@@ -54,12 +55,13 @@ export default function PronadjiAkorde() {
     }
     setIsFormatting(true);
     try {
-        // Since handleFormatSongContent is now gone from actions, we'll keep this simple.
-        // In a real scenario, we might call a client-side AI function or a cloud function.
-        toast({ title: 'Info', description: 'Formatiranje pomoću AI trenutno nije dostupno.' });
+        const formatted = await formatSongContent({ content: songDetails.lyricsAndChords });
+        setSongDetails(prev => prev ? { ...prev, lyricsAndChords: formatted.formattedContent } : null);
+        toast({ title: 'Uspjeh', description: 'Sadržaj uspješno formatiran pomoću AI.' });
 
-    } catch {
-       toast({ variant: 'destructive', title: 'Greška', description: 'Dogodila se neočekivana greška.' });
+    } catch (error) {
+       console.error("Greška pri formatiranju pomoću AI:", error);
+       toast({ variant: 'destructive', title: 'Greška', description: 'Dogodila se neočekivana greška pri formatiranju.' });
     } finally {
         setIsFormatting(false);
     }
