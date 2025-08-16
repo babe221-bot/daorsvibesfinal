@@ -7,7 +7,7 @@
  *
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {value: true});
 const firebase_functions_1 = require("firebase-functions");
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -21,9 +21,9 @@ const firebase_functions_1 = require("firebase-functions");
 // functions should each use functions.runWith({maxInstances: 10}) instead.
 // In the v1 API, each function can only serve one request per container, so
 // this will be the maximum concurrent request count.
-(0, firebase_functions_1.setGlobalOptions)({ maxInstances: 10 });
+(0, firebase_functions_1.setGlobalOptions)({maxInstances: 10});
 // export const helloWorld = onRequest((request, response) => {
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
-//# sourceMappingURL=index.js.map
+// # sourceMappingURL=index.js.map
