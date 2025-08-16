@@ -36,8 +36,7 @@
     ]
   },
   "storage": {
-    "rules": "storage.rules",
-    "bucket": "daorsvibesfinal.firebasestorage.app"
+    "rules": "storage.rules"
   },
   "apphosting": [
     {
@@ -54,6 +53,6 @@
   },
   "extensions": {},
   "database": {
-    "rules": "database.rules"
+    "rules": "database.rules.json"
   }
 }
