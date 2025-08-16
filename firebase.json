@@ -19,7 +19,7 @@
     }
   ],
   "hosting": {
-    "site": "daorsvibesfinal-4cdbe",
+    "site": "daorsvibes--daorsvibesfinal.europe-west4.hosted.app",
     "public": "public",
     "ignore": [
       "firebase.json",
