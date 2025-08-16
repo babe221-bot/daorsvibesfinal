@@ -6,6 +6,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
   // Turbopack configuration for aliasing 'fs' to an empty module
   experimental: {
+    allowedDevOrigins: ['https://3000-firebase-daorsvibesfinal2-1755200532526.cluster-fbfjltn375c6wqxlhoehbz44sk.cloudworkstations.dev'],
     turbo: {
       resolveAlias: {
         'fs': './empty-module.js',
