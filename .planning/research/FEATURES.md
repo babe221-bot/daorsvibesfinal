@@ -1,97 +1,66 @@
 # Feature Landscape
 
-**Domain:** Web application with Firebase replacement (Go backend)
+**Domain:** Custom Web Application Backend (Replacing Firebase)
 **Researched:** 2026-03-19
 
 ## Table Stakes
 
-Features users expect. Missing = product feels incomplete.
+Features users and the frontend application expect. Missing these means the application will break or lose its current Firebase-provided functionality.
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| User Authentication (Login/Logout) | Users expect secure access to their accounts | Medium | Standard email/password + OAuth providers (Google, GitHub) |
-| User Registration | New users need to create accounts | Low | Email verification flow expected |
-| Password Reset | Users forget passwords | Medium | Secure token-based reset flow |
-| Data Persistence | User data must survive sessions | High | Primary reason for backend - replacing Firebase Firestore/Storage |
-| File Upload/Download | Users expect to upload/profile pictures, documents | Medium | Replacing Firebase Storage functionality |
-| Real-time Updates | Modern apps expect live data sync | High | Replacing Firebase real-time database features |
-| Responsive Design | Works on mobile and desktop | Low-Medium | Frontend concern but critical for UX |
-| Basic Error Handling | Users need feedback when things fail | Low | Graceful degradation, meaningful error messages |
-| Loading States | Users need feedback during operations | Low | Spinners, skeleton screens, progress indicators |
-| API Endpoints | Frontend needs to communicate with backend | Medium | REST or GraphQL endpoints matching Firebase API contracts |
-| Data Validation | Prevent invalid data entry | Medium | Both frontend and backend validation required |
-| Session Management | Maintain user state | Medium | JWT tokens or session cookies for auth persistence |
+| User Authentication & Session Management | Replaces Firebase Auth. Required to identify users and secure their data. | Medium | Email/password login, JWTs or secure session cookies. |
+| CRUD REST Endpoints | Replaces direct Firestore client access. The core way the frontend interacts with data. | Low | Essential to map frontend actions to database operations securely. |
+| Role-based Route Authorization | Replaces Firebase Security Rules. Protects endpoints from unauthorized access. | Low | Middleware (e.g., in Gin/Echo) to verify user roles/tokens before accessing handlers. |
+| Relational or Document Database | Replaces Firestore. Persistent storage for application state and user data. | Medium | Setup migrations, models, and connection pooling (e.g., PostgreSQL or SQLite via GORM). |
+| File Upload API & Storage | Replaces Firebase Storage. Needed for user avatars, documents, or media. | Medium | Multipart form parsing, storing files locally or on S3-compatible object storage. |
+| CORS Configuration | Essential for separating frontend and backend domains securely. | Low | Must allow frontend origin to make API requests with credentials. |
+| Basic Input Validation | Prevents malformed data and injection attacks. | Low | Validate request bodies before processing them in the database. |
 
 ## Differentiators
 
-Features that set product apart. Not expected, but valued.
+Features that set a custom backend apart from Firebase's limitations, providing competitive advantage and long-term control.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Self-hosted Backend Option | Full data control, no vendor lock-in | High | Key motivator for Firebase replacement - deploy anywhere |
-| Predictable Pricing Model | Fixed costs vs Firebase's variable billing | Low-Medium | Major pain point with Firebase at scale |
-| Open Source Stack | Community trust, extensibility, no proprietary lock-in | Low | Go/Gin/Echo + PostgreSQL are all open source |
-| Custom Business Logic | Tailored backend functionality | High | Ability to implement complex workflows Firebase makes difficult |
-| Advanced Analytics Dashboard | Insights into app usage and performance | Medium | Custom metrics Firebase doesn't provide out-of-box |
-| Role-Based Access Control (RBAC) | Fine-grained permissions beyond Firebase Auth | Medium | More complex permission systems than Firebase's basic auth |
-| Data Export/Import | Users can migrate data in/out easily | Medium | Addresses Firebase vendor lock-in concerns |
-| Multi-region Deployment | Lower latency globally | High | Geographic distribution options Firebase doesn't easily offer |
-| Offline-First Capability | App works when network is unavailable | High | Service workers + local storage sync (more control than Firebase) |
-| Custom Webhooks/Integrations | Extend functionality with third-party services | Medium | Flexible integration points Firebase limits |
-| Audit Logging | Compliance and debugging capability | Medium | Detailed access/log changes Firebase doesn't expose easily |
-| Rate Limiting & Abuse Protection | Security and cost control | Medium | Prevent DOS attacks and unexpected bills |
+| Complex Relational Queries | Allows efficient joins, aggregations, and reporting that are notoriously difficult/expensive in Firestore. | Medium | Leverage SQL capabilities for better data analysis and feature building. |
+| Full Data Ownership & Backups | Direct access to raw data. No vendor lock-in, easy to backup via standard database dumps (e.g., pg_dump). | Low | Provides peace of mind and easier compliance. |
+| Scheduled Background Jobs | Replaces expensive Cloud Functions. Run cron jobs or background workers directly on the server without extra billing. | Medium | Useful for periodic cleanups, email sending, or data processing. |
+| Local Development Environment | Developers can run the entire stack locally via Docker without relying on Firebase Emulators or internet access. | Low | Drastically improves developer experience and testing workflows. |
 
 ## Anti-Features
 
-Features to explicitly NOT build.
+Features to explicitly NOT build, especially for a beginner Go developer targeting a small/medium scale (hundreds of users).
 
 | Anti-Feature | Why Avoid | What to Do Instead |
 |--------------|-----------|-------------------|
-| Proprietary Data Formats | Creates vendor lock-in similar to Firebase | Use standard formats (JSON, SQL, open protocols) |
-| Hidden Pricing Tiers | Avoid Firebase-style surprise bills | Transparent, predictable pricing model |
-| Black Box Backend | No visibility into how data is handled | Open source code, clear documentation, self-hostable |
-| Forced Google Ecosystem | Avoid tying users to Google accounts | Support multiple auth providers, email/password |
-| Complex Vendor SDKs | Reduce learning curve and dependency issues | Simple REST/GraphQL APIs, minimal client SDK |
-| Lock-in to Specific Cloud Provider | Maintain deployment flexibility | Cloud-agnostic deployment (Docker, Kubernetes, traditional VMs) |
-| Over-engineered Auth Systems | Avoid complexity that doesn't serve users | Standard auth patterns (JWT/OAuth) rather than custom schemes |
-| Proprietary Query Language | Avoid Firebase-style Firestore query limitations | Standard SQL or well-documented custom query API |
-| Mandatory Real-time for All Data | Not all data needs live updates, adds complexity | Selective real-time subscriptions based on use case |
-| Vendor-specific Console | Avoid creating another proprietary dashboard | Standard monitoring tools (Prometheus/Grafana) or simple admin panel |
+| Ubiquitous Real-time Sync (WebSockets) | Rebuilding Firestore's real-time document sync for everything is highly complex, stateful, and resource-intensive to manage. | Stick to standard REST (HTTP request/response) or short-polling unless a feature absolutely requires real-time. |
+| Microservices Architecture | Adds massive operational overhead, complex deployments, and networking challenges for a small application. | Build a modular Monolith. Run everything in a single Go process. |
+| Custom Multi-Region Distribution | Unnecessary for hundreds of users. Over-complicates database replication and deployment. | Deploy a single instance to a reliable VPS close to your primary user base. |
+| Custom OAuth/OIDC Server | Building a secure, spec-compliant OAuth provider is extremely difficult and error-prone. | Use simple Email/Password auth for MVP, or integrate existing Go libraries to consume external providers. |
 
 ## Feature Dependencies
 
-```
-User Authentication → Session Management → RBAC → Audit Logging
-Data Persistence → Real-time Updates → Offline-First Capability
-File Upload/Download → Storage Abstraction → Data Export/Import
-API Endpoints → Data Validation → Rate Limiting
-User Authentication → Password Reset → Email Verification
-Basic Error Handling → Loading States → All user interactions
+```text
+Relational/Document Database → CRUD REST Endpoints (Endpoints require DB)
+User Authentication & Sessions → Role-based Route Authorization (Auth required for roles)
+Relational/Document Database → File Upload API & Storage (Need to store file metadata/URLs)
 ```
 
 ## MVP Recommendation
 
 Prioritize:
-1. **User Authentication** (email/password + JWT) - Table stake, enables all user-specific features
-2. **Data Persistence** (PostgreSQL with Go ORM) - Core reason for replacing Firebase
-3. **File Upload/Download** (Local filesystem or S3-compatible) - Common requirement replacing Firebase Storage
-4. **API Endpoints** (REST with Gin/Echo) - Communication layer for frontend
-5. **Basic Error Handling & Loading States** - UX fundamentals
+1. **Relational Database Setup** (Foundation for all data)
+2. **User Authentication & Sessions** (Security prerequisite)
+3. **CRUD REST Endpoints** (Core functionality to unblock frontend)
+4. **File Upload API & Storage** (Since the app currently uses Firebase Storage)
 
-Defer:
-- **Real-time Updates** ([reason]: Complexity high, can implement polling initially)
-- **Role-Based Access Control** ([reason]: Start with simple auth, add RBAC later as needed)
-- **Offline-First Capability** ([reason]: Requires service workers and complex sync logic)
-- **Custom Analytics Dashboard** ([reason]: Can use basic logging initially, add metrics later)
-- **Multi-region Deployment** ([reason]: Start single region, scale later)
-- **Advanced RBAC** ([reason]: Begin with simple user/admin roles)
+Defer: 
+- **Complex Relational Queries**: Build only when a specific new feature demands it; stick to 1:1 Firestore replacements first.
+- **Scheduled Background Jobs**: Implement later when automated tasks are explicitly required.
+- **Real-time WebSockets**: Unless a specific feature breaks without it, rely on REST initially.
 
 ## Sources
 
-- Firebase replacement trends and alternatives analysis (Supabase, Appwrite, custom backend solutions)
-- Modern authentication practices (JWT, OAuth, passkeys) - 2026 standards
-- Web application essential features research (responsive design, error handling, loading states)
-- SaaS building guides differentiating table stakes from competitive advantages
-- Backend as a Service comparison reports (2026)
-- Web development best practices for growing businesses
-- Authentication implementation guides for modern applications
+- Project Context (Beginner Go developer, small/medium scale).
+- Standard web architecture patterns for migrating off BaaS (Backend-as-a-Service) platforms.
