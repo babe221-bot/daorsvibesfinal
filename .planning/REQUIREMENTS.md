@@ -38,4 +38,20 @@
 
 ## Traceability
 
-*(To be filled by roadmap)*
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| AUTH-01 | Phase 2 | Pending |
+| AUTH-02 | Phase 2 | Pending |
+| AUTH-03 | Phase 2 | Pending |
+| AUTH-04 | Phase 2 | Pending |
+| DATA-01 | Phase 3 | Pending |
+| DATA-02 | Phase 3 | Pending |
+| DATA-03 | Phase 1 | Pending |
+| DATA-04 | Phase 1 | Pending |
+| STOR-01 | Phase 4 | Pending |
+| STOR-02 | Phase 6 | Pending |
+| STOR-03 | Phase 4 | Pending |
+| STOR-04 | Phase 4 | Pending |
+| INT-01 | Phase 5 | Pending |
+| INT-02 | Phase 5 | Pending |
+| INT-03 | Phase 7 | Pending |
