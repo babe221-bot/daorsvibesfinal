@@ -9,3 +9,4 @@ node_modules
 0.8.
 firebase-debug.log
 firestore-debug.log
+.env
