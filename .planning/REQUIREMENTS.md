@@ -11,7 +11,7 @@
 ### Data Management (Replacing Firestore)
 - [ ] **DATA-01**: Backend exposes REST API endpoints for all necessary CRUD operations previously handled by Firestore.
 - [ ] **DATA-02**: Backend validates all incoming data payloads (replacing Firebase Security Rules logic).
-- [ ] **DATA-03**: Backend securely connects to and queries the PostgreSQL database using a connection pool.
+- [x] **DATA-03**: Backend securely connects to and queries the PostgreSQL database using a connection pool.
 - [ ] **DATA-04**: System preserves data relationships and constraints appropriate for a relational database.
 
 ### Storage (Replacing Firebase Storage)
@@ -46,7 +46,7 @@
 | AUTH-04 | Phase 2 | Pending |
 | DATA-01 | Phase 3 | Pending |
 | DATA-02 | Phase 3 | Pending |
-| DATA-03 | Phase 1 | Pending |
+| DATA-03 | Phase 1 | Complete |
 | DATA-04 | Phase 1 | Pending |
 | STOR-01 | Phase 4 | Pending |
 | STOR-02 | Phase 6 | Pending |

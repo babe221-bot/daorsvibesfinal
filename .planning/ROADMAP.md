@@ -21,7 +21,7 @@
   2. Database contains tables with relational constraints matching the domain models.
   3. Server logs confirm successful database queries without connection leaks.
 **Plans**:
-  - [ ] 1-01-PLAN.md — Initialize Go module, config, and DB connection pool
+  - [x] 1-01-PLAN.md — Initialize Go module, config, and DB connection pool
   - [ ] 1-02-PLAN.md — Create Goose migrations and domain models
 
 ### Phase 2: Authentication Security
@@ -87,7 +87,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Database Foundation | 0/2 | Planned | - |
+| 1. Database Foundation | 1/2 | In Progress | - |
 | 2. Authentication Security | 0/0 | Not started | - |
 | 3. Core Data APIs | 0/0 | Not started | - |
 | 4. Storage Infrastructure APIs | 0/0 | Not started | - |
