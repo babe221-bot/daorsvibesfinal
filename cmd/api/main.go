@@ -3,9 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/daorsvibesfinal/internal/config"
 	"github.com/daorsvibesfinal/internal/database"
+	"github.com/daorsvibesfinal/internal/handlers"
+	"github.com/daorsvibesfinal/internal/services"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -28,4 +32,34 @@ func main() {
 	}
 
 	log.Println("Successfully connected to the database")
+
+	// Initialize Services
+	authService := services.NewAuthService(db, cfg.JWTSecret)
+
+	// Initialize Handlers
+	authHandler := handlers.NewAuthHandler(authService)
+
+	// Set up Gin Router
+	r := gin.Default()
+
+	// API Routes
+	api := r.Group("/api")
+	{
+		auth := api.Group("/auth")
+		{
+			auth.POST("/signup", authHandler.Signup)
+			auth.POST("/login", authHandler.Login)
+			auth.POST("/logout", authHandler.Logout)
+		}
+	}
+
+	// Start server
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	log.Printf("Server starting on port %s", port)
+	if err := r.Run(":" + port); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }
