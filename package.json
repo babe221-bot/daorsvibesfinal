@@ -10,6 +10,7 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.53",
     "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
     "@genkit-ai/firebase": "^1.16.1",
     "@genkit-ai/googleai": "^1.16.0",
@@ -36,6 +37,7 @@
     "@radix-ui/react-toast": "^1.2.14",
     "@radix-ui/react-tooltip": "^1.2.7",
     "@types/dotenv": "^6.1.1",
+    "ai": "^6.0.137",
     "aubiojs": "^0.2.1",
     "class-variance-authority": "^0.7.1",
     "dotenv": "^17.2.1",
