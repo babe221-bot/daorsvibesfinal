@@ -1,1 +1,17 @@
 npm warn exec The following package was not found and will be installed: next@16.2.1
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.105:3000
+- Environments: .env.local, .env
+✓ Ready in 1337ms
+⨯ Failed to load next.config.js, see more info here https://nextjs.org/docs/messages/next-config-error
+Error: Cannot find module '@next/bundle-analyzer'
+Require stack:
+- C:\Users\Administrator\Documents\GitHub\daorsvibesfinal\next.config.js
+    at ignore-listed frames {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\Administrator\\Documents\\GitHub\\daorsvibesfinal\\next.config.js'
+  ]
+}
+[?25h
