@@ -472,3 +472,10 @@ Error: ENOENT: no such file or directory, open 'C:\Users\Administrator\Documents
 
 Import trace for requested module:
 ./node_modules/next/dist/server/app-render/action-utils.js
+Watchpack Error (stats): Error: EINVAL: invalid argument, lstat 'C:\pagefile.sys'
+Watchpack Error (stats): Error: EINVAL: invalid argument, lstat 'C:\pagefile.sys'
+Watchpack Error (stats): Error: EINVAL: invalid argument, lstat 'C:\pagefile.sys'
+Watchpack Error (stats): Error: EINVAL: invalid argument, lstat 'C:\pagefile.sys'
+Watchpack Error (stats): Error: EINVAL: invalid argument, lstat 'C:\pagefile.sys'
+Watchpack Error (stats): Error: EINVAL: invalid argument, lstat 'C:\pagefile.sys'
+[?25h
