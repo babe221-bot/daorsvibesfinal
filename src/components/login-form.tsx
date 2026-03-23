@@ -4,8 +4,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { auth as clientAuth } from "@/lib/firebase-client";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { SubmitButton } from "./ui/submit-button";
@@ -15,26 +14,21 @@ export function LoginForm() {
   const [password, setPassword] = useState('');
   const router = useRouter();
   const { toast } = useToast();
+  const supabase = createClient();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(clientAuth, email, password);
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
       router.push("/dashboard");
     } catch (error) {
-      if (typeof error === 'object' && error !== null && 'code' in error && (error as {code: string}).code === 'auth/invalid-credential') {
-        toast({
-          variant: "destructive",
-          title: "Greška prilikom prijave",
-          description: "Email ili lozinka nisu ispravni.",
-        });
-      } else {
-         toast({
-          variant: "destructive",
-          title: "Greška",
-          description: "Došlo je do neočekivane greške.",
-        });
-      }
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Greška prilikom prijave",
+        description: "Email ili lozinka nisu ispravni ili je došlo do greške.",
+      });
     }
   };
 

@@ -5,10 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoginForm } from "@/components/login-form";
 import { RegisterForm } from "@/components/register-form";
 import { Button } from "@/components/ui/button";
-import { GoogleAuthProvider, signInAnonymously, signInWithPopup } from "firebase/auth";
-import { auth } from "@/lib/firebase-client";
 import { useRouter } from "next/navigation";
 import { User } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 function GoogleIcon() {
     return (
@@ -23,14 +22,17 @@ function GoogleIcon() {
 
 export default function LoginPage() {
   const router = useRouter();
+  const supabase = createClient();
 
   const handleGoogleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      if (result.user) {
-          router.push("/dashboard");
-      }
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
     } catch (error) {
       console.error("Error initiating Google sign-in:", error);
     }
@@ -38,10 +40,9 @@ export default function LoginPage() {
 
   const handleGuestSignIn = async () => {
     try {
-      const result = await signInAnonymously(auth);
-      if (result.user) {
-        router.push("/dashboard");
-      }
+      const { error } = await supabase.auth.signInAnonymously();
+      if (error) throw error;
+      router.push("/dashboard");
     } catch (error) {
       console.error("Error during guest sign-in:", error);
     }

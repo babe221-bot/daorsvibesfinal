@@ -5,8 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "@/lib/firebase-client";
+import { createClient } from "@/lib/supabase/client";
 import { SubmitButton } from "./ui/submit-button";
 
 export function RegisterForm() {
@@ -14,6 +13,7 @@ export function RegisterForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const supabase = createClient();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,32 +27,28 @@ export function RegisterForm() {
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, { displayName: name });
+      const { data, error } = await supabase.auth.signUp({ 
+        email, 
+        password,
+        options: {
+            data: {
+                display_name: name
+            }
+        }
+      });
+      
+      if (error) throw error;
+      
       toast({
         title: "Uspješna registracija",
-        description: `Korisnik ${userCredential.user.email} je uspješno kreiran. Sada se možete prijaviti.`,
+        description: `Korisnik ${data.user?.email} je uspješno kreiran. Sada se možete prijaviti.`,
       });
     } catch (error) {
-      let errorMessage = "Došlo je do neočekivane greške prilikom registracije. Molimo pokušajte ponovo.";
-      if (typeof error === 'object' && error !== null && 'code' in error) {
-        const errorCode = (error as {code: string}).code;
-        switch (errorCode) {
-          case 'auth/email-already-in-use':
-            errorMessage = "Korisnik sa ovom email adresom već postoji.";
-            break;
-          case 'auth/invalid-email':
-            errorMessage = "Format email adrese nije ispravan.";
-            break;
-          case 'auth/weak-password':
-            errorMessage = "Lozinka je preslaba. Molimo koristite jaču lozinku.";
-            break;
-        }
-      }
+      console.error(error);
       toast({
         variant: "destructive",
         title: "Greška",
-        description: errorMessage,
+        description: "Došlo je do neočekivane greške prilikom registracije. Molimo pokušajte ponovo.",
       });
     }
   };
