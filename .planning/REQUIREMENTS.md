@@ -3,8 +3,8 @@
 ## v1 Requirements
 
 ### Authentication
-- [ ] **AUTH-01**: User can log in securely using email and password, establishing a session.
-- [ ] **AUTH-02**: System maintains user session securely using HttpOnly cookies (preventing XSS).
+- [x] **AUTH-01**: User can log in securely using email and password, establishing a session.
+- [x] **AUTH-02**: System maintains user session securely using HttpOnly cookies (preventing XSS).
 - [ ] **AUTH-03**: User can log out, securely terminating the session.
 - [ ] **AUTH-04**: Unauthenticated users are prevented from accessing protected API endpoints.
 
@@ -40,8 +40,8 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 2 | Pending |
-| AUTH-02 | Phase 2 | Pending |
+| AUTH-01 | Phase 2 | Complete |
+| AUTH-02 | Phase 2 | Complete |
 | AUTH-03 | Phase 2 | Pending |
 | AUTH-04 | Phase 2 | Pending |
 | DATA-01 | Phase 3 | Pending |
