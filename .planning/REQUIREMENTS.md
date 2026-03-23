@@ -5,8 +5,8 @@
 ### Authentication
 - [x] **AUTH-01**: User can log in securely using email and password, establishing a session.
 - [x] **AUTH-02**: System maintains user session securely using HttpOnly cookies (preventing XSS).
-- [ ] **AUTH-03**: User can log out, securely terminating the session.
-- [ ] **AUTH-04**: Unauthenticated users are prevented from accessing protected API endpoints.
+- [x] **AUTH-03**: User can log out, securely terminating the session.
+- [x] **AUTH-04**: Unauthenticated users are prevented from accessing protected API endpoints.
 
 ### Data Management (Replacing Firestore)
 - [ ] **DATA-01**: Backend exposes REST API endpoints for all necessary CRUD operations previously handled by Firestore.
@@ -42,8 +42,8 @@
 |-------------|-------|--------|
 | AUTH-01 | Phase 2 | Complete |
 | AUTH-02 | Phase 2 | Complete |
-| AUTH-03 | Phase 2 | Pending |
-| AUTH-04 | Phase 2 | Pending |
+| AUTH-03 | Phase 2 | Complete |
+| AUTH-04 | Phase 2 | Complete |
 | DATA-01 | Phase 3 | Pending |
 | DATA-02 | Phase 3 | Pending |
 | DATA-03 | Phase 1 | Complete |
