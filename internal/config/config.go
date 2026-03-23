@@ -13,6 +13,7 @@ type Config struct {
 	DBPassword string
 	DBName     string
 	DBSSLMode  string
+	JWTSecret  string
 }
 
 func Load() (*Config, error) {
@@ -26,6 +27,7 @@ func Load() (*Config, error) {
 		DBPassword: getEnvOrDefault("DB_PASSWORD", ""),
 		DBName:     getEnvOrDefault("DB_NAME", "daorsvibes"),
 		DBSSLMode:  getEnvOrDefault("DB_SSLMODE", "disable"),
+		JWTSecret:  getEnvOrDefault("JWT_SECRET", "fallback-secret-for-dev-only"),
 	}
 
 	return cfg, nil
