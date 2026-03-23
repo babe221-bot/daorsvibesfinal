@@ -61,6 +61,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	}
 
 	isProd := os.Getenv("APP_ENV") == "production"
+	c.SetSameSite(http.SameSiteStrictMode)
 	c.SetCookie("auth_token", tokenString, 86400, "/", "", isProd, true)
 
 	c.JSON(http.StatusOK, gin.H{"message": "logged in successfully"})
@@ -68,6 +69,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 func (h *AuthHandler) Logout(c *gin.Context) {
 	isProd := os.Getenv("APP_ENV") == "production"
+	c.SetSameSite(http.SameSiteStrictMode)
 	c.SetCookie("auth_token", "", -1, "/", "", isProd, true)
 	c.JSON(http.StatusOK, gin.H{"message": "logged out successfully"})
 }
