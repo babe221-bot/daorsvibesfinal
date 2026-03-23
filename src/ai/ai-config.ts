@@ -13,4 +13,4 @@ const google = createGoogleGenerativeAI({
 });
 
 // The exported default model. To switch AI providers, just change this instance!
-export const defaultModel = google('gemini-1.5-flash');
+export const defaultModel = google(process.env.GEMINI_MODEL || 'gemini-1.5-flash');
