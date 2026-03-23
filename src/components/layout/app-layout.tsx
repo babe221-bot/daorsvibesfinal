@@ -16,16 +16,17 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { LayoutDashboard, ListMusic, Music, BarChart, Settings, LogOut, LifeBuoy, Calendar, Milestone, Guitar, Search, Library } from "lucide-react";
-import { auth } from "@/lib/firebase-client";
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const supabase = createClient();
 
   const handleSignOut = async () => {
     try {
-      await auth.signOut();
+      await supabase.auth.signOut();
       router.push("/login");
     } catch (error) {
       console.error("Error signing out: ", error);

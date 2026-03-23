@@ -10,7 +10,6 @@ const nextConfig = {
   ],
   experimental: {
   },
-  turbopack: {},
   // Webpack configuration for aliasing 'fs' to an empty module
   webpack: (config, { isServer }) => {
     // Fixes npm packages that depend on `fs` module
