@@ -40,3 +40,23 @@ Retrying 1/3...
 Request timed out after 3000ms
 
 Retrying 1/3...
+ ✓ Compiled / in 52.7s (871 modules)
+ HEAD / 200 in 55911ms
+ GET / 200 in 9688ms
+ ○ Compiling /_error ...
+Watchpack Error (initial scan): Error: EINVAL: invalid argument, lstat 'C:\DumpStack.log.tmp'
+Watchpack Error (initial scan): Error: EINVAL: invalid argument, lstat 'C:\pagefile.sys'
+Watchpack Error (initial scan): Error: EINVAL: invalid argument, lstat 'C:\swapfile.sys'
+Watchpack Error (initial scan): Error: EINVAL: invalid argument, lstat 'C:\DumpStack.log.tmp'
+Watchpack Error (initial scan): Error: EINVAL: invalid argument, lstat 'C:\pagefile.sys'
+Watchpack Error (initial scan): Error: EINVAL: invalid argument, lstat 'C:\swapfile.sys'
+ ✓ Compiled /favicon.ico in 20s (1255 modules)
+ GET /favicon.ico 200 in 13274ms
+ GET /logo-transformation-video.mp4 416 in 16604ms
+ GET /login 200 in 13767ms
+ GET /login 200 in 137ms
+ GET /login 200 in 109ms
+ GET /login 200 in 78ms
+ GET /favicon.ico 200 in 22ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 6.5s (1392 modules)
