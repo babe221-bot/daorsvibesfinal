@@ -1,4 +1,4 @@
-import { z } from 'genkit';
+import { z } from 'zod';
 
 export const SuggestKeyChangeOutputSchema = z.object({
   detectedKey: z.string().describe('The original key detected in the audio.'),

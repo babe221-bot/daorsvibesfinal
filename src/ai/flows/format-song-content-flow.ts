@@ -2,15 +2,11 @@
 
 /**
  * @fileOverview Formats raw song content (lyrics and chords) into a clean, readable format.
- *
- * - formatSongContent - Takes raw song text and uses AI to format it.
- * - FormatSongContentInput - The input type for the formatSongContent function.
- * - FormatSongContentOutput - The return type for the formatSongContent function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
-import { ZodError } from 'zod';
+import { generateObject } from 'ai';
+import { z } from 'zod';
+import { defaultModel } from '@/ai/ai-config';
 
 const FormatSongContentInputSchema = z.object({
   content: z.string().describe('The raw song content including lyrics and chords.'),
@@ -22,21 +18,16 @@ const FormatSongContentOutputSchema = z.object({
 });
 export type FormatSongContentOutput = z.infer<typeof FormatSongContentOutputSchema>;
 
-
 export async function formatSongContent(input: FormatSongContentInput): Promise<FormatSongContentOutput> {
   const parsedInput = FormatSongContentInputSchema.safeParse(input);
   if (!parsedInput.success) {
-    throw new ZodError(parsedInput.error.issues);
+    throw new z.ZodError(parsedInput.error.issues);
   }
   
-  return formatSongContentFlow(parsedInput.data);
-}
-
-const prompt = ai.definePrompt({
-  name: 'formatSongContentPrompt',
-  input: {schema: FormatSongContentInputSchema},
-  output: {schema: FormatSongContentOutputSchema},
-  prompt: `You are an expert music transcription AI. Your task is to format the provided raw text, which contains lyrics and chords for a song.
+  const { object } = await generateObject({
+    model: defaultModel,
+    schema: FormatSongContentOutputSchema,
+    system: `You are an expert music transcription AI. Your task is to format the provided raw text, which contains lyrics and chords for a song.
 
 Your goal is to place the chord annotations directly above the corresponding lyric text where the chord change occurs. Preserve the structure of the song (e.g., verse, chorus, bridge). Ensure chords are aligned correctly.
 
@@ -52,24 +43,9 @@ Example Output:
 C              G
 This is a line of lyrics
 Am           F         C   G        C
-And this is another one.
+And this is another one.`,
+    prompt: `Analyze and format the following content and return it in the specified JSON format.\n\nRAW CONTENT:\n${parsedInput.data.content}`,
+  });
 
-
-Analyze and format the following content and return it in the specified JSON format.
-
-RAW CONTENT:
-{{{content}}}
-`,
-});
-
-const formatSongContentFlow = ai.defineFlow(
-  {
-    name: 'formatSongContentFlow',
-    inputSchema: FormatSongContentInputSchema,
-    outputSchema: FormatSongContentOutputSchema,
-  },
-  async (input) => {
-    const {output} = await prompt(input);
-    return output!;
-  }
-);
+  return object;
+}
