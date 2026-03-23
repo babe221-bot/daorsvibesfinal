@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/daorsvibesfinal/internal/config"
 	"github.com/daorsvibesfinal/internal/database"
 	"github.com/daorsvibesfinal/internal/handlers"
+	"github.com/daorsvibesfinal/internal/middleware"
 	"github.com/daorsvibesfinal/internal/services"
 	"github.com/gin-gonic/gin"
 )
@@ -50,6 +52,20 @@ func main() {
 			auth.POST("/signup", authHandler.Signup)
 			auth.POST("/login", authHandler.Login)
 			auth.POST("/logout", authHandler.Logout)
+
+			// Protected routes
+			protected := auth.Group("")
+			protected.Use(middleware.RequireAuth(authService))
+			{
+				protected.GET("/me", func(c *gin.Context) {
+					userID := c.MustGet("userID").(string)
+					email := c.MustGet("email").(string)
+					c.JSON(http.StatusOK, gin.H{
+						"user_id": userID,
+						"email":   email,
+					})
+				})
+			}
 		}
 	}
 
