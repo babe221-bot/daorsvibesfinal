@@ -13,17 +13,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { auth } from "@/lib/firebase-client";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/hooks/use-auth";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Header() {
-  const [user, loading] = useAuthState(auth);
+  const { user, loading } = useAuth();
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+  const supabase = createClient();
 
   useEffect(() => {
     setIsClient(true);
@@ -31,7 +32,7 @@ export default function Header() {
 
   const handleSignOut = async () => {
     try {
-      await auth.signOut();
+      await supabase.auth.signOut();
       router.push("/login");
     } catch (error) {
       console.error("Error signing out: ", error);
@@ -40,8 +41,8 @@ export default function Header() {
 
   const getAvatarFallback = () => {
     if (!user) return "DV";
-    if (user.isAnonymous) return "G";
-    return user.displayName?.substring(0, 2).toUpperCase() || "DV";
+    if (user.is_anonymous) return "G";
+    return (user.user_metadata?.display_name || user.email || "DV").substring(0, 2).toUpperCase();
   };
 
   return (
@@ -71,13 +72,13 @@ export default function Header() {
         <DropdownMenuTrigger asChild>
            <Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-full">
              <Avatar>
-              <AvatarImage src={user?.photoURL ?? `https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.uid ?? 'default'}`} alt="@daors" />
+              <AvatarImage src={user?.user_metadata?.avatar_url ?? `https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.id ?? 'default'}`} alt="@daors" />
               <AvatarFallback>{getAvatarFallback()}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>{user?.isAnonymous ? "Guest" : "Moj nalog"}</DropdownMenuLabel>
+          <DropdownMenuLabel>{user?.is_anonymous ? "Guest" : "Moj nalog"}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/dashboard/settings">Postavke</Link>

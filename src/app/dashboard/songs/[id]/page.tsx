@@ -1,12 +1,18 @@
-
 import SongPlayerPage from './song-player-page';
-import { getSong } from '@/lib/firebase.server';
+import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 
 export default async function SongPage({ params }: any) {
-  const song = await getSong(params.id);
+  const supabase = await createClient();
+  const { id } = await params;
+  
+  const { data: song, error } = await supabase
+    .from('public_songs')
+    .select('*')
+    .eq('id', id)
+    .single();
 
-  if (!song) {
+  if (error || !song) {
     notFound();
   }
 
