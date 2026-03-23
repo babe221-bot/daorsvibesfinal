@@ -32,7 +32,10 @@
   1. User can log in with email/password and receive an HttpOnly cookie.
   2. User can log out, which successfully invalidates the session cookie.
   3. Unauthenticated requests to protected endpoints return 401 Unauthorized errors.
-**Plans**: TBD
+**Plans**: 3 plans
+  - [ ] 2-01-PLAN.md — Implement core authentication service and JWT cryptography
+  - [ ] 2-02-PLAN.md — Implement Gin auth middleware and HTTP handlers
+  - [ ] 2-03-PLAN.md — Register API routes and test E2E authentication flow
 
 ### Phase 3: Core Data APIs
 **Goal**: Applications can perform business operations through secure, validated endpoints.
@@ -88,7 +91,7 @@
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Database Foundation | 2/2 | Complete | 2026-03-20 |
-| 2. Authentication Security | 0/0 | Not started | - |
+| 2. Authentication Security | 0/3 | In Progress | - |
 | 3. Core Data APIs | 0/0 | Not started | - |
 | 4. Storage Infrastructure APIs | 0/0 | Not started | - |
 | 5. Frontend Data Integration | 0/0 | Not started | - |
