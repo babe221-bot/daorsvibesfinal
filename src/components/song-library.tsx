@@ -1,7 +1,5 @@
-
 "use client";
 import React, { useState } from 'react';
-import { getFirestore, collection, addDoc, query, deleteDoc, doc, serverTimestamp, where, getDocs } from 'firebase/firestore';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,18 +7,19 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Progress } from "@/components/ui/progress";
 import PronadjiAkorde from './pronadji-akorde';
 import { Library, Trash2, Wand2 } from 'lucide-react';
-import { firestore } from '@/lib/firebase-client';
 import { handleSimplifyChords } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { useUserSongs, Song } from '@/hooks/use-user-songs';
 import Modal from '@/components/ui/modal';
+import { createClient } from '@/lib/supabase/client';
 
 function SongLibrary() {
   const { toast } = useToast();
   const { userId, loading: authLoading, error: authError } = useAuth();
   const { songs, loading: songsLoading, error: songsError } = useUserSongs(userId);
+  const supabase = createClient();
 
   const [songTitle, setSongTitle] = useState('');
   const [songArtist, setSongArtist] = useState('');
@@ -77,12 +76,15 @@ function SongLibrary() {
     setError('');
     setMessage('');
     try {
-      await addDoc(collection(firestore, `users/${userId}/songs`), {
+      const { error } = await supabase.from('user_songs').insert({
+        user_id: userId,
         title,
         artist,
         lyricsAndChords: lyrics,
-        timestamp: serverTimestamp(),
       });
+      
+      if (error) throw error;
+      
       setMessage("Pjesma je uspješno spremljena!");
       setSongTitle('');
       setSongArtist('');
@@ -102,7 +104,13 @@ function SongLibrary() {
     setLoading(true);
     setError('');
     try {
-      await deleteDoc(doc(firestore, `users/${userId}/songs`, songId));
+      const { error } = await supabase
+        .from('user_songs')
+        .delete()
+        .eq('id', songId)
+        .eq('user_id', userId);
+
+      if (error) throw error;
       setMessage("Pjesma je obrisana.");
     } catch (err) {
       console.error("Greška pri brisanju pjesme:", err);
@@ -119,16 +127,13 @@ function SongLibrary() {
     setError('');
     setSearchResults([]);
     try {
-      const publicSongsRef = collection(firestore, 'songs');
-      const titleQuery = query(publicSongsRef, where("title", ">=", searchQuery), where("title", "<=", searchQuery + '\uf8ff'));
-      const artistQuery = query(publicSongsRef, where("artist", ">=", searchQuery), where("artist", "<=", searchQuery + '\uf8ff'));
+      const { data, error } = await supabase
+        .from('public_songs')
+        .select('*')
+        .or(`title.ilike.%${searchQuery}%,artist.ilike.%${searchQuery}%`);
       
-      const [titleSnapshot, artistSnapshot] = await Promise.all([getDocs(titleQuery), getDocs(artistQuery)]);
-      const results: { [key: string]: Song } = {};
-      titleSnapshot.forEach(doc => results[doc.id] = { id: doc.id, ...doc.data() } as Song);
-      artistSnapshot.forEach(doc => results[doc.id] = { id: doc.id, ...doc.data() } as Song);
-      
-      setSearchResults(Object.values(results));
+      if (error) throw error;
+      setSearchResults(data || []);
     } catch (err) {
       console.error("Greška pri pretraživanju javnih pjesama:", err);
       setError("Nije uspjelo pretraživanje pjesama.");
@@ -143,12 +148,30 @@ function SongLibrary() {
     setLoading(true);
     setError('');
     try {
-        const q = query(collection(firestore, `users/${userId}/songs`), where("title", "==", song.title), where("artist", "==", song.artist));
-        if (!(await getDocs(q)).empty) {
+        // Check if already in library
+        const { data: existing } = await supabase
+          .from('user_songs')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('title', song.title)
+          .eq('artist', song.artist || '')
+          .limit(1);
+
+        if (existing && existing.length > 0) {
             setMessage("Ova pjesma se već nalazi u vašoj biblioteci.");
             return;
         }
-        await addDoc(collection(firestore, `users/${userId}/songs`), { ...song, timestamp: serverTimestamp() });
+
+        const { error } = await supabase.from('user_songs').insert({
+          user_id: userId,
+          title: song.title,
+          artist: song.artist,
+          lyricsAndChords: song.lyricsAndChords,
+          url: song.url
+        });
+
+        if (error) throw error;
+
         setMessage(`"${song.title}" dodano u vašu biblioteku!`);
     } catch (err) {
         console.error("Greška pri dodavanju pjesme:", err);
@@ -263,7 +286,7 @@ function SongLibrary() {
                                   {song.lyricsAndChords}
                               </pre>
                               <div className="mt-4 flex justify-between items-center">
-                                  <p className="text-xs text-muted-foreground">Dodano: {song.timestamp ? new Date(song.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
+                                  <p className="text-xs text-muted-foreground">Dodano: {song.created_at ? new Date(song.created_at).toLocaleDateString() : 'N/A'}</p>
                                   <Button onClick={(e) => { e.preventDefault(); onSimplifyChords(song);}} disabled={isAiLoading} size="sm" variant="outline" className="bg-transparent border-primary/50 hover:bg-primary/20">
                                     <Wand2 className="mr-2 h-4 w-4 text-primary"/> 
                                     Pojednostavi

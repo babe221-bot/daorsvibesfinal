@@ -1,20 +1,21 @@
-
 import { useState, useEffect } from 'react';
-import { collection, query, onSnapshot, DocumentData, Timestamp } from 'firebase/firestore';
-import { firestore } from '@/lib/firebase-client';
+import { createClient } from '@/lib/supabase/client';
 
-export interface Song extends DocumentData {
+export interface Song {
   id: string;
+  user_id?: string;
   title: string;
   artist?: string;
   lyricsAndChords: string;
-  timestamp?: Timestamp;
+  created_at?: string;
+  url?: string;
 }
 
 export function useUserSongs(userId: string | null | undefined) {
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const supabase = createClient();
 
   useEffect(() => {
     if (!userId) {
@@ -23,21 +24,38 @@ export function useUserSongs(userId: string | null | undefined) {
     }
 
     setLoading(true);
-    const userSongsCollectionRef = collection(firestore, `users/${userId}/songs`);
-    const q = query(userSongsCollectionRef);
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetchedSongs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Song[];
-      fetchedSongs.sort((a, b) => (b.timestamp?.toDate()?.getTime() || 0) - (a.timestamp?.toDate()?.getTime() || 0));
-      setSongs(fetchedSongs);
-      setLoading(false);
-    }, (err) => {
-      console.error('Error fetching user songs:', err);
-      setError('Failed to load your songs.');
-      setLoading(false);
-    });
+    const fetchSongs = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('user_songs')
+          .select('*')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false });
 
-    return () => unsubscribe();
+        if (error) throw error;
+        setSongs(data || []);
+      } catch (err) {
+        console.error('Error fetching user songs:', err);
+        setError('Failed to load your songs.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSongs();
+
+    // Set up realtime subscription
+    const subscription = supabase
+      .channel(`user_songs_${userId}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'user_songs', filter: `user_id=eq.${userId}` }, () => {
+        fetchSongs(); // Re-fetch on any change
+      })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [userId]);
 
   return { songs, loading, error };

@@ -1,31 +1,50 @@
-
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, signInAnonymously, User } from 'firebase/auth';
-import { auth } from '@/lib/firebase-client';
+import { createClient } from '@/lib/supabase/client';
+import { User } from '@supabase/supabase-js';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const supabase = createClient();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        try {
-          const userCredential = await signInAnonymously(auth);
-          setUser(userCredential.user);
-        } catch (e) {
-          console.error('Anonymous sign-in failed:', e);
-          setError('Authentication failed. Please try again.');
+    let mounted = true;
+
+    async function initializeAuth() {
+      try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) throw sessionError;
+
+        if (session?.user) {
+          if (mounted) setUser(session.user);
+        } else {
+          // Attempt anonymous sign in if enabled
+          const { data, error: signInError } = await supabase.auth.signInAnonymously();
+          if (signInError) throw signInError;
+          if (mounted && data.user) setUser(data.user);
         }
+      } catch (e) {
+        console.error('Auth initialization failed:', e);
+        if (mounted) setError('Authentication failed. Please try again.');
+      } finally {
+        if (mounted) setLoading(false);
       }
-      setLoading(false);
+    }
+
+    initializeAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (mounted) {
+        setUser(session?.user ?? null);
+      }
     });
 
-    return () => unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
-  return { user, userId: user?.uid, loading, error };
+  return { user, userId: user?.id, loading, error };
 }

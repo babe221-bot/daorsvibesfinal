@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState } from 'react';
@@ -7,18 +6,16 @@ import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { auth, firestore } from '@/lib/firebase-client';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { handleExtractSongData } from '@/app/actions';
 import type { ExtractSongDataState } from '@/lib/types';
 import { Label } from '@/components/ui/label';
 import { Sparkles } from 'lucide-react';
-import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore';
+import { createClient } from '@/lib/supabase/client';
 import { formatSongContent } from '@/ai/flows/format-song-content-flow';
 
 const initialState: ExtractSongDataState = {};
-
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -31,9 +28,10 @@ function SubmitButton() {
 
 export default function PronadjiAkorde() {
   const { toast } = useToast();
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [state, formAction] = useActionState(handleExtractSongData, initialState);
   const [songUrl, setSongUrl] = useState('');
+  const supabase = createClient();
 
   const [songDetails, setSongDetails] = useState<{ title: string; artist: string; lyricsAndChords: string; url: string } | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -80,29 +78,31 @@ export default function PronadjiAkorde() {
 
     setIsSaving(true);
     try {
-        const songsCollectionRef = collection(firestore, "songs");
-        const q = query(
-            songsCollectionRef,
-            where("title", "==", songDetails.title),
-            where("artist", "==", songDetails.artist || "")
-        );
+        // Check if exists in public_songs
+        const { data: existing, error: queryError } = await supabase
+          .from('public_songs')
+          .select('id')
+          .eq('title', songDetails.title)
+          .eq('artist', songDetails.artist || '')
+          .limit(1);
+          
+        if (queryError) throw queryError;
 
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
+        if (existing && existing.length > 0) {
             toast({ variant: 'destructive', title: 'Greška', description: 'Ova pjesma već postoji u javnom repozitoriju.' });
             setIsSaving(false);
             return;
         }
 
-        await addDoc(songsCollectionRef, {
+        const { error: insertError } = await supabase.from('public_songs').insert({
             title: songDetails.title,
             artist: songDetails.artist || "",
             lyricsAndChords: songDetails.lyricsAndChords,
             url: songDetails.url || "",
-            timestamp: serverTimestamp(),
-            addedBy: user.uid,
+            added_by: user.id,
         });
+
+        if (insertError) throw insertError;
 
         toast({ title: 'Uspjeh', description: "Pjesma je uspješno dodana u javni repozitorij!" });
         setSongDetails(null);

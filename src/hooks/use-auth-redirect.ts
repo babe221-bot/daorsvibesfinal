@@ -1,21 +1,24 @@
-
 import { useEffect } from 'react';
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { app } from '@/lib/firebase-client';
-
-const auth = getAuth(app);
+import { createClient } from '@/lib/supabase/client';
 
 export function useAuthRedirect() {
   const router = useRouter();
+  const supabase = createClient();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user && !session.user.is_anonymous) {
         router.push('/dashboard');
       }
     });
 
-    return () => unsubscribe();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user && !session.user.is_anonymous) {
+        router.push('/dashboard');
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [router]);
 }

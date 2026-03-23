@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import { auth } from '@/lib/firebase-client';
-import { Song } from './use-user-songs'; // Reuse the Song interface
-
-const db = getFirestore(auth.app);
+import { createClient } from '@/lib/supabase/client';
+import { Song } from './use-user-songs';
 
 export function useSong(userId: string | null | undefined, songId: string) {
   const [song, setSong] = useState<Song | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const supabase = createClient();
 
   useEffect(() => {
     if (!userId || !songId) {
@@ -19,11 +17,17 @@ export function useSong(userId: string | null | undefined, songId: string) {
     const fetchSong = async () => {
       setLoading(true);
       try {
-        const songDocRef = doc(db, `users/${userId}/songs`, songId);
-        const songDoc = await getDoc(songDocRef);
+        const { data, error } = await supabase
+          .from('user_songs')
+          .select('*')
+          .eq('user_id', userId)
+          .eq('id', songId)
+          .single();
 
-        if (songDoc.exists()) {
-          setSong({ id: songDoc.id, ...songDoc.data() } as Song);
+        if (error) throw error;
+
+        if (data) {
+          setSong(data as Song);
         } else {
           setError("Song not found.");
         }
