@@ -381,7 +381,7 @@ export default function PronadjiAkorde() {
       const simplified = await handleSimplifyChords({
         title: songDetails.title,
         artist: songDetails.artist || undefined,
-        lyricsAndChords: songDetails.lyricsAndChords,
+        lyrics_and_chords: songDetails.lyricsAndChords,
       });
       if (simplified.error) {
         toast({ variant: 'destructive', title: 'Greška', description: simplified.error });
@@ -411,7 +411,7 @@ export default function PronadjiAkorde() {
     setIsTransposing(true);
     try {
       const result = await handleTransposeChords({
-        lyricsAndChords: songDetails.lyricsAndChords,
+        lyrics_and_chords: songDetails.lyricsAndChords,
         semitones,
       });
       if (result.error) {
@@ -493,7 +493,7 @@ export default function PronadjiAkorde() {
       const { error: insertError } = await supabase.from('public_songs').insert({
         title: trimmedTitle,
         artist: trimmedArtist || "",
-        lyricsAndChords: songDetails.lyricsAndChords,
+        lyrics_and_chords: songDetails.lyricsAndChords,
         url: songDetails.url || "",
         added_by: user.id,
       });

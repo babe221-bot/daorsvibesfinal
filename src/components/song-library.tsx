@@ -80,7 +80,7 @@ function SongLibrary() {
         user_id: userId,
         title,
         artist,
-        lyricsAndChords: lyrics,
+        lyrics_and_chords: lyrics,
       });
       
       if (error) throw error;
@@ -166,7 +166,7 @@ function SongLibrary() {
           user_id: userId,
           title: song.title,
           artist: song.artist,
-          lyricsAndChords: song.lyricsAndChords,
+          lyrics_and_chords: song.lyricsAndChords,
           url: song.url
         });
 
