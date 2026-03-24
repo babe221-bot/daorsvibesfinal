@@ -9,12 +9,7 @@ const nextConfig = {
     'https://3001-firebase-daorsvibesfinal2-1755200532526.cluster-fbfjltn375c6wqxlhoehbz44sk.cloudworkstations.dev'
   ],
   experimental: {
-    turbo: {
-      resolveAlias: {
-        fs: './empty-module.js',
-        path: './empty-module.js',
-      },
-    },
+    serverComponentsExternalPackages: ['aubiojs'],
   },
   // Webpack configuration for aliasing 'fs' to an empty module
   webpack: (config, { isServer }) => {
