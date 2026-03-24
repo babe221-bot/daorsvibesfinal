@@ -2,10 +2,6 @@
   "name": "daorsvibesfinal",
   "version": "0.1.0",
   "private": true,
-  "browser": {
-    "fs": false,
-    "path": false
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
