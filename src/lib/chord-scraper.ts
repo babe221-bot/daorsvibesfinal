@@ -1,14 +1,16 @@
 /**
- * @fileOverview Chord website scraper with site-specific extraction and AI fallback.
+ * @fileOverview Chord website scraper with site-specific extraction, search, and AI fallback.
  *
- * Supports:
- *   - ultimate-guitar.com  → JSON extraction from js-store data attribute
- *   - e-chords.com         → regex extraction from server-rendered HTML
- *   - azchords.com         → regex extraction from server-rendered HTML
- *   - chordu.com           → regex extraction from server-rendered HTML
- *   - songsterr.com        → JSON API
- *   - Any other site       → AI fallback (sends raw HTML to Gemini)
+ * Features:
+ *   - Auto-search across 12 chord sites (ex-YU + international)
+ *   - Site-specific content extraction
+ *   - Generic HTML fallback
+ *   - AI fallback for unknown sites
  */
+
+import { ALL_CHORD_SITES, SCRAPER_HEADERS, type ChordSite } from './chord-sites';
+
+// ── Types ───────────────────────────────────────────────────────────────────
 
 export interface ScrapedSong {
   title: string;
@@ -16,20 +18,35 @@ export interface ScrapedSong {
   lyricsAndChords: string;
 }
 
+export interface SearchResult {
+  title: string;
+  artist: string;
+  url: string;
+  siteName: string;
+  siteKey: string;
+}
+
 type SiteExtractor = (html: string, url: string) => ScrapedSong | null;
 
 // ── Site detection ──────────────────────────────────────────────────────────
 
-const SITE_PATTERNS: Record<string, RegExp> = {
+const SITE_DOMAIN_PATTERNS: Record<string, RegExp> = {
   'ultimate-guitar': /ultimate-guitar\.com/i,
   'e-chords': /e-chords\.com/i,
   'azchords': /azchords\.com/i,
   'chordu': /chordu\.com/i,
   'songsterr': /songsterr\.com/i,
+  'akorde-me': /akorde\.me/i,
+  'tabovi': /tabovi\.com/i,
+  'akorde-tabovi': /akorditabovi\.com/i,
+  'gitaratabovi': /gitaratabovi\.com/i,
+  'akordi-org': /akordi\.org/i,
+  'chordify': /chordify\.net/i,
+  'guitaretabs': /guitaretabs\.com/i,
 };
 
 export function detectSite(url: string): string | null {
-  for (const [site, pattern] of Object.entries(SITE_PATTERNS)) {
+  for (const [site, pattern] of Object.entries(SITE_DOMAIN_PATTERNS)) {
     if (pattern.test(url)) return site;
   }
   return null;
@@ -68,14 +85,12 @@ function extractMetaFromTitle(html: string): { title: string; artist: string } {
     .replace(/&nbsp;/g, ' ')
     .trim();
 
-  // Common patterns: "Song - Artist Chords | Site" or "Song by Artist - Chords"
   // Strip site suffixes
   raw = raw
-    .replace(/\s*[|\-–—]\s*(Chords?|Tabs?|Lyrics?|Guitar\s*Tabs?|Ukulele\s*Chords?).*$/i, '')
+    .replace(/\s*[|\-–—]\s*(Chords?|Tabs?|Lyrics?|Guitar\s*Tabs?|Ukulele\s*Chords?|Akorde|Tabovi|Akorde i tabovi).*$/i, '')
     .replace(/\s*(Chords?|Tabs?|Lyrics?)\s*$/i, '')
     .trim();
 
-  // Split on " - " or " by "
   const byMatch = raw.match(/^(.+?)\s+by\s+(.+)$/i);
   if (byMatch) {
     return { title: byMatch[1].trim(), artist: byMatch[2].trim() };
@@ -89,11 +104,10 @@ function extractMetaFromTitle(html: string): { title: string; artist: string } {
   return { title: raw, artist: '' };
 }
 
-// ── Site-specific extractors ────────────────────────────────────────────────
+// ── Site-specific content extractors ────────────────────────────────────────
 
 const extractors: Record<string, SiteExtractor> = {
   'ultimate-guitar': (html) => {
-    // UG embeds tab data in <div class="js-store" data-content="...">
     const storeMatch = html.match(
       /<div[^>]*class="js-store"[^>]*data-content="([^"]*)"[^>]*>/i
     );
@@ -108,11 +122,9 @@ const extractors: Record<string, SiteExtractor> = {
       const title = tab?.song_name || '';
       const artist = tab?.artist_name || '';
 
-      // Try wiki_tab content first, then tab.content
       let content = wikiTab?.content || tab?.content || '';
 
       if (typeof content === 'string' && content.length > 0) {
-        // UG uses [ch]...[/ch] BBCode for chords
         content = content
           .replace(/\[ch\]/g, '')
           .replace(/\[\/ch\]/g, '')
@@ -138,89 +150,43 @@ const extractors: Record<string, SiteExtractor> = {
     return null;
   },
 
-  'e-chords': (html) => {
-    const { title, artist } = extractMetaFromTitle(html);
-
-    // E-Chords wraps lyrics/chords in a specific div
-    // Try multiple patterns
-    const patterns = [
-      /<div[^>]*id="coremain"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i,
-      /<pre[^>]*>([\s\S]*?)<\/pre>/i,
-      /<div[^>]*class="[^"]*lyrics[^"]*"[^>]*>([\s\S]*?)<\/div>/i,
-    ];
-
-    for (const pattern of patterns) {
-      const match = html.match(pattern);
-      if (match) {
-        const content = stripHtml(match[1]);
-        if (content.length > 20) {
-          return { title, artist, lyricsAndChords: content };
-        }
-      }
-    }
-    return null;
-  },
-
-  'azchords': (html) => {
-    const { title, artist } = extractMetaFromTitle(html);
-
-    const patterns = [
-      /<pre[^>]*>([\s\S]*?)<\/pre>/i,
-      /<div[^>]*class="[^"]*chords?[^"]*"[^>]*>([\s\S]*?)<\/div>/i,
-      /<div[^>]*id="[^"]*chords?[^"]*"[^>]*>([\s\S]*?)<\/div>/i,
-    ];
-
-    for (const pattern of patterns) {
-      const match = html.match(pattern);
-      if (match) {
-        const content = stripHtml(match[1]);
-        if (content.length > 20) {
-          return { title, artist, lyricsAndChords: content };
-        }
-      }
-    }
-    return null;
-  },
-
-  'chordu': (html) => {
-    const { title, artist } = extractMetaFromTitle(html);
-
-    const patterns = [
-      /<pre[^>]*>([\s\S]*?)<\/pre>/i,
-      /<div[^>]*class="[^"]*chord[^"]*"[^>]*>([\s\S]*?)<\/div>/i,
-    ];
-
-    for (const pattern of patterns) {
-      const match = html.match(pattern);
-      if (match) {
-        const content = stripHtml(match[1]);
-        if (content.length > 20) {
-          return { title, artist, lyricsAndChords: content };
-        }
-      }
-    }
-    return null;
-  },
-
   'songsterr': (_html, url) => {
-    // Songsterr uses a JSON API — we handle this separately in fetchContentFromUrl
-    // This extractor is a fallback that won't match
-    // The actual Songsterr fetch is handled in the main scrape function
+    // Handled separately via API
     return null;
   },
+};
+
+// Generic extractor for sites without custom logic
+const genericExtractor: SiteExtractor = (html) => {
+  const { title, artist } = extractMetaFromTitle(html);
+
+  const patterns = [
+    /<pre[^>]*>([\s\S]*?)<\/pre>/i,
+    /<code[^>]*>([\s\S]*?)<\/code>/i,
+    /<div[^>]*class="[^"]*(?:chords?|lyrics?|song-text|tab-content)[^"]*"[^>]*>([\s\S]*?)<\/div>/i,
+    /<div[^>]*id="[^"]*(?:chords?|lyrics?|coremain)[^"]*"[^>]*>([\s\S]*?)<\/div>/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = html.match(pattern);
+    if (match) {
+      const content = stripHtml(match[1]);
+      if (content.length > 20) {
+        return { title, artist, lyricsAndChords: content };
+      }
+    }
+  }
+  return null;
 };
 
 // ── Songsterr API helper ────────────────────────────────────────────────────
 
 async function fetchSongsterrData(url: string): Promise<ScrapedSong | null> {
-  // Extract song name from URL: /a/wa/song?song=Artist-Song
-  // Or search by URL pattern
   const songMatch = url.match(/songsterr\.com\/a\/wa\/song\?.*song=([^&]+)/i);
   const searchMatch = url.match(/songsterr\.com\/.*?\/([^\/]+?)(?:-chords)?-s(\d+)s?$/i);
 
   try {
     if (searchMatch) {
-      // Fetch tab data directly by song ID
       const songId = searchMatch[2];
       const apiResponse = await fetch(
         `https://www.songsterr.com/a/wa/song?id=${songId}`,
@@ -261,12 +227,11 @@ async function fetchSongsterrData(url: string): Promise<ScrapedSong | null> {
   return null;
 }
 
-// ── Main export: fetch + extract ────────────────────────────────────────────
+// ── Main export: fetch + extract from URL ───────────────────────────────────
 
 export async function scrapeChordSite(url: string): Promise<ScrapedSong | null> {
   const site = detectSite(url);
 
-  // Songsterr uses API, not HTML scraping
   if (site === 'songsterr') {
     return fetchSongsterrData(url);
   }
@@ -274,14 +239,7 @@ export async function scrapeChordSite(url: string): Promise<ScrapedSong | null> 
   // Fetch raw HTML
   let html: string;
   try {
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-      },
-    });
+    const response = await fetch(url, { headers: SCRAPER_HEADERS });
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
@@ -297,23 +255,182 @@ export async function scrapeChordSite(url: string): Promise<ScrapedSong | null> 
     if (result) return result;
   }
 
-  // Generic fallback: try <pre> tags and common patterns
-  const genericPatterns = [
-    /<pre[^>]*>([\s\S]*?)<\/pre>/i,
-    /<code[^>]*>([\s\S]*?)<\/code>/i,
-  ];
+  // Generic fallback
+  const result = genericExtractor(html, url);
+  if (result) return result;
 
-  const { title, artist } = extractMetaFromTitle(html);
-  for (const pattern of genericPatterns) {
-    const match = html.match(pattern);
-    if (match) {
-      const content = stripHtml(match[1]);
-      if (content.length > 20) {
-        return { title, artist, lyricsAndChords: content };
+  return null;
+}
+
+// ── Auto-search across all chord sites ──────────────────────────────────────
+
+/**
+ * Search a single site for chord results.
+ * Returns an array of SearchResult objects found on that site.
+ */
+async function searchSingleSite(
+  site: ChordSite,
+  query: string
+): Promise<SearchResult[]> {
+  const results: SearchResult[] = [];
+  const searchUrl = site.searchUrl(query);
+
+  try {
+    const response = await fetch(searchUrl, {
+      headers: SCRAPER_HEADERS,
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!response.ok) return results;
+
+    const html = await response.text();
+
+    // Special handling for Songsterr (JSON API)
+    if (site.key === 'songsterr') {
+      try {
+        const data = JSON.parse(html);
+        if (Array.isArray(data)) {
+          for (const item of data.slice(0, 5)) {
+            if (item.title) {
+              results.push({
+                title: item.title || '',
+                artist: item.artist?.name || '',
+                url: `https://www.songsterr.com/a/wa/song?id=${item.id}`,
+                siteName: site.name,
+                siteKey: site.key,
+              });
+            }
+          }
+        } else if (data && data.title) {
+          results.push({
+            title: data.title || '',
+            artist: data.artist?.name || '',
+            url: `https://www.songsterr.com/a/wa/song?id=${data.id}`,
+            siteName: site.name,
+            siteKey: site.key,
+          });
+        }
+      } catch {
+        // Not JSON
       }
+      return results;
     }
+
+    // HTML-based search result extraction
+    const { linkPattern } = site.resultSelectors;
+    let match;
+    let count = 0;
+    const maxResults = 5;
+
+    // Clone the regex to reset lastIndex
+    const regex = new RegExp(linkPattern.source, linkPattern.flags);
+
+    while ((match = regex.exec(html)) !== null && count < maxResults) {
+      const href = match[1];
+      let title = match[2] || '';
+
+      // Clean up the title
+      title = title
+        .replace(/<[^>]+>/g, '')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&nbsp;/g, ' ')
+        .trim();
+
+      if (!title && href) {
+        // Try to extract title from URL
+        const urlParts = href.split('/').pop()?.replace(/[-_]/g, ' ').replace(/\.\w+$/, '') || '';
+        title = urlParts.slice(0, 80);
+      }
+
+      if (title.length < 3) continue;
+
+      // Build full URL
+      let fullUrl = href;
+      if (href.startsWith('/')) {
+        const siteUrl = new URL(searchUrl);
+        fullUrl = `${siteUrl.origin}${href}`;
+      }
+
+      // Parse title and artist from combined string
+      let parsedTitle = title;
+      let parsedArtist = '';
+
+      const sepMatch = title.match(/^(.+?)\s*[-–—]\s*(.+)$/);
+      if (sepMatch) {
+        parsedArtist = sepMatch[1].trim();
+        parsedTitle = sepMatch[2].trim();
+      }
+
+      // Skip duplicates
+      if (results.some((r) => r.url === fullUrl)) continue;
+
+      results.push({
+        title: parsedTitle,
+        artist: parsedArtist,
+        url: fullUrl,
+        siteName: site.name,
+        siteKey: site.key,
+      });
+      count++;
+    }
+  } catch (error) {
+    // Site search failed — skip silently
+    console.debug(`Search failed for ${site.name}:`, error);
   }
 
-  // Return null — caller should fall back to AI extraction
-  return null;
+  return results;
+}
+
+/**
+ * Search all chord sites in parallel for a song.
+ *
+ * @param songName - Song title to search for
+ * @param artist   - Optional artist name to narrow results
+ * @returns Array of SearchResult from all sites, sorted by relevance
+ */
+export async function searchChordSites(
+  songName: string,
+  artist?: string
+): Promise<SearchResult[]> {
+  const query = artist ? `${artist} ${songName}` : songName;
+
+  // Search all sites in parallel with timeout
+  const searchPromises = ALL_CHORD_SITES.map((site) =>
+    searchSingleSite(site, query).catch(() => [])
+  );
+
+  const allResults = await Promise.all(searchPromises);
+  const results = allResults.flat();
+
+  // Sort by relevance: exact title match first, then by artist match
+  const queryLower = songName.toLowerCase();
+  const artistLower = (artist || '').toLowerCase();
+
+  results.sort((a, b) => {
+    const aTitle = a.title.toLowerCase();
+    const bTitle = b.title.toLowerCase();
+
+    // Exact title match bonus
+    const aExact = aTitle.includes(queryLower) ? 0 : 1;
+    const bExact = bTitle.includes(queryLower) ? 0 : 1;
+    if (aExact !== bExact) return aExact - bExact;
+
+    // Artist match bonus
+    if (artistLower) {
+      const aArtist = a.artist.toLowerCase().includes(artistLower) ? 0 : 1;
+      const bArtist = b.artist.toLowerCase().includes(artistLower) ? 0 : 1;
+      if (aArtist !== bArtist) return aArtist - bArtist;
+    }
+
+    // Ex-YU sites first (for Balkan music relevance)
+    const aExYU = a.siteKey.match(/akorde|tabovi|gitaratabovi|akordi/) ? 0 : 1;
+    const bExYU = b.siteKey.match(/akorde|tabovi|gitaratabovi|akordi/) ? 0 : 1;
+    return aExYU - bExYU;
+  });
+
+  // Limit to top 20 results
+  return results.slice(0, 20);
 }

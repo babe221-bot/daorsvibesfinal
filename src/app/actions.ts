@@ -6,7 +6,7 @@ import { formatSongContent } from "@/ai/flows/format-song-content-flow";
 import { simplifyChords } from "@/ai/flows/simplify-chords-flow";
 import { transposeChords } from "@/ai/flows/transpose-chords-flow";
 import { suggestKeyChange } from "@/ai/flows/suggest-key-change";
-import { scrapeChordSite } from "@/lib/chord-scraper";
+import { scrapeChordSite, searchChordSites, type SearchResult } from "@/lib/chord-scraper";
 import type { KeyChangeSuggesterState, SongData } from "@/lib/types";
 
 const SongUrlSchema = z.string().url({ message: "Molimo unesite važeći URL." });
@@ -162,6 +162,40 @@ export async function handleScrapeChordSite(
     console.error(e);
     const errorMessage = e instanceof Error ? e.message : "Došlo je do nepoznate greške.";
     return { error: `Došlo je do neočekivane greške: ${errorMessage}` };
+  }
+}
+
+// ── Chord Search ────────────────────────────────────────────────────────────
+
+const SearchChordsSchema = z.object({
+  songName: z.string().min(1, { message: "Unesite naziv pjesme." }),
+  artist: z.string().optional(),
+});
+
+export async function handleSearchChords(
+  data: { songName: string; artist?: string }
+): Promise<{ results?: SearchResult[]; error?: string }> {
+  const validatedFields = SearchChordsSchema.safeParse(data);
+
+  if (!validatedFields.success) {
+    return { error: validatedFields.error.flatten().fieldErrors.songName?.[0] ?? "Nevažeći unos." };
+  }
+
+  try {
+    const results = await searchChordSites(
+      validatedFields.data.songName,
+      validatedFields.data.artist
+    );
+
+    if (results.length === 0) {
+      return { error: "Nisu pronađeni rezultati. Pokušajte drugačiji naziv ili umjetnika." };
+    }
+
+    return { results };
+  } catch (e) {
+    console.error(e);
+    const errorMessage = e instanceof Error ? e.message : "Nepoznata greška.";
+    return { error: `Greška pri pretraživanju: ${errorMessage}` };
   }
 }
 
