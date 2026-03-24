@@ -33,7 +33,7 @@ export const CHORD_SITES_EX_YU: ChordSite[] = [
     key: 'akorde-me',
     searchUrl: (q) => `https://akorde.me/search?q=${encodeURIComponent(q)}`,
     resultSelectors: {
-      linkPattern: /<a[^>]*href="(\/[^"]*)"[^>]*class="[^"]*song[^"]*"[^>]*>([^<]*)<\/a>/gi,
+      linkPattern: /<a[^>]*href="(\/pesma\/[^"]*)"[^>]*class="[^"]*song[^"]*"[^>]*>([^<]*)<\/a>/gi,
       titlePattern: />([^<]+)<\/a>/,
     },
     contentSelectors: [
@@ -48,7 +48,7 @@ export const CHORD_SITES_EX_YU: ChordSite[] = [
     key: 'tabovi',
     searchUrl: (q) => `https://www.tabovi.com/search.php?search=${encodeURIComponent(q)}`,
     resultSelectors: {
-      linkPattern: /<a[^>]*href="(\/[^"]*\.html)"[^>]*>([^<]*)<\/a>/gi,
+      linkPattern: /<a[^>]*href="(\/[^"]*tab[^"]*\.html)"[^>]*>([^<]*)<\/a>/gi,
       titlePattern: />([^<]+)<\/a>/,
     },
     contentSelectors: [
@@ -63,7 +63,7 @@ export const CHORD_SITES_EX_YU: ChordSite[] = [
     key: 'akorde-tabovi',
     searchUrl: (q) => `https://www.akorditabovi.com/search?q=${encodeURIComponent(q)}`,
     resultSelectors: {
-      linkPattern: /<a[^>]*href="(https?:\/\/www\.akorditabovi\.com\/[^"]*)"[^>]*>([^<]*)<\/a>/gi,
+      linkPattern: /<a[^>]*href="(https?:\/\/www\.akorditabovi\.com\/[^"]*akord[^"]*)"[^>]*>([^<]*)<\/a>/gi,
       titlePattern: />([^<]+)<\/a>/,
     },
     contentSelectors: [
@@ -78,7 +78,7 @@ export const CHORD_SITES_EX_YU: ChordSite[] = [
     key: 'gitaratabovi',
     searchUrl: (q) => `https://gitaratabovi.com/search?q=${encodeURIComponent(q)}`,
     resultSelectors: {
-      linkPattern: /<a[^>]*href="(\/[^"]*)"[^>]*>([^<]*)<\/a>/gi,
+      linkPattern: /<a[^>]*href="(\/[^"]*tab[^"]*)"[^>]*>([^<]*)<\/a>/gi,
       titlePattern: />([^<]+)<\/a>/,
     },
     contentSelectors: [
@@ -92,7 +92,7 @@ export const CHORD_SITES_EX_YU: ChordSite[] = [
     key: 'akordi-org',
     searchUrl: (q) => `https://www.akordi.org/search.php?search=${encodeURIComponent(q)}`,
     resultSelectors: {
-      linkPattern: /<a[^>]*href="(\/[^"]*)"[^>]*>([^<]*)<\/a>/gi,
+      linkPattern: /<a[^>]*href="(\/[^"]*akord[^"]*\.html)"[^>]*>([^<]*)<\/a>/gi,
       titlePattern: />([^<]+)<\/a>/,
     },
     contentSelectors: [
@@ -125,9 +125,60 @@ export const CHORD_SITES_INTL: ChordSite[] = [
     key: 'e-chords',
     searchUrl: (q) => `https://www.e-chords.com/search-all/${encodeURIComponent(q)}`,
     resultSelectors: {
-      linkPattern: /<a[^>]*href="(https:\/\/www\.e-chords\.com\/[^"]*)"[^>]*>([^<]*)<\/a>/gi,
+      linkPattern: /<a[^>]*href="(https:\/\/www\.e-chords\.com\/chords\/[^"]*)"[^>]*>([^<]*)<\/a>/gi,
       titlePattern: />([^<]+)<\/a>/,
     },
+    contentSelectors: [
+      /<div[^>]*id="coremain"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i,
+      /<pre[^>]*>([\s\S]*?)<\/pre>/i,
+    ],
+    priority: 2,
+    region: 'international',
+  },
+  {
+    name: 'AZChords',
+    key: 'azchords',
+    searchUrl: (q) => `https://www.azchords.com/search.php?search=${encodeURIComponent(q)}`,
+    resultSelectors: {
+      linkPattern: /<a[^>]*href="(\/[^"]*-chords\.html)"[^>]*>([^<]*)<\/a>/gi,
+      titlePattern: />([^<]+)<\/a>/,
+    },
+    contentSelectors: [
+      /<pre[^>]*>([\s\S]*?)<\/pre>/i,
+      /<div[^>]*class="[^"]*chords?[^"]*"[^>]*>([\s\S]*?)<\/div>/i,
+    ],
+    priority: 3,
+    region: 'international',
+  },
+  {
+    name: 'ChordU',
+    key: 'chordu',
+    searchUrl: (q) => `https://chordu.com/search?q=${encodeURIComponent(q)}`,
+    resultSelectors: {
+      linkPattern: /<a[^>]*href="(\/chords\/[^"]*)"[^>]*>([^<]*)<\/a>/gi,
+      titlePattern: />([^<]+)<\/a>/,
+    },
+    contentSelectors: [
+      /<pre[^>]*>([\s\S]*?)<\/pre>/i,
+      /<div[^>]*class="[^"]*chord[^"]*"[^>]*>([\s\S]*?)<\/div>/i,
+    ],
+    priority: 4,
+    region: 'international',
+  },
+  {
+    name: 'GuitareTab',
+    key: 'guitaretabs',
+    searchUrl: (q) => `https://www.guitaretabs.com/search.php?search=${encodeURIComponent(q)}`,
+    resultSelectors: {
+      linkPattern: /<a[^>]*href="(\/tabs\/[^"]*-tabs\.html)"[^>]*>([^<]*)<\/a>/gi,
+      titlePattern: />([^<]+)<\/a>/,
+    },
+    contentSelectors: [
+      /<pre[^>]*>([\s\S]*?)<\/pre>/i,
+    ],
+    priority: 7,
+    region: 'international',
+  },
     contentSelectors: [
       /<div[^>]*id="coremain"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i,
       /<pre[^>]*>([\s\S]*?)<\/pre>/i,

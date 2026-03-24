@@ -367,6 +367,10 @@ async function searchSingleSite(
       // Skip duplicates
       if (results.some((r) => r.url === fullUrl)) continue;
 
+      // Filter out junk links
+      const junkPatterns = [/about/i, /terms/i, /privacy/i, /features/i, /refund/i, /contact/i];
+      if (junkPatterns.some(p => p.test(fullUrl) || p.test(title))) continue;
+
       results.push({
         title: parsedTitle,
         artist: parsedArtist,
