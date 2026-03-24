@@ -104,38 +104,85 @@ function LineCharCounter({ text }: { text: string }) {
 
 function SearchResultItem({
   result,
-  onClick,
+  versionIndex,
+  totalVersions,
+  onLoad,
+  onCopy,
   isLoading,
 }: {
   result: SearchResult;
-  onClick: () => void;
+  versionIndex: number;
+  totalVersions: number;
+  onLoad: () => void;
+  onCopy: () => void;
   isLoading: boolean;
 }) {
   return (
-    <button
-      onClick={onClick}
-      disabled={isLoading}
-      className="w-full text-left p-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all disabled:opacity-50 group"
-    >
-      <div className="flex items-start justify-between gap-2">
+    <div className="w-full p-3 rounded-lg bg-white/5 hover:bg-white/8 border border-white/10 hover:border-white/20 transition-all group">
+      <div className="flex items-start gap-3">
+        {/* Version badge */}
+        <div className="shrink-0 mt-0.5">
+          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary/20 text-primary text-xs font-bold">
+            v{versionIndex + 1}
+          </span>
+        </div>
+
+        {/* Info */}
         <div className="min-w-0 flex-1">
-          <p className="font-medium text-sm truncate">{result.title}</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <p className="font-medium text-sm truncate">{result.title}</p>
+            {totalVersions > 1 && (
+              <span className="text-[10px] text-muted-foreground">
+                ({versionIndex + 1}/{totalVersions})
+              </span>
+            )}
+          </div>
           {result.artist && (
             <p className="text-xs text-muted-foreground truncate">{result.artist}</p>
           )}
+          <div className="flex items-center gap-1.5 mt-1">
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-muted-foreground border border-white/10">
+              {result.siteName}
+            </span>
+            <span className="text-[10px] text-muted-foreground truncate max-w-[200px]">
+              {result.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]}
+            </span>
+          </div>
         </div>
+
+        {/* Actions */}
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-muted-foreground">
-            {result.siteName}
-          </span>
-          {isLoading ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
-          ) : (
-            <ExternalLink className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onCopy}
+            disabled={isLoading}
+            className="h-7 px-2 text-xs gap-1 opacity-60 hover:opacity-100"
+            title="Kopiraj sadržaj"
+          >
+            <Copy className="h-3 w-3" />
+            <span className="hidden sm:inline">Kopiraj</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onLoad}
+            disabled={isLoading}
+            className="h-7 px-2 text-xs gap-1"
+            title="Učitaj u editor"
+          >
+            {isLoading ? (
+              <Loader2 className="h-3 w-3 animate-spin" />
+            ) : (
+              <>
+                <ExternalLink className="h-3 w-3" />
+                <span className="hidden sm:inline">Učitaj</span>
+              </>
+            )}
+          </Button>
         </div>
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -243,6 +290,29 @@ export default function PronadjiAkorde() {
     } catch (error) {
       console.error("Greška pri dohvaćanju:", error);
       toast({ variant: 'destructive', title: 'Greška', description: 'Nije moguće dohvatiti akorde.' });
+    } finally {
+      setFetchingResultUrl(null);
+    }
+  }, [toast]);
+
+  const handleCopyResult = useCallback(async (result: SearchResult) => {
+    setFetchingResultUrl(result.url);
+    try {
+      const fetched = await fetchSongFromUrl(result.url);
+      if (fetched.error) {
+        toast({ variant: 'destructive', title: 'Greška', description: fetched.error });
+        return;
+      }
+      if (fetched.result?.lyricsAndChords) {
+        await navigator.clipboard.writeText(fetched.result.lyricsAndChords);
+        toast({
+          title: 'Kopirano!',
+          description: `${result.title} — sadržaj kopiran u međuspremnik.`,
+        });
+      }
+    } catch (error) {
+      console.error("Greška pri kopiranju:", error);
+      toast({ variant: 'destructive', title: 'Greška', description: 'Nije moguće kopirati sadržaj.' });
     } finally {
       setFetchingResultUrl(null);
     }
@@ -520,22 +590,33 @@ export default function PronadjiAkorde() {
 
                 {/* Search Results */}
                 {searchResults.length > 0 && (
-                  <div className="space-y-2">
-                    <Label className="text-sm text-muted-foreground">
-                      Rezultati ({searchResults.length})
-                    </Label>
-                    <ScrollArea className="h-[300px] rounded-lg border border-white/10">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm text-muted-foreground">
+                        Pronađeno verzija: {searchResults.length}
+                      </Label>
+                      <span className="text-[10px] text-muted-foreground">
+                        v = verzija akorda
+                      </span>
+                    </div>
+                    <ScrollArea className="h-[400px] rounded-lg border border-white/10 bg-white/[0.02]">
                       <div className="p-2 space-y-1.5">
                         {searchResults.map((result, index) => (
                           <SearchResultItem
                             key={`${result.url}-${index}`}
                             result={result}
-                            onClick={() => handleResultClick(result)}
+                            versionIndex={index}
+                            totalVersions={searchResults.length}
+                            onLoad={() => handleResultClick(result)}
+                            onCopy={() => handleCopyResult(result)}
                             isLoading={fetchingResultUrl === result.url}
                           />
                         ))}
                       </div>
                     </ScrollArea>
+                    <p className="text-[10px] text-muted-foreground text-center">
+                      Svaka stavka je različita verzija akorda iz različitih izvora. Kliknite "Učitaj" da otvorite u editoru ili "Kopiraj" da kopirate sadržaj.
+                    </p>
                   </div>
                 )}
               </div>
