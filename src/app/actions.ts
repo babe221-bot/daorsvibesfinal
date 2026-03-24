@@ -165,6 +165,44 @@ export async function handleScrapeChordSite(
   }
 }
 
+/**
+ * Direct URL fetch (for search result clicks — no FormData needed).
+ */
+export async function fetchSongFromUrl(
+  url: string
+): Promise<{ result?: SongData; sourceUrl?: string; error?: string }> {
+  const validated = SongUrlSchema.safeParse(url);
+  if (!validated.success) {
+    return { error: "Nevažeći URL." };
+  }
+
+  try {
+    // Try site-specific scraper first
+    const scraped = await scrapeChordSite(validated.data);
+    if (scraped && scraped.lyricsAndChords.length > 10) {
+      return {
+        result: {
+          title: scraped.title,
+          artist: scraped.artist,
+          lyricsAndChords: scraped.lyricsAndChords,
+        },
+        sourceUrl: validated.data,
+      };
+    }
+
+    // Fallback to AI extraction
+    const result = await extractSongData({ songUrl: validated.data });
+    if (!result) {
+      return { error: "Nije moguće dohvatiti podatke za ovaj URL." };
+    }
+    return { result, sourceUrl: validated.data };
+  } catch (e) {
+    console.error(e);
+    const errorMessage = e instanceof Error ? e.message : "Nepoznata greška.";
+    return { error: `Greška: ${errorMessage}` };
+  }
+}
+
 // ── Chord Search ────────────────────────────────────────────────────────────
 
 const SearchChordsSchema = z.object({

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@/lib/supabase/client';
@@ -23,8 +24,11 @@ import {
   handleFormatSongContent,
   handleSimplifyChords,
   handleTransposeChords,
+  handleSearchChords,
+  fetchSongFromUrl,
 } from '@/app/actions';
 import type { ExtractSongDataState } from '@/lib/types';
+import type { SearchResult } from '@/lib/chord-scraper';
 import {
   Sparkles,
   Copy,
@@ -35,7 +39,10 @@ import {
   ArrowDownUp,
   Search,
   ClipboardPaste,
+  Link,
   Loader2,
+  ExternalLink,
+  Globe,
 } from 'lucide-react';
 
 // ── Types ───────────────────────────────────────────────────────────────────
@@ -65,7 +72,7 @@ const initialState: ExtractSongDataState = {};
 
 // ── Sub-components ──────────────────────────────────────────────────────────
 
-function SubmitButton({ label = 'Dohvati Sadržaj' }: { label?: string }) {
+function SubmitButton({ label = 'Dohvati Sadržaj', icon }: { label?: string; icon?: React.ReactNode }) {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" disabled={pending} className="w-full sm:w-auto gap-2">
@@ -76,7 +83,7 @@ function SubmitButton({ label = 'Dohvati Sadržaj' }: { label?: string }) {
         </>
       ) : (
         <>
-          <Search className="h-4 w-4" />
+          {icon || <Search className="h-4 w-4" />}
           {label}
         </>
       )}
@@ -95,6 +102,43 @@ function LineCharCounter({ text }: { text: string }) {
   );
 }
 
+function SearchResultItem({
+  result,
+  onClick,
+  isLoading,
+}: {
+  result: SearchResult;
+  onClick: () => void;
+  isLoading: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={isLoading}
+      className="w-full text-left p-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all disabled:opacity-50 group"
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0 flex-1">
+          <p className="font-medium text-sm truncate">{result.title}</p>
+          {result.artist && (
+            <p className="text-xs text-muted-foreground truncate">{result.artist}</p>
+          )}
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-muted-foreground">
+            {result.siteName}
+          </span>
+          {isLoading ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+          ) : (
+            <ExternalLink className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+          )}
+        </div>
+      </div>
+    </button>
+  );
+}
+
 // ── Main Component ──────────────────────────────────────────────────────────
 
 export default function PronadjiAkorde() {
@@ -108,7 +152,14 @@ export default function PronadjiAkorde() {
   const [youtubeUrl, setYoutubeUrl] = useState('');
 
   // Active input tab
-  const [activeTab, setActiveTab] = useState<'url' | 'paste'>('url');
+  const [activeTab, setActiveTab] = useState<'search' | 'url' | 'paste'>('search');
+
+  // Search state
+  const [searchSongName, setSearchSongName] = useState('');
+  const [searchArtist, setSearchArtist] = useState('');
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [fetchingResultUrl, setFetchingResultUrl] = useState<string | null>(null);
 
   // Paste tab state
   const [pasteContent, setPasteContent] = useState('');
@@ -141,6 +192,61 @@ export default function PronadjiAkorde() {
   }, [state, toast, songUrl]);
 
   // ── Handlers ──────────────────────────────────────────────────────────────
+
+  const handleSearch = async () => {
+    if (!searchSongName.trim()) {
+      toast({ variant: 'destructive', title: 'Greška', description: 'Unesite naziv pjesme.' });
+      return;
+    }
+    setIsSearching(true);
+    setSearchResults([]);
+    try {
+      const result = await handleSearchChords({
+        songName: searchSongName.trim(),
+        artist: searchArtist.trim() || undefined,
+      });
+      if (result.error) {
+        toast({ variant: 'destructive', title: 'Greška', description: result.error });
+        return;
+      }
+      setSearchResults(result.results || []);
+      toast({
+        title: 'Rezultati',
+        description: `Pronađeno ${result.results?.length || 0} rezultata na 12 stranica.`,
+      });
+    } catch (error) {
+      console.error("Greška pri pretraživanju:", error);
+      toast({ variant: 'destructive', title: 'Greška', description: 'Neočekivana greška pri pretraživanju.' });
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleResultClick = useCallback(async (result: SearchResult) => {
+    setFetchingResultUrl(result.url);
+    try {
+      const fetched = await fetchSongFromUrl(result.url);
+      if (fetched.error) {
+        toast({ variant: 'destructive', title: 'Greška', description: fetched.error });
+        return;
+      }
+      if (fetched.result) {
+        setSongDetails({
+          title: fetched.result.title || result.title,
+          artist: fetched.result.artist || result.artist,
+          lyricsAndChords: fetched.result.lyricsAndChords,
+          url: fetched.sourceUrl || result.url,
+        });
+        setPreviousContent(null);
+        toast({ title: 'Uspjeh', description: `Akorde dohvaćeni sa ${result.siteName}!` });
+      }
+    } catch (error) {
+      console.error("Greška pri dohvaćanju:", error);
+      toast({ variant: 'destructive', title: 'Greška', description: 'Nije moguće dohvatiti akorde.' });
+    } finally {
+      setFetchingResultUrl(null);
+    }
+  }, [toast]);
 
   const handleImportPaste = async () => {
     if (!pasteContent.trim()) {
@@ -274,6 +380,9 @@ export default function PronadjiAkorde() {
     setSongUrl('');
     setYoutubeUrl('');
     setPasteContent('');
+    setSearchSongName('');
+    setSearchArtist('');
+    setSearchResults([]);
     setPreviousContent(null);
     setTranspositionSemitones('0');
     toast({ title: 'Resetirano', description: 'Obrazac je očišćen. Spremni za novu pjesmu.' });
@@ -294,7 +403,6 @@ export default function PronadjiAkorde() {
       const trimmedTitle = songDetails.title.trim();
       const trimmedArtist = songDetails.artist.trim();
 
-      // Check if exists (normalize for comparison)
       const { data: existing, error: queryError } = await supabase
         .from('public_songs')
         .select('id')
@@ -343,17 +451,95 @@ export default function PronadjiAkorde() {
 
         {/* ── Input Section ────────────────────────────────────────────────── */}
         {!songDetails && (
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'url' | 'paste')}>
-            <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger value="url" className="gap-2">
-                <Search className="h-4 w-4" />
-                Dohvati iz URL-a
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'search' | 'url' | 'paste')}>
+            <TabsList className="grid w-full grid-cols-3 mb-4">
+              <TabsTrigger value="search" className="gap-1.5 text-xs sm:text-sm">
+                <Search className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Pretraži</span>
+                <span className="sm:hidden">Pretraži</span>
               </TabsTrigger>
-              <TabsTrigger value="paste" className="gap-2">
-                <ClipboardPaste className="h-4 w-4" />
-                Zalijepi tekst
+              <TabsTrigger value="url" className="gap-1.5 text-xs sm:text-sm">
+                <Link className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Dohvati iz URL-a</span>
+                <span className="sm:hidden">URL</span>
+              </TabsTrigger>
+              <TabsTrigger value="paste" className="gap-1.5 text-xs sm:text-sm">
+                <ClipboardPaste className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Zalijepi tekst</span>
+                <span className="sm:hidden">Zalijepi</span>
               </TabsTrigger>
             </TabsList>
+
+            {/* Search Tab */}
+            <TabsContent value="search">
+              <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex-1 space-y-1">
+                    <Label htmlFor="searchSongName">Naziv pjesme</Label>
+                    <Input
+                      id="searchSongName"
+                      placeholder="npr. Kad sam bio mali"
+                      value={searchSongName}
+                      onChange={(e) => setSearchSongName(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                      className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                    />
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <Label htmlFor="searchArtist">Izvođač / Bend</Label>
+                    <Input
+                      id="searchArtist"
+                      placeholder="npr. Crvena Jabuka"
+                      value={searchArtist}
+                      onChange={(e) => setSearchArtist(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                      className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                    />
+                  </div>
+                </div>
+                <Button
+                  onClick={handleSearch}
+                  disabled={isSearching || !searchSongName.trim()}
+                  className="gap-2"
+                >
+                  {isSearching ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Pretraživanje 12 stranica...
+                    </>
+                  ) : (
+                    <>
+                      <Globe className="h-4 w-4" />
+                      Pretraži sve stranice
+                    </>
+                  )}
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  Pretražuje se 12 stranica: ex-YU (Akorde.me, Tabovi.com, AkordiTabovi, GitaraTabovi, Akordi.org) i internacionalne (Ultimate Guitar, E-Chords, AZChords, ChordU, Chordify, Songsterr, GuitareTab).
+                </p>
+
+                {/* Search Results */}
+                {searchResults.length > 0 && (
+                  <div className="space-y-2">
+                    <Label className="text-sm text-muted-foreground">
+                      Rezultati ({searchResults.length})
+                    </Label>
+                    <ScrollArea className="h-[300px] rounded-lg border border-white/10">
+                      <div className="p-2 space-y-1.5">
+                        {searchResults.map((result, index) => (
+                          <SearchResultItem
+                            key={`${result.url}-${index}`}
+                            result={result}
+                            onClick={() => handleResultClick(result)}
+                            isLoading={fetchingResultUrl === result.url}
+                          />
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
 
             {/* URL Tab */}
             <TabsContent value="url">
@@ -369,7 +555,7 @@ export default function PronadjiAkorde() {
                     className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
                   />
                   <p className="text-xs text-muted-foreground">
-                    Podržane stranice: Ultimate Guitar, E-Chords, AZChords, ChordU, Songsterr i druge.
+                    Podržane stranice: Ultimate Guitar, E-Chords, AZChords, ChordU, Songsterr, Akorde.me, Tabovi.com i druge.
                   </p>
                   {state.error && <p className="text-sm text-destructive">{state.error}</p>}
                 </div>
