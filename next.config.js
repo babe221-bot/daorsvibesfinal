@@ -4,24 +4,22 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const nextConfig = {
+  turbopack: {
+    resolveAlias: {
+      fs: {
+        browser: './empty-module.js',
+      },
+      path: {
+        browser: './empty-module.js',
+      },
+    },
+  },
   allowedDevOrigins: [
     'https://3000-firebase-daorsvibesfinal2-1755200532526.cluster-fbfjltn375c6wqxlhoehbz44sk.cloudworkstations.dev',
     'https://3001-firebase-daorsvibesfinal2-1755200532526.cluster-fbfjltn375c6wqxlhoehbz44sk.cloudworkstations.dev'
   ],
   serverExternalPackages: ['aubiojs'],
   experimental: {
-  },
-  // Webpack configuration for aliasing 'fs' to an empty module
-  webpack: (config, { isServer }) => {
-    // Fixes npm packages that depend on `fs` module
-    if (!isServer) {
-      config.resolve.fallback = {
-        fs: false,
-        path: false,
-      };
-    }
-
-    return config;
   },
 };
 
