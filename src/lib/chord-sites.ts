@@ -179,13 +179,6 @@ export const CHORD_SITES_INTL: ChordSite[] = [
     priority: 7,
     region: 'international',
   },
-    contentSelectors: [
-      /<div[^>]*id="coremain"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i,
-      /<pre[^>]*>([\s\S]*?)<\/pre>/i,
-    ],
-    priority: 2,
-    region: 'international',
-  },
   {
     name: 'AZChords',
     key: 'azchords',
