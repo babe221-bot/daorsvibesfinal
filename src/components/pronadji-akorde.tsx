@@ -117,8 +117,8 @@ function SearchResultItem({
   onCopy: () => void;
   isLoading: boolean;
 }) {
-  return (
-    <div className="w-full p-3 rounded-lg bg-white/5 hover:bg-white/8 border border-white/10 hover:border-white/20 transition-all group">
+   return (
+     <div className="w-full p-3 rounded-lg bg-white/5 hover:bg-white/8 border border-white/10 hover:border-white/20 transition-all cursor-pointer group">
       <div className="flex items-start gap-3">
         {/* Version badge */}
         <div className="shrink-0 mt-0.5">
@@ -127,28 +127,28 @@ function SearchResultItem({
           </span>
         </div>
 
-        {/* Info */}
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <p className="font-medium text-sm truncate">{result.title}</p>
-            {totalVersions > 1 && (
-              <span className="text-[10px] text-muted-foreground">
-                ({versionIndex + 1}/{totalVersions})
-              </span>
-            )}
-          </div>
-          {result.artist && (
-            <p className="text-xs text-muted-foreground truncate">{result.artist}</p>
-          )}
-          <div className="flex items-center gap-1.5 mt-1">
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-muted-foreground border border-white/10">
-              {result.siteName}
-            </span>
-            <span className="text-[10px] text-muted-foreground truncate max-w-[200px]">
-              {result.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]}
-            </span>
-          </div>
-        </div>
+         {/* Info */}
+         <div className="min-w-0 flex-1" onClick={() => handleResultClick(result)}>
+           <div className="flex items-center gap-2 flex-wrap">
+             <p className="font-medium text-sm truncate">{result.title}</p>
+             {totalVersions > 1 && (
+               <span className="text-[10px] text-muted-foreground">
+                 ({versionIndex + 1}/{totalVersions})
+               </span>
+             )}
+           </div>
+           {result.artist && (
+             <p className="text-xs text-muted-foreground truncate">{result.artist}</p>
+           )}
+           <div className="flex items-center gap-1.5 mt-1">
+             <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-muted-foreground border border-white/10">
+               {result.siteName}
+             </span>
+             <span className="text-[10px] text-muted-foreground truncate max-w-[200px]">
+               {result.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]}
+             </span>
+           </div>
+         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-1.5 shrink-0">
