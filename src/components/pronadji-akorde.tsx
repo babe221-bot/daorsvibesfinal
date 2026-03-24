@@ -257,9 +257,11 @@ export default function PronadjiAkorde() {
         return;
       }
       setSearchResults(result.results || []);
+      const count = result.results?.length || 0;
+      const siteCount = new Set(result.results?.map((r: SearchResult) => r.siteName)).size;
       toast({
         title: 'Rezultati',
-        description: `Pronađeno ${result.results?.length || 0} rezultata na 12 stranica.`,
+        description: `Pronađeno ${count} verzija na ${siteCount} stranica.`,
       });
     } catch (error) {
       console.error("Greška pri pretraživanju:", error);
