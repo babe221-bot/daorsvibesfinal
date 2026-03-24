@@ -289,7 +289,7 @@ async function searchSingleSite(
       try {
         const data = JSON.parse(html);
         if (Array.isArray(data)) {
-          for (const item of data.slice(0, 5)) {
+          for (const item of data.slice(0, 10)) {
             if (item.title) {
               results.push({
                 title: item.title || '',
@@ -319,7 +319,7 @@ async function searchSingleSite(
     const { linkPattern } = site.resultSelectors;
     let match;
     let count = 0;
-    const maxResults = 5;
+    const maxResults = 10;
 
     // Clone the regex to reset lastIndex
     const regex = new RegExp(linkPattern.source, linkPattern.flags);
@@ -431,6 +431,6 @@ export async function searchChordSites(
     return aExYU - bExYU;
   });
 
-  // Limit to top 20 results
-  return results.slice(0, 20);
+  // Limit to top 50 results (show all versions)
+  return results.slice(0, 50);
 }
