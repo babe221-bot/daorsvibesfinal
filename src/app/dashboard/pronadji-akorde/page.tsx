@@ -14,6 +14,12 @@ const PronadjiAkordePage = () => {
           <Header />
           <main className="flex-1 p-4 md:p-8 text-white fade-in-down">
              <Card className="glass-card">
+              <div className="p-6 pb-2">
+                <h1 className="text-2xl font-bold">Pronađi Akorde</h1>
+                <p className="text-muted-foreground mt-1">
+                  Dohvatite tekstove i akorde sa popularnih web stranica, uredite ih i spremite u javni repozitorij.
+                </p>
+              </div>
               <ErrorBoundary>
                 <PronadjiAkorde />
               </ErrorBoundary>
