@@ -590,37 +590,104 @@ export default function PronadjiAkorde() {
                   Pretražuje se 12 stranica: ex-YU (Akorde.me, Tabovi.com, AkordiTabovi, GitaraTabovi, Akordi.org) i internacionalne (Ultimate Guitar, E-Chords, AZChords, ChordU, Chordify, Songsterr, GuitareTab).
                 </p>
 
-                {/* Search Results */}
-                {searchResults.length > 0 && (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-sm text-muted-foreground">
-                        Pronađeno verzija: {searchResults.length}
-                      </Label>
-                      <span className="text-[10px] text-muted-foreground">
-                        v = verzija akorda
-                      </span>
-                    </div>
-                    <ScrollArea className="h-[400px] rounded-lg border border-white/10 bg-white/[0.02]">
-                      <div className="p-2 space-y-1.5">
-                        {searchResults.map((result, index) => (
-                          <SearchResultItem
-                            key={`${result.url}-${index}`}
-                            result={result}
-                            versionIndex={index}
-                            totalVersions={searchResults.length}
-                            onLoad={() => handleResultClick(result)}
-                            onCopy={() => handleCopyResult(result)}
-                            isLoading={fetchingResultUrl === result.url}
-                          />
-                        ))}
-                      </div>
-                    </ScrollArea>
-                    <p className="text-[10px] text-muted-foreground text-center">
-                      Svaka stavka je različita verzija akorda iz različitih izvora. Kliknite "Učitaj" da otvorite u editoru ili "Kopiraj" da kopirate sadržaj.
+                  {!isSearching && searchResults.length === 0 && searchSongName.trim() !== '' ? (
+                    <p className="text-muted-foreground text-center py-8">
+                      Nije pronađen ni jedan rezultat. Pokušajte s drugim ključnim riječima.
                     </p>
-                  </div>
-                )}
+                  ) : (
+                    <>
+                      {isSearching && searchResults.length === 0 && (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-sm text-muted-foreground">
+                              Pronađeno verzija: {searchResults.length}
+                            </Label>
+                            <span className="text-[10px] text-muted-foreground">
+                              v = verzija akorda
+                            </span>
+                          </div>
+                          <ScrollArea className="h-[400px] rounded-lg border border-white/10 bg-white/[0.02]">
+                            <div className="p-2 space-y-1.5">
+                              {/* Placeholder skeletons while loading */}
+                              {[...Array(5)].map((_, i) => (
+                                <div key={i} className="w-full p-3 rounded-lg bg-white/5 hover:bg-white/8 border border-white/10 hover:border-white/20 transition-all group animate-pulse">
+                                  <div className="flex items-start gap-3">
+                                    <div className="shrink-0 mt-0.5">
+                                      <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary/20 text-primary text-xs font-bold">
+                                        v1
+                                      </span>
+                                    </div>
+                                    <div className="min-w-0 flex-1">
+                                      <div className="flex items-center gap-2 flex-wrap">
+                                        <p className="font-medium text-sm truncate" style={{ lineHeight: '1.2' }}>
+                                          Loading...
+                                        </p>
+                                        <span className="text-[10px] text-muted-foreground">
+                                          (1/5)
+                                        </span>
+                                      </div>
+                                      <p className="text-xs text-muted-foreground truncate">Loading Artist</p>
+                                      <div className="flex items-center gap-1.5 mt-1">
+                                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-muted-foreground border border-white/10">
+                                          Loading Site
+                                        </span>
+                                        <span className="text-[10px] text-muted-foreground truncate max-w-[200px]">
+                                          loading...
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                      <Button variant="ghost" size="sm" disabled className="h-7 px-2 text-xs gap-1 opacity-60">
+                                        <Copy className="h-3 w-3" />
+                                        <span className="hidden sm:inline">Kopiraj</span>
+                                      </Button>
+                                      <Button variant="outline" size="sm" disabled className="h-7 px-2 text-xs gap-1">
+                                        <Loader2 className="h-3 w-3 animate-spin" />
+                                        <span className="hidden sm:inline">Učitaj</span>
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </ScrollArea>
+                          <p className="text-[10px] text-muted-foreground text-center">
+                            Svaka stavka je različita verzija akorda iz različitih izvora. Kliknite "Učitaj" da otvorite u editoru ili "Kopiraj" da kopirate sadržaj.
+                          </p>
+                        </div>
+                      )}
+                      {searchResults.length > 0 && (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-sm text-muted-foreground">
+                              Pronađeno verzija: {searchResults.length}
+                            </Label>
+                            <span className="text-[10px] text-muted-foreground">
+                              v = verzija akorda
+                            </span>
+                          </div>
+                          <ScrollArea className="h-[400px] rounded-lg border border-white/10 bg-white/[0.02]">
+                            <div className="p-2 space-y-1.5">
+                              {searchResults.map((result, index) => (
+                                <SearchResultItem
+                                  key={`${result.url}-${index}`}
+                                  result={result}
+                                  versionIndex={index}
+                                  totalVersions={searchResults.length}
+                                  onLoad={() => handleResultClick(result)}
+                                  onCopy={() => handleCopyResult(result)}
+                                  isLoading={fetchingResultUrl === result.url}
+                                />
+                              ))}
+                            </div>
+                          </ScrollArea>
+                          <p className="text-[10px] text-muted-foreground text-center">
+                            Svaka stavka je različita verzija akorda iz različitih izvora. Kliknite "Učitaj" da otvorite u editoru ili "Kopiraj" da kopirate sadržaj.
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  )}
               </div>
             </TabsContent>
 
